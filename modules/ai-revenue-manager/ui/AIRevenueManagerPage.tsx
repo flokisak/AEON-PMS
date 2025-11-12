@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAIRevenueManager } from '../logic/useAIRevenueManager';
+import { useCurrency } from '@/core/hooks/useCurrency';
 import { FiTrendingUp, FiDollarSign, FiCalendar, FiTarget } from 'react-icons/fi';
 
 function MetricCard({ title, value, icon: Icon, color }: { title: string; value: string | number; icon: any; color: string }) {
@@ -23,7 +24,17 @@ export function AIRevenueManagerPage() {
   console.log('AIRevenueManagerPage rendered');
   const { t } = useTranslation('common');
   const { revenueData, isLoading, pricingSuggestions, factors, updatePrice } = useAIRevenueManager();
+  const { formatCurrency } = useCurrency();
   const [selectedRoomType, setSelectedRoomType] = useState<string | null>(null);
+
+  // Add currency change listener for auto-refresh
+  useEffect(() => {
+    const handleCurrencyChange = () => {
+      window.location.reload();
+    };
+    window.addEventListener('currencyChanged', handleCurrencyChange);
+    return () => window.removeEventListener('currencyChanged', handleCurrencyChange);
+  }, []);
 
   if (isLoading) return (
     <div className="flex items-center justify-center h-64">
@@ -45,7 +56,7 @@ export function AIRevenueManagerPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <MetricCard
           title={t('aiRevenueManager.totalRevenue')}
-          value={`$${totalRevenue.toLocaleString()}`}
+          value={formatCurrency(totalRevenue)}
           icon={FiDollarSign}
           color="border-emerald-400"
         />
@@ -86,7 +97,7 @@ export function AIRevenueManagerPage() {
               {revenueData?.map((data) => (
                 <tr key={data.date} className="border-t border-neutral-medium hover:bg-neutral-light/50">
                   <td className="p-4 font-medium text-foreground">{new Date(data.date).toLocaleDateString()}</td>
-                  <td className="p-4 text-neutral-dark">${data.revenue.toLocaleString()}</td>
+                  <td className="p-4 text-neutral-dark">{formatCurrency(data.revenue)}</td>
                   <td className="p-4">
                     <div className="flex items-center">
                       <div className="w-full bg-neutral-medium rounded-full h-2 mr-2">
@@ -95,7 +106,7 @@ export function AIRevenueManagerPage() {
                       {data.occupancy}%
                     </div>
                   </td>
-                  <td className="p-4 text-neutral-dark">${Math.round(data.revenue / (data.occupancy / 100))}</td>
+                  <td className="p-4 text-neutral-dark">{formatCurrency(Math.round(data.revenue / (data.occupancy / 100)))}</td>
                 </tr>
               ))}
             </tbody>
@@ -135,18 +146,18 @@ export function AIRevenueManagerPage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <div>
                   <p className="text-sm text-neutral-dark">{t('aiRevenueManager.currentPrice')}</p>
-                  <p className="text-xl font-bold text-foreground">${suggestion.currentPrice}</p>
+                  <p className="text-xl font-bold text-foreground">{formatCurrency(suggestion.currentPrice)}</p>
                 </div>
                 <div>
                   <p className="text-sm text-neutral-dark">{t('aiRevenueManager.suggestedPrice')}</p>
                   <p className={`text-xl font-bold ${suggestion.suggestedPrice > suggestion.currentPrice ? 'text-emerald-600' : 'text-red-600'}`}>
-                    ${suggestion.suggestedPrice}
+                    {formatCurrency(suggestion.suggestedPrice)}
                   </p>
                 </div>
                 <div>
                   <p className="text-sm text-neutral-dark">{t('aiRevenueManager.potentialRevenue')}</p>
                   <p className="text-xl font-bold text-cyan-600">
-                    ${(suggestion.suggestedPrice - suggestion.currentPrice) * 10} {/* Mock calculation */}
+                    {formatCurrency((suggestion.suggestedPrice - suggestion.currentPrice) * 10)} {/* Mock calculation */}
                   </p>
                 </div>
               </div>
@@ -155,7 +166,7 @@ export function AIRevenueManagerPage() {
                 <div className="border-t border-neutral-medium pt-4">
                   <h4 className="font-medium mb-2 text-foreground">{t('aiRevenueManager.detailedAnalysis')}</h4>
                   <ul className="list-disc list-inside text-sm text-neutral-dark space-y-1">
-                    <li>{t('aiRevenueManager.competitorPrices')}: ${suggestion.currentPrice - 5} - ${suggestion.currentPrice + 15}</li>
+                    <li>{t('aiRevenueManager.competitorPrices')}: {formatCurrency(suggestion.currentPrice - 5)} - {formatCurrency(suggestion.currentPrice + 15)}</li>
                     <li>{t('aiRevenueManager.seasonalDemand')}: {t('aiRevenueManager.summerPeak')}</li>
                     <li>{t('aiRevenueManager.localEvents')}: {t('aiRevenueManager.conferenceInCity')}</li>
                     <li>{t('aiRevenueManager.historicalOccupancy')}: 85% {t('aiRevenueManager.forThisPeriod')}</li>

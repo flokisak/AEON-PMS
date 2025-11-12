@@ -7,6 +7,7 @@ import { Room } from '../../../core/types';
 import { MaintenancePanel } from './MaintenancePanel';
 import { AmenitiesManager } from './AmenitiesManager';
 import { FiWifi, FiWind, FiCoffee, FiTv, FiShield, FiDroplet, FiList, FiGrid, FiTool, FiStar } from 'react-icons/fi';
+import { useCurrency } from '@/core/hooks/useCurrency';
 
 function RoomCard({ room, onEdit, onDelete, onMaintenance }: {
   room: Room;
@@ -16,6 +17,7 @@ function RoomCard({ room, onEdit, onDelete, onMaintenance }: {
 }) {
   const { t } = useTranslation('common');
   const { updateRoomStatus } = useRooms();
+  const { formatCurrency } = useCurrency();
 
   const getStatusColor = (status: Room['status']) => {
     switch (status) {
@@ -53,7 +55,7 @@ function RoomCard({ room, onEdit, onDelete, onMaintenance }: {
       </div>
 
       <div className="mb-4">
-        <p className="text-2xl font-bold text-primary">${room.price}</p>
+        <p className="text-2xl font-bold text-primary">{formatCurrency(room.price)}</p>
         <p className="text-sm text-neutral-dark">{t('rooms.perNight')} • {room.capacity} {t('rooms.guests')}</p>
         {room.size && <p className="text-sm text-neutral-dark">{room.size} {t('rooms.squareMeters')}</p>}
       </div>

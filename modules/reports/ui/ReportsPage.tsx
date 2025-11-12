@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useReports } from '../logic/useReports';
 import { useReservations } from '../../reservations/logic/useReservations';
 import { useRooms } from '../../rooms/logic/useRooms';
 import { useHousekeeping } from '../../housekeeping/logic/useHousekeeping';
+import { useCurrency } from '@/core/hooks/useCurrency';
 
 export function ReportsPage() {
   const { t } = useTranslation('common');
@@ -13,7 +14,17 @@ export function ReportsPage() {
   const { reservations } = useReservations();
   const { rooms } = useRooms();
   const { tasks } = useHousekeeping();
+  const { formatCurrency } = useCurrency();
   const [selectedReport, setSelectedReport] = useState<'overview' | 'maintenance' | 'guests' | 'stayovers' | 'housekeeping'>('overview');
+
+  // Add currency change listener for auto-refresh
+  useEffect(() => {
+    const handleCurrencyChange = () => {
+      window.location.reload();
+    };
+    window.addEventListener('currencyChanged', handleCurrencyChange);
+    return () => window.removeEventListener('currencyChanged', handleCurrencyChange);
+  }, []);
 
   if (isLoading) return <div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div></div>;
 
@@ -96,7 +107,7 @@ export function ReportsPage() {
             </button>
             <button
               onClick={() => {
-                const summary = `${t('reports.hotelOverviewReport')}\n${t('reports.totalRevenueLabel')}: $${reportData?.totalRevenue}\n${t('reports.occupancyRateLabel')}: ${reportData?.totalOccupancy}%\n${t('reports.totalGuestsLabel')}: ${reportData?.totalGuests}`;
+                const summary = `${t('reports.hotelOverviewReport')}\n${t('reports.totalRevenueLabel')}: ${formatCurrency(reportData?.totalRevenue || 0)}\n${t('reports.occupancyRateLabel')}: ${reportData?.totalOccupancy}%\n${t('reports.totalGuestsLabel')}: ${reportData?.totalGuests}`;
                 const blob = new Blob([summary], { type: 'text/plain' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
@@ -110,7 +121,7 @@ export function ReportsPage() {
             </button>
             <button
               onClick={() => {
-                const message = t('reports.hotelOverview', { revenue: reportData?.totalRevenue, occupancy: reportData?.totalOccupancy, guests: reportData?.totalGuests });
+                const message = t('reports.hotelOverview', { revenue: formatCurrency(reportData?.totalRevenue || 0), occupancy: reportData?.totalOccupancy, guests: reportData?.totalGuests });
                 const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
                 window.open(url, '_blank');
               }}
@@ -122,7 +133,7 @@ export function ReportsPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white p-6 rounded-lg shadow-sm border border-neutral-medium">
               <h2 className="text-lg font-semibold mb-2 text-foreground">{t('reports.totalRevenue')}</h2>
-              <p className="text-3xl font-bold text-primary">${reportData?.totalRevenue.toLocaleString()}</p>
+              <p className="text-3xl font-bold text-primary">{formatCurrency(reportData?.totalRevenue || 0)}</p>
               <p className="text-sm text-neutral-dark">{t('reports.thisMonth')}</p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-sm border border-neutral-medium">

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useBilling } from '../logic/useBilling';
 import { Invoice } from '../../../core/types';
@@ -9,15 +9,28 @@ import { InvoiceEditor } from './InvoiceEditor';
 import { GuestAccountsView } from './GuestAccountsView';
 import { PaymentProcessingView } from './PaymentProcessingView';
 import { ReportsView } from './ReportsView';
+import { useCurrency } from '@/core/hooks/useCurrency';
 
 type ViewType = 'invoices' | 'guest-accounts' | 'payments' | 'reports';
 
 export function BillingPage() {
   const { t } = useTranslation('common');
   const { invoices, guestAccounts, isLoading, updateInvoice } = useBilling();
+  const { formatCurrency, convertFromBase } = useCurrency();
   const [currentView, setCurrentView] = useState<ViewType>('invoices');
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
   const [editingInvoice, setEditingInvoice] = useState<Invoice | null>(null);
+
+  // Listen for currency changes
+  useEffect(() => {
+    const handleCurrencyChange = () => {
+      // Force re-render to update all displayed amounts
+      window.location.reload();
+    };
+
+    window.addEventListener('currencyChanged', handleCurrencyChange);
+    return () => window.removeEventListener('currencyChanged', handleCurrencyChange);
+  }, []);
 
   const getStatusColor = (status: Invoice['status']) => {
     switch (status) {
@@ -35,8 +48,6 @@ export function BillingPage() {
   const getStatusLabel = (status: Invoice['status']) => {
     return t(`billing.${status}`);
   };
-
-  const formatCurrency = (amount: number) => `$${amount.toFixed(2)}`;
 
   const handleSaveInvoice = (updatedInvoice: Invoice) => {
     updateInvoice.mutate({

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useBilling } from '../logic/useBilling';
 import { Invoice, Payment } from '../../../core/types';
+import { useCurrency } from '@/core/hooks/useCurrency';
 
 interface InvoiceDetailViewProps {
   invoice: Invoice;
@@ -13,6 +14,7 @@ interface InvoiceDetailViewProps {
 export function InvoiceDetailView({ invoice, onBack }: InvoiceDetailViewProps) {
   const { t } = useTranslation('common');
   const { addPayment } = useBilling();
+  const { formatCurrency } = useCurrency();
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [paymentForm, setPaymentForm] = useState({
     amount: invoice.balance,
@@ -20,8 +22,6 @@ export function InvoiceDetailView({ invoice, onBack }: InvoiceDetailViewProps) {
     reference_number: '',
     notes: '',
   });
-
-  const formatCurrency = (amount: number) => `$${amount.toFixed(2)}`;
 
   const getStatusColor = (status: Invoice['status']) => {
     switch (status) {

@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePackagesEvents, Package, Event, Partner, PartnerOffer, PartnerReservation } from '../logic/usePackagesEvents';
+import { useCurrency } from '@/core/hooks/useCurrency';
 import { FiPackage, FiCalendar, FiPlus, FiEdit, FiTrash, FiX, FiUsers, FiUser, FiClock, FiMail, FiPhone, FiMapPin, FiDollarSign } from 'react-icons/fi';
 
 function PackageCard({ pkg, onEdit, onDelete, onBook }: { 
@@ -13,6 +14,7 @@ function PackageCard({ pkg, onEdit, onDelete, onBook }: {
 }) {
   const { t } = useTranslation('common');
   const { partnerOffers, partners } = usePackagesEvents();
+  const { formatCurrency } = useCurrency();
   
   const partnerOffersList = pkg.partner_offers
     .filter(po => po.included_in_package)
@@ -42,7 +44,7 @@ function PackageCard({ pkg, onEdit, onDelete, onBook }: {
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
           <p className="text-sm text-gray-600">{t('packagesEvents.price')}</p>
-          <p className="text-xl font-bold text-green-600">${pkg.price}</p>
+          <p className="text-xl font-bold text-green-600">{formatCurrency(pkg.price)}</p>
         </div>
         <div>
           <p className="text-sm text-gray-600">{t('packagesEvents.duration')}</p>
@@ -71,7 +73,7 @@ function PackageCard({ pkg, onEdit, onDelete, onBook }: {
                   <span className="text-gray-600 ml-1">({item.partner!.name})</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-green-600 font-medium">${item.offer!.price}</span>
+                  <span className="text-green-600 font-medium">{formatCurrency(item.offer!.price)}</span>
                   {item.auto_book && (
                     <span className="bg-green-100 text-green-800 px-2 py-1 rounded">{t('packagesEvents.autoBook')}</span>
                   )}
@@ -105,6 +107,7 @@ function PackageCard({ pkg, onEdit, onDelete, onBook }: {
 
 function EventCard({ event, onEdit, onDelete }: { event: Event; onEdit: () => void; onDelete: () => void }) {
   const { t } = useTranslation('common');
+  const { formatCurrency } = useCurrency();
   
   return (
     <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
@@ -139,7 +142,7 @@ function EventCard({ event, onEdit, onDelete }: { event: Event; onEdit: () => vo
         </div>
         <div>
           <p className="text-sm text-gray-600">{t('packagesEvents.price')}</p>
-          <p className="text-xl font-bold text-green-600">${event.price}</p>
+          <p className="text-xl font-bold text-green-600">{formatCurrency(event.price)}</p>
         </div>
       </div>
       <div className="flex justify-between text-sm text-gray-600">
@@ -175,6 +178,7 @@ function PackageForm({
 }) {
   const { t } = useTranslation('common');
   const { partnerOffers, partners } = usePackagesEvents();
+  const { formatCurrency } = useCurrency();
   
   const [formData, setFormData] = useState({
     name: pkg?.name || '',
@@ -362,7 +366,7 @@ function PackageForm({
                      />
                      <div>
                        <p className="font-medium">{offer.name}</p>
-                       <p className="text-sm text-gray-600">{partner?.name} - ${offer.price} ({offer.duration_minutes}{t('packagesEvents.minutes')})</p>
+                        <p className="text-sm text-gray-600">{partner?.name} - {formatCurrency(offer.price)} ({offer.duration_minutes}{t('packagesEvents.minutes')})</p>
                      </div>
                    </div>
                  </div>
@@ -430,6 +434,7 @@ function EventForm({
   onCancel: () => void; 
 }) {
   const { t } = useTranslation('common');
+  const { formatCurrency } = useCurrency();
   
   const [formData, setFormData] = useState({
     name: event?.name || '',
@@ -624,6 +629,7 @@ function PartnerOfferCard({ offer, partner, onEdit, onDelete }: {
   onDelete: () => void; 
 }) {
   const { t } = useTranslation('common');
+  const { formatCurrency } = useCurrency();
   
   return (
     <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
@@ -645,7 +651,7 @@ function PartnerOfferCard({ offer, partner, onEdit, onDelete }: {
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
           <p className="text-sm text-gray-600">{t('packagesEvents.price')}</p>
-          <p className="text-xl font-bold text-green-600">${offer.price}</p>
+          <p className="text-xl font-bold text-green-600">{formatCurrency(offer.price)}</p>
         </div>
         <div>
           <p className="text-sm text-gray-600">{t('packagesEvents.duration')}</p>
@@ -869,6 +875,16 @@ function PartnerForm({
 
 export function PackagesEventsPage() {
   const { t } = useTranslation('common');
+  const { formatCurrency } = useCurrency();
+
+  // Add currency change listener for auto-refresh
+  useEffect(() => {
+    const handleCurrencyChange = () => {
+      window.location.reload();
+    };
+    window.addEventListener('currencyChanged', handleCurrencyChange);
+    return () => window.removeEventListener('currencyChanged', handleCurrencyChange);
+  }, []);
   const { 
     packages, 
     events, 
@@ -1204,7 +1220,7 @@ export function PackagesEventsPage() {
                 <div className="mb-4 p-4 bg-indigo-50 rounded-lg">
                   <h4 className="font-semibold text-indigo-800 mb-2">{t('packagesEvents.packageDetails')}</h4>
                   <p className="text-sm text-indigo-700">{selectedPackage.description}</p>
-                  <p className="text-lg font-bold text-indigo-800 mt-2">${selectedPackage.price} for {selectedPackage.duration} {t('packagesEvents.nights')}</p>
+                  <p className="text-lg font-bold text-indigo-800 mt-2">{formatCurrency(selectedPackage.price)} for {selectedPackage.duration} {t('packagesEvents.nights')}</p>
                   
                   {selectedPackage.partner_offers.filter(po => po.included_in_package && po.auto_book).length > 0 && (
                     <div className="mt-3 p-3 bg-green-50 rounded border border-green-200">

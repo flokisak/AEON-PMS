@@ -4,10 +4,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useModules } from '@/core/hooks/useModules';
+import { useCurrency } from '@/core/hooks/useCurrency';
 
 export default function AdminPage() {
   const { t, i18n } = useTranslation('common');
   const { modules, isLoading, updateModuleStatus } = useModules();
+  const { currentCurrency, changeCurrency, allCurrencies, formatCurrency } = useCurrency();
   const [activeTab, setActiveTab] = useState<'modules' | 'property' | 'company' | 'users' | 'employee-access' | 'language'>('modules');
 
   if (isLoading) return <div>{t('admin.loading')}</div>;
@@ -74,7 +76,7 @@ export default function AdminPage() {
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >
-          {t('admin.language')}
+          {t('admin.language')} & {t('admin.currency')}
         </button>
       </div>
 
@@ -388,7 +390,7 @@ export default function AdminPage() {
       {activeTab === 'language' && (
         <div>
           <h2 className="text-xl font-semibold mb-4 text-gray-800">{t('admin.languageSettings')}</h2>
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">{t('admin.selectLanguage')}</label>
               <select
@@ -400,8 +402,34 @@ export default function AdminPage() {
                 <option value="en">English</option>
               </select>
             </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">{t('admin.selectCurrency')}</label>
+              <select
+                value={currentCurrency}
+                onChange={(e) => changeCurrency(e.target.value as any)}
+                className="form-input w-full max-w-xs"
+              >
+                {allCurrencies.map((currency) => (
+                  <option key={currency.code} value={currency.code}>
+                    {currency.symbol} {currency.code} - {currency.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h3 className="font-semibold text-blue-800 mb-2">{t('admin.currentCurrency')}</h3>
+              <p className="text-blue-700">
+                {formatCurrency(100)} {t('admin.conversionRate')}: 1 USD = {formatCurrency(1, 'USD')}
+              </p>
+            </div>
+            
             <p className="text-sm text-gray-600">
               {t('admin.languageChangeNote')}
+            </p>
+            <p className="text-sm text-gray-600">
+              {t('admin.currencyChangeNote')}
             </p>
           </div>
         </div>

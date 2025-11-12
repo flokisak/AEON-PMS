@@ -869,6 +869,16 @@
     "saveAccessSettings": "Uložit nastavení přístupu",
     "languageSettings": "Nastavení jazyka",
     "selectLanguage": "Vybrat jazyk",
-    "languageChangeNote": "Změny jazyka se projeví okamžitě. Obnovte stránku, pokud se některé prvky neaktualizují."
+    "languageChangeNote": "Změny jazyka se projeví okamžitě. Obnovte stránku, pokud se některé prvky neaktualizují.",
+    "currency": "Měna",
+    "currencySettings": "Nastavení měny",
+    "selectCurrency": "Vybrat měnu",
+    "currencyChangeNote": "Změny měny se projeví okamžitě. Všechny ceny a účty budou přepočítány.",
+    "currentCurrency": "Aktuální měna",
+    "baseCurrency": "Základní měna",
+    "pricesRecalculated": "Všechny ceny byly přepočítány na základě nové měny.",
+    "conversionRate": "Kurz",
+    "totalInBaseCurrency": "Celkem ({{baseCurrency}})",
+    "totalInCurrentCurrency": "Celkem ({{currency}})"
   }
 }

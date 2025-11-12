@@ -870,6 +870,16 @@
     "saveAccessSettings": "Save Access Settings",
     "languageSettings": "Language Settings",
     "selectLanguage": "Select Language",
-    "languageChangeNote": "Language changes will be applied immediately. Refresh the page if some elements don't update."
+    "languageChangeNote": "Language changes will be applied immediately. Refresh the page if some elements don't update.",
+    "currency": "Currency",
+    "currencySettings": "Currency Settings",
+    "selectCurrency": "Select Currency",
+    "currencyChangeNote": "Currency changes will be applied immediately. All prices and bills will be recalculated.",
+    "currentCurrency": "Current Currency",
+    "baseCurrency": "Base Currency",
+    "pricesRecalculated": "All prices have been recalculated based on the new currency.",
+    "conversionRate": "Conversion Rate",
+    "totalInBaseCurrency": "Total ({{baseCurrency}})",
+    "totalInCurrentCurrency": "Total ({{currency}})"
   }
 }

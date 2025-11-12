@@ -6,6 +6,7 @@ import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
 import { useReservations } from '../logic/useReservations';
 import { useHousekeeping } from '../../housekeeping/logic/useHousekeeping';
 import { Reservation, Room } from '../../../core/types';
+import { useCurrency } from '@/core/hooks/useCurrency';
 
 function DraggableReservation({ reservation }: { reservation: any }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
@@ -49,6 +50,7 @@ export function ReservationsPage() {
   const { t } = useTranslation('common');
   const { reservations, isLoading, createReservation, updateReservation, deleteReservation, updateRoom } = useReservations();
   const { createTask } = useHousekeeping();
+  const { formatCurrency } = useCurrency();
   const [activeTab, setActiveTab] = useState<'list' | 'gantt'>('gantt');
   const [form, setForm] = useState<Omit<Reservation, 'id' | 'created_at'>>({
     guest_name: '',
@@ -379,6 +381,7 @@ export function ReservationsPage() {
                 <div key={room.id} className="flex border-b border-neutral-medium relative hover:bg-neutral-light/30 transition-colors">
                     <div className="w-32 p-2 font-medium text-sm text-foreground bg-neutral-light border-r border-neutral-medium flex flex-col justify-center">
                      <span className="truncate">{room.number} ({room.type})</span>
+                     <span className="text-xs text-neutral-dark">{formatCurrency(room.price)}</span>
                      <select
                        value={room.status}
                        onChange={(e) => {
