@@ -219,32 +219,44 @@ function CRMSection({ companies, setCompanies }: { companies: Company[], setComp
       {crmTab === 'leads' && (
         <>
           <div className="bg-white rounded-lg shadow-sm border border-neutral-medium p-6 mb-6">
-            <h3 className="text-lg font-semibold mb-4 text-foreground">{t('frontDesk.addNewLead')}</h3>
+            <h3 className="text-lg font-semibold mb-4 text-foreground">{editingLead ? t('frontDesk.editLead') : t('frontDesk.addNewLead')}</h3>
             <form onSubmit={(e) => {
               e.preventDefault();
               const formData = new FormData(e.target as HTMLFormElement);
-              addLead({
-                name: formData.get('name') as string,
-                email: formData.get('email') as string,
-                phone: formData.get('phone') as string,
-                source: formData.get('source') as string,
-                status: formData.get('status') as 'new' | 'contacted' | 'qualified' | 'lost',
-              });
+              if (editingLead) {
+                updateLead(editingLead.id, {
+                  name: formData.get('name') as string,
+                  email: formData.get('email') as string,
+                  phone: formData.get('phone') as string,
+                  source: formData.get('source') as string,
+                  status: formData.get('status') as 'new' | 'contacted' | 'qualified' | 'lost',
+                });
+                setEditingLead(null);
+              } else {
+                addLead({
+                  name: formData.get('name') as string,
+                  email: formData.get('email') as string,
+                  phone: formData.get('phone') as string,
+                  source: formData.get('source') as string,
+                  status: formData.get('status') as 'new' | 'contacted' | 'qualified' | 'lost',
+                });
+              }
               (e.target as HTMLFormElement).reset();
             }}>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-4">
-                <input name="name" placeholder={t('frontDesk.name')} required className="form-input" />
-                <input name="email" type="email" placeholder={t('frontDesk.email')} required className="form-input" />
-                <input name="phone" placeholder={t('frontDesk.phone')} required className="form-input" />
-                <input name="source" placeholder={t('frontDesk.source')} required className="form-input" />
-                <select name="status" required className="form-input">
+                <input name="name" placeholder={t('frontDesk.name')} defaultValue={editingLead?.name} required className="form-input" />
+                <input name="email" type="email" placeholder={t('frontDesk.email')} defaultValue={editingLead?.email} required className="form-input" />
+                <input name="phone" placeholder={t('frontDesk.phone')} defaultValue={editingLead?.phone} required className="form-input" />
+                <input name="source" placeholder={t('frontDesk.source')} defaultValue={editingLead?.source} required className="form-input" />
+                <select name="status" defaultValue={editingLead?.status || 'new'} required className="form-input">
                   <option value="new">{t('frontDesk.leadStatus.new')}</option>
                   <option value="contacted">{t('frontDesk.leadStatus.contacted')}</option>
                   <option value="qualified">{t('frontDesk.leadStatus.qualified')}</option>
                   <option value="lost">{t('frontDesk.leadStatus.lost')}</option>
                 </select>
               </div>
-              <button type="submit" className="btn-primary">{t('frontDesk.addLead')}</button>
+              <button type="submit" className="btn-primary">{editingLead ? t('frontDesk.updateLead') : t('frontDesk.addLead')}</button>
+              {editingLead && <button type="button" onClick={() => setEditingLead(null)} className="btn-secondary ml-2">{t('frontDesk.cancel')}</button>}
             </form>
           </div>
           <div className="bg-white rounded-lg shadow-sm border border-neutral-medium overflow-x-auto">
@@ -254,9 +266,10 @@ function CRMSection({ companies, setCompanies }: { companies: Company[], setComp
                   <th className="p-4 text-left font-semibold text-foreground">{t('frontDesk.name')}</th>
                   <th className="p-4 text-left font-semibold text-foreground">{t('frontDesk.email')}</th>
                   <th className="p-4 text-left font-semibold text-foreground">{t('frontDesk.phone')}</th>
-                  <th className="p-4 text-left font-semibold text-foreground">{t('frontDesk.source')}</th>
-                  <th className="p-4 text-left font-semibold text-foreground">{t('frontDesk.status')}</th>
-                </tr>
+                   <th className="p-4 text-left font-semibold text-foreground">{t('frontDesk.source')}</th>
+                   <th className="p-4 text-left font-semibold text-foreground">{t('frontDesk.status')}</th>
+                   <th className="p-4 text-left font-semibold text-foreground">{t('frontDesk.actions')}</th>
+                 </tr>
               </thead>
               <tbody>
                 {leads.map((lead) => (
@@ -265,17 +278,20 @@ function CRMSection({ companies, setCompanies }: { companies: Company[], setComp
                     <td className="p-4 text-neutral-dark">{lead.email}</td>
                     <td className="p-4 text-neutral-dark">{lead.phone}</td>
                     <td className="p-4 text-neutral-dark">{lead.source}</td>
-                    <td className="p-4">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        lead.status === 'new' ? 'bg-cyan-50 text-cyan-700' :
-                        lead.status === 'contacted' ? 'bg-amber-50 text-amber-700' :
-                        lead.status === 'qualified' ? 'bg-emerald-50 text-emerald-700' :
-                        'bg-red-50 text-red-700'
-                       }`}>
-                        {t(`frontDesk.leadStatus.${lead.status}`)}
-                      </span>
-                    </td>
-                  </tr>
+                     <td className="p-4">
+                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                         lead.status === 'new' ? 'bg-cyan-50 text-cyan-700' :
+                         lead.status === 'contacted' ? 'bg-amber-50 text-amber-700' :
+                         lead.status === 'qualified' ? 'bg-emerald-50 text-emerald-700' :
+                         'bg-red-50 text-red-700'
+                        }`}>
+                         {t(`frontDesk.leadStatus.${lead.status}`)}
+                       </span>
+                     </td>
+                     <td className="p-4">
+                       <button onClick={() => setEditingLead(lead)} className="btn-secondary text-sm px-3 py-1">{t('frontDesk.edit')}</button>
+                     </td>
+                   </tr>
                 ))}
               </tbody>
             </table>
@@ -360,50 +376,64 @@ function CRMSection({ companies, setCompanies }: { companies: Company[], setComp
       {crmTab === 'newsletter' && (
         <>
           <div className="bg-white rounded-lg shadow-sm border border-neutral-medium p-6 mb-6">
-            <h3 className="text-lg font-semibold mb-4 text-foreground">{t('frontDesk.addNewSubscriber')}</h3>
+            <h3 className="text-lg font-semibold mb-4 text-foreground">{editingSubscriber ? t('frontDesk.editSubscriber') : t('frontDesk.addNewSubscriber')}</h3>
             <form onSubmit={(e) => {
               e.preventDefault();
               const formData = new FormData(e.target as HTMLFormElement);
-              addSubscriber({
-                email: formData.get('email') as string,
-                subscribedAt: formData.get('subscribedAt') as string,
-                status: formData.get('status') as 'active' | 'unsubscribed',
-              });
+              if (editingSubscriber) {
+                updateSubscriber(editingSubscriber.id, {
+                  email: formData.get('email') as string,
+                  subscribedAt: formData.get('subscribedAt') as string,
+                  status: formData.get('status') as 'active' | 'unsubscribed',
+                });
+                setEditingSubscriber(null);
+              } else {
+                addSubscriber({
+                  email: formData.get('email') as string,
+                  subscribedAt: formData.get('subscribedAt') as string,
+                  status: formData.get('status') as 'active' | 'unsubscribed',
+                });
+              }
               (e.target as HTMLFormElement).reset();
             }}>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <input name="email" type="email" placeholder={t('frontDesk.email')} required className="form-input" />
-                <input name="subscribedAt" type="date" required className="form-input" />
-                <select name="status" required className="form-input">
+                <input name="email" type="email" placeholder={t('frontDesk.email')} defaultValue={editingSubscriber?.email} required className="form-input" />
+                <input name="subscribedAt" type="date" defaultValue={editingSubscriber?.subscribedAt} required className="form-input" />
+                <select name="status" defaultValue={editingSubscriber?.status || 'active'} required className="form-input">
                   <option value="active">{t('frontDesk.subscriberStatus.active')}</option>
                   <option value="unsubscribed">{t('frontDesk.subscriberStatus.unsubscribed')}</option>
                 </select>
               </div>
-              <button type="submit" className="btn-primary">{t('frontDesk.addSubscriber')}</button>
+              <button type="submit" className="btn-primary">{editingSubscriber ? t('frontDesk.updateSubscriber') : t('frontDesk.addSubscriber')}</button>
+              {editingSubscriber && <button type="button" onClick={() => setEditingSubscriber(null)} className="btn-secondary ml-2">{t('frontDesk.cancel')}</button>}
             </form>
           </div>
           <div className="bg-white rounded-lg shadow-sm border border-neutral-medium overflow-x-auto">
             <table className="w-full">
               <thead className="bg-neutral-light">
                 <tr>
-                  <th className="p-4 text-left font-semibold text-foreground">{t('frontDesk.email')}</th>
-                  <th className="p-4 text-left font-semibold text-foreground">{t('frontDesk.subscribedAt')}</th>
-                  <th className="p-4 text-left font-semibold text-foreground">{t('frontDesk.status')}</th>
-                </tr>
+                   <th className="p-4 text-left font-semibold text-foreground">{t('frontDesk.email')}</th>
+                   <th className="p-4 text-left font-semibold text-foreground">{t('frontDesk.subscribedAt')}</th>
+                   <th className="p-4 text-left font-semibold text-foreground">{t('frontDesk.status')}</th>
+                   <th className="p-4 text-left font-semibold text-foreground">{t('frontDesk.actions')}</th>
+                 </tr>
               </thead>
               <tbody>
                 {subscribers.map((sub) => (
                   <tr key={sub.id} className="border-t border-neutral-medium hover:bg-neutral-light/50">
                     <td className="p-4 text-foreground font-medium">{sub.email}</td>
                     <td className="p-4 text-neutral-dark">{sub.subscribedAt}</td>
-                    <td className="p-4">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        sub.status === 'active' ? 'bg-emerald-50 text-emerald-700' : 'bg-neutral-100 text-neutral-700'
-                       }`}>
-                        {t(`frontDesk.subscriberStatus.${sub.status}`)}
-                      </span>
-                    </td>
-                  </tr>
+                     <td className="p-4">
+                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                         sub.status === 'active' ? 'bg-emerald-50 text-emerald-700' : 'bg-neutral-100 text-neutral-700'
+                        }`}>
+                         {t(`frontDesk.subscriberStatus.${sub.status}`)}
+                       </span>
+                     </td>
+                     <td className="p-4">
+                       <button onClick={() => setEditingSubscriber(sub)} className="btn-secondary text-sm px-3 py-1">{t('frontDesk.edit')}</button>
+                     </td>
+                   </tr>
                 ))}
               </tbody>
             </table>
