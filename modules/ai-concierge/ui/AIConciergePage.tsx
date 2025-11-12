@@ -175,7 +175,7 @@ export function AIConciergePage() {
               <h3 className="text-lg font-semibold text-primary mb-3">{t('aiConcierge.partnerRecommendations')}</h3>
               <div className="space-y-3">
                 {suggestedPartners.map((partner) => (
-                  <div key={partner.id} className="bg-white p-3 rounded-lg shadow-sm border border-neutral-medium">
+                  <div key={partner.id} className="bg-white p-3 rounded-lg shadow-sm border border-neutral-medium min-h-[200px]">
                     <h4 className="font-semibold text-foreground">{partner.name}</h4>
                     <p className="text-sm text-neutral-dark mb-2">{partner.description}</p>
                      <p className="text-sm text-neutral-dark mb-2"><strong>{t('aiConcierge.hours')}:</strong> {partner.openingHours.replace('\n', ', ')}</p>
@@ -274,7 +274,7 @@ export function AIConciergePage() {
 
            <div className="bg-white p-4 rounded-lg shadow-sm mb-6 border border-neutral-medium">
              <h3 className="font-semibold mb-4 text-foreground">{t('aiConcierge.createNewWorkflow')}</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-4">
                <input
                  type="text"
                  placeholder={t('aiConcierge.workflowName')}
@@ -376,7 +376,7 @@ export function AIConciergePage() {
 
           <div className="bg-white p-4 rounded-lg shadow-sm mb-6 border border-neutral-medium">
             <h3 className="font-semibold mb-4 text-foreground">{t('aiConcierge.addNewPartner')}</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-4">
                <input
                  type="text"
                   placeholder={t('aiConcierge.partnerName')}
@@ -462,7 +462,7 @@ export function AIConciergePage() {
                     <h4 className="font-semibold text-foreground">{partner.name}</h4>
                     <p className="text-sm text-neutral-dark mb-2">{partner.category}</p>
                     <p className="text-sm text-neutral-dark mb-1">{partner.description}</p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 text-sm">
                        <p><strong>{t('aiConcierge.website')}:</strong> <a href={partner.website} target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary-dark">{partner.website}</a></p>
                        <div><strong>{t('aiConcierge.hours')}:</strong><br /><span style={{ whiteSpace: 'pre-line' }}>{partner.openingHours}</span></div>
                        <p><strong>{t('aiConcierge.contact')}:</strong> {partner.contact}</p>

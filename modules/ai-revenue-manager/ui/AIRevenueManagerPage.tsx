@@ -8,7 +8,7 @@ import { FiTrendingUp, FiDollarSign, FiCalendar, FiTarget } from 'react-icons/fi
 
 function MetricCard({ title, value, icon: Icon, color }: { title: string; value: string | number; icon: any; color: string }) {
   return (
-    <div className={`bg-white rounded-lg shadow-sm p-6 border-l-4 ${color} border border-neutral-medium`}>
+    <div className={`bg-white rounded-lg shadow-sm p-6 border-l-4 ${color} border border-neutral-medium min-h-[120px]`}>
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-neutral-dark">{title}</p>
@@ -53,7 +53,7 @@ export function AIRevenueManagerPage() {
       </div>
 
       {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <MetricCard
           title={t('aiRevenueManager.totalRevenue')}
           value={formatCurrency(totalRevenue)}
@@ -117,7 +117,7 @@ export function AIRevenueManagerPage() {
       {/* AI Factors */}
       <div className="bg-white rounded-lg shadow-sm p-6 border border-neutral-medium">
         <h2 className="text-lg font-semibold mb-4 text-foreground">{t('aiRevenueManager.aiAnalysisFactors')}</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {factors.map((factor, index) => (
             <div key={index} className="p-4 bg-neutral-light rounded-lg border border-neutral-medium">
               <h3 className="font-medium text-foreground">{factor.name}</h3>
@@ -143,7 +143,7 @@ export function AIRevenueManagerPage() {
                   {selectedRoomType === suggestion.roomType ? t('aiRevenueManager.hideDetails') : t('aiRevenueManager.showDetails')}
                 </button>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-4">
                 <div>
                   <p className="text-sm text-neutral-dark">{t('aiRevenueManager.currentPrice')}</p>
                   <p className="text-xl font-bold text-foreground">{formatCurrency(suggestion.currentPrice)}</p>

@@ -148,9 +148,9 @@ export function EmployeeManagementPage() {
           </div>
 
           {/* Department Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
             {departmentStats.map((stat) => (
-              <div key={stat.department} className="bg-white rounded-lg shadow-sm border border-neutral-medium p-4">
+              <div key={stat.department} className="bg-white rounded-lg shadow-sm border border-neutral-medium p-4 min-h-[160px]">
                  <h3 className="font-semibold text-foreground capitalize mb-2">
                    {t(`employeeManagement.${stat.department.replace('-', '')}`) || stat.department.replace('-', ' ')}
                  </h3>
@@ -367,7 +367,7 @@ export function EmployeeManagementPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                    <div>
                      <label className="form-label text-sm">{t('employeeManagement.email')}</label>
                      <div className="text-foreground">{viewingEmployee.email}</div>

@@ -26,7 +26,7 @@ function PackageCard({ pkg, onEdit, onDelete, onBook }: {
     .filter(item => item.offer && item.partner);
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200 min-h-[280px]">
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-lg font-semibold text-gray-800">{pkg.name}</h3>
@@ -110,7 +110,7 @@ function EventCard({ event, onEdit, onDelete }: { event: Event; onEdit: () => vo
   const { formatCurrency } = useCurrency();
   
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200 min-h-[280px]">
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-lg font-semibold text-gray-800">{event.name}</h3>
@@ -574,7 +574,7 @@ function PartnerCard({ partner, onEdit, onDelete }: { partner: Partner; onEdit: 
   const { t } = useTranslation('common');
   
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200 min-h-[280px]">
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-lg font-semibold text-gray-800">{partner.name}</h3>
@@ -632,7 +632,7 @@ function PartnerOfferCard({ offer, partner, onEdit, onDelete }: {
   const { formatCurrency } = useCurrency();
   
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200 min-h-[280px]">
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-lg font-semibold text-gray-800">{offer.name}</h3>
@@ -692,7 +692,7 @@ function PartnerReservationCard({ reservation, offer, partner }: {
   const { t } = useTranslation('common');
   
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200 min-h-[280px]">
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-lg font-semibold text-gray-800">{offer.name}</h3>
@@ -997,7 +997,7 @@ export function PackagesEventsPage() {
        {activeTab === 'packages' && (
          <div>
            <h2 className="text-xl font-semibold mb-4 text-gray-800">{t('packagesEvents.hotelPackages')}</h2>
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
              {packages?.map(pkg => (
                <PackageCard
                  key={pkg.id}
@@ -1020,7 +1020,7 @@ export function PackagesEventsPage() {
        {activeTab === 'events' && (
          <div>
            <h2 className="text-xl font-semibold mb-4 text-gray-800">{t('packagesEvents.events')}</h2>
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
              {events?.map(event => (
                <EventCard
                  key={event.id}
@@ -1039,7 +1039,7 @@ export function PackagesEventsPage() {
        {activeTab === 'partners' && (
          <div>
            <h2 className="text-xl font-semibold mb-4 text-gray-800">{t('packagesEvents.partners')}</h2>
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
              {partners?.map(partner => (
                <PartnerCard
                  key={partner.id}
@@ -1058,7 +1058,7 @@ export function PackagesEventsPage() {
        {activeTab === 'offers' && (
          <div>
            <h2 className="text-xl font-semibold mb-4 text-gray-800">{t('packagesEvents.partnerOffers')}</h2>
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
              {partnerOffers?.map(offer => {
                const partner = partners?.find(p => p.id === offer.partner_id);
                return (
@@ -1081,7 +1081,7 @@ export function PackagesEventsPage() {
        {activeTab === 'reservations' && (
          <div>
            <h2 className="text-xl font-semibold mb-4 text-gray-800">{t('packagesEvents.partnerReservations')}</h2>
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
              {partnerReservations?.map(reservation => {
                const offer = partnerOffers?.find(o => o.id === reservation.partner_offer_id);
                const partner = partners?.find(p => p.id === offer?.partner_id);

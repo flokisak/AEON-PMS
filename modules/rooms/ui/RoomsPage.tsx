@@ -35,7 +35,7 @@ function RoomCard({ room, onEdit, onDelete, onMaintenance }: {
 
 
   return (
-    <div className="bg-white rounded-lg p-6 shadow-sm border border-neutral-medium hover:shadow-md transition-all duration-200">
+    <div className="bg-white rounded-lg p-6 shadow-sm border border-neutral-medium hover:shadow-md transition-all duration-200 min-h-[280px]">
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-xl font-bold text-foreground">{t('rooms.roomNumber')} {room.number}</h3>
