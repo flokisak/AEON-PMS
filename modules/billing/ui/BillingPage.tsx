@@ -10,6 +10,7 @@ import { GuestAccountsView } from './GuestAccountsView';
 import { PaymentProcessingView } from './PaymentProcessingView';
 import { ReportsView } from './ReportsView';
 import { useCurrency } from '@/core/hooks/useCurrency';
+import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator } from '@/core/ui/DropdownMenu';
 
 type ViewType = 'invoices' | 'guest-accounts' | 'payments' | 'reports';
 
@@ -192,27 +193,33 @@ export function BillingPage() {
                          {getStatusLabel(invoice.status)}
                        </span>
                     </td>
-                    <td className="p-4">
-                      <div className="flex gap-2">
-                         <button
-                          onClick={() => setSelectedInvoice(invoice)}
-                          className="text-primary hover:text-primary-dark text-sm font-medium"
-                        >
-                          {t('billing.view')}
-                        </button>
-                        <button
-                          onClick={() => setEditingInvoice(invoice)}
-                          className="text-neutral-dark hover:text-primary text-sm font-medium"
-                        >
-                          {t('billing.edit')}
-                        </button>
-                        {invoice.balance > 0 && (
-                          <button className="text-emerald-600 hover:text-emerald-700 text-sm font-medium">
-                            {t('billing.pay')}
-                          </button>
-                        )}
-                      </div>
-                    </td>
+                     <td className="p-4">
+                       <DropdownMenu
+                         trigger={
+                           <button className="text-gray-400 hover:text-gray-600 p-1 rounded hover:bg-gray-100">
+                             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                               <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"/>
+                             </svg>
+                           </button>
+                         }
+                         align="right"
+                       >
+                         <DropdownMenuItem onClick={() => setSelectedInvoice(invoice)}>
+                           <span className="text-primary">{t('billing.view')}</span>
+                         </DropdownMenuItem>
+                         <DropdownMenuItem onClick={() => setEditingInvoice(invoice)}>
+                           <span className="text-neutral-dark">{t('billing.edit')}</span>
+                         </DropdownMenuItem>
+                         {invoice.balance > 0 && (
+                           <>
+                             <DropdownMenuSeparator />
+                             <DropdownMenuItem onClick={() => {/* TODO: Implement payment functionality */}}>
+                               <span className="text-emerald-600">{t('billing.pay')}</span>
+                             </DropdownMenuItem>
+                           </>
+                         )}
+                       </DropdownMenu>
+                     </td>
                   </tr>
                 ))}
               </tbody>

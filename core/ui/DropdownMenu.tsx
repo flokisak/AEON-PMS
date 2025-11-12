@@ -1,0 +1,76 @@
+'use client';
+
+import React, { useState, useRef, useEffect } from 'react';
+
+interface DropdownMenuProps {
+  trigger: React.ReactNode;
+  children: React.ReactNode;
+  align?: 'left' | 'right';
+}
+
+export function DropdownMenu({ trigger, children, align = 'left' }: DropdownMenuProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  return (
+    <div className="relative inline-block text-left" ref={dropdownRef}>
+      <div onClick={() => setIsOpen(!isOpen)}>
+        {trigger}
+      </div>
+      
+      {isOpen && (
+        <div className={`absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ${
+          align === 'right' ? 'right-0' : 'left-0'
+        }`}>
+          <div className="py-1">
+            {React.Children.map(children, (child) => 
+              React.isValidElement(child) 
+                ? React.cloneElement(child as React.ReactElement<any>, { 
+                    onClick: () => {
+                      const originalOnClick = (child as React.ReactElement<any>).props.onClick;
+                      if (originalOnClick) originalOnClick();
+                      setIsOpen(false);
+                    }
+                  })
+                : child
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+interface DropdownMenuItemProps {
+  onClick: () => void;
+  children: React.ReactNode;
+  className?: string;
+}
+
+export function DropdownMenuItem({ onClick, children, className = '' }: DropdownMenuItemProps) {
+  return (
+    <button
+      onClick={onClick}
+      className={`block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 ${className}`}
+    >
+      {children}
+    </button>
+  );
+}
+
+export function DropdownMenuSeparator() {
+  return <hr className="my-1 border-gray-200" />;
+}

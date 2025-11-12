@@ -13,10 +13,30 @@ export function HousekeepingPage() {
     assigned_to: '',
     status: 'pending',
   });
+  const [editingTask, setEditingTask] = useState<HousekeepingTask | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    createTask.mutate(form);
+    if (editingTask) {
+      updateTask.mutate({ id: editingTask.id, ...form });
+      setEditingTask(null);
+    } else {
+      createTask.mutate(form);
+    }
+    setForm({ room_number: 0, assigned_to: '', status: 'pending' });
+  };
+
+  const handleEdit = (task: HousekeepingTask) => {
+    setEditingTask(task);
+    setForm({
+      room_number: task.room_number,
+      assigned_to: task.assigned_to,
+      status: task.status,
+    });
+  };
+
+  const handleCancel = () => {
+    setEditingTask(null);
     setForm({ room_number: 0, assigned_to: '', status: 'pending' });
   };
 
@@ -33,7 +53,9 @@ export function HousekeepingPage() {
         <p className="text-neutral-dark">{t('housekeeping.description')}</p>
       </div>
       <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg border border-neutral-medium shadow-sm">
-        <h2 className="text-lg font-semibold mb-6 text-foreground">{t('housekeeping.addNewTask')}</h2>
+        <h2 className="text-lg font-semibold mb-6 text-foreground">
+          {editingTask ? t('housekeeping.editTask') : t('housekeeping.addNewTask')}
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div>
             <label className="form-label">{t('housekeeping.roomNumber')}</label>
@@ -70,9 +92,16 @@ export function HousekeepingPage() {
             </select>
           </div>
           <div className="flex items-end">
-            <button type="submit" className="btn-primary w-full py-3">
-              {t('housekeeping.addTask')}
-            </button>
+            <div className="flex gap-2">
+              <button type="submit" className="btn-primary flex-1 py-3">
+                {editingTask ? t('housekeeping.updateTask') : t('housekeeping.addTask')}
+              </button>
+              {editingTask && (
+                <button type="button" onClick={handleCancel} className="btn-secondary flex-1 py-3">
+                  {t('housekeeping.cancel')}
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </form>
@@ -104,18 +133,26 @@ export function HousekeepingPage() {
                       t('housekeeping.taskStatus.done').toUpperCase()}
                   </span>
                 </td>
-                <td className="p-4">
-                   <button
-                     onClick={() => {
-                       if (confirm(t('housekeeping.confirmDeleteTask'))) {
-                         deleteTask.mutate(task.id);
-                       }
-                     }}
-                     className="btn-error text-sm px-4 py-2"
-                   >
-                     {t('housekeeping.delete')}
-                   </button>
-                </td>
+                 <td className="p-4">
+                   <div className="flex gap-2">
+                     <button
+                       onClick={() => handleEdit(task)}
+                       className="btn-secondary text-sm px-4 py-2"
+                     >
+                       {t('housekeeping.edit')}
+                     </button>
+                     <button
+                       onClick={() => {
+                         if (confirm(t('housekeeping.confirmDeleteTask'))) {
+                           deleteTask.mutate(task.id);
+                         }
+                       }}
+                       className="btn-error text-sm px-4 py-2"
+                     >
+                       {t('housekeeping.delete')}
+                     </button>
+                   </div>
+                 </td>
               </tr>
             ))}
           </tbody>
