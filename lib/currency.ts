@@ -7,22 +7,22 @@ export interface Currency {
 }
 
 export const currencies: Record<string, Currency> = {
-  USD: { code: 'USD', symbol: '$', name: 'US Dollar', rate: 1 },
-  EUR: { code: 'EUR', symbol: '€', name: 'Euro', rate: 0.92 },
-  GBP: { code: 'GBP', symbol: '£', name: 'British Pound', rate: 0.79 },
-  CZK: { code: 'CZK', symbol: 'Kč', name: 'Czech Koruna', rate: 23.5 },
-  CAD: { code: 'CAD', symbol: 'C$', name: 'Canadian Dollar', rate: 1.36 },
-  AUD: { code: 'AUD', symbol: 'A$', name: 'Australian Dollar', rate: 1.53 },
-  CHF: { code: 'CHF', symbol: 'Fr', name: 'Swiss Franc', rate: 0.88 },
-  JPY: { code: 'JPY', symbol: '¥', name: 'Japanese Yen', rate: 149.5 },
-  CNY: { code: 'CNY', symbol: '¥', name: 'Chinese Yuan', rate: 7.24 },
+  CZK: { code: 'CZK', symbol: 'Kč', name: 'Česká koruna', rate: 1 },
+  EUR: { code: 'EUR', symbol: '€', name: 'Euro', rate: 0.041 },
+  USD: { code: 'USD', symbol: '$', name: 'US Dollar', rate: 0.043 },
+  GBP: { code: 'GBP', symbol: '£', name: 'British Pound', rate: 0.034 },
+  CAD: { code: 'CAD', symbol: 'C$', name: 'Canadian Dollar', rate: 0.058 },
+  AUD: { code: 'AUD', symbol: 'A$', name: 'Australian Dollar', rate: 0.065 },
+  CHF: { code: 'CHF', symbol: 'Fr', name: 'Swiss Franc', rate: 0.037 },
+  JPY: { code: 'JPY', symbol: '¥', name: 'Japanese Yen', rate: 6.36 },
+  CNY: { code: 'CNY', symbol: '¥', name: 'Chinese Yuan', rate: 0.31 },
 };
 
 export type CurrencyCode = keyof typeof currencies;
 
 export class CurrencyConverter {
-  private static baseCurrency: CurrencyCode = 'USD';
-  private static currentCurrency: CurrencyCode = 'USD';
+  private static baseCurrency: CurrencyCode = 'CZK';
+  private static currentCurrency: CurrencyCode = 'CZK';
 
   static setBaseCurrency(currency: CurrencyCode): void {
     this.baseCurrency = currency;
@@ -37,6 +37,10 @@ export class CurrencyConverter {
     const saved = localStorage.getItem('currency') as CurrencyCode;
     if (saved && currencies[saved]) {
       this.currentCurrency = saved;
+    } else {
+      // Default to CZK if no saved currency
+      this.currentCurrency = 'CZK';
+      localStorage.setItem('currency', 'CZK');
     }
     return this.currentCurrency;
   }

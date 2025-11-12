@@ -162,9 +162,14 @@ export function ReservationsPage() {
   };
 
   const rooms: Room[] = [
-    { id: 1, number: 101, type: 'Standard', status: 'available', price: 100, capacity: 2, amenities: [], maintenance_notes: [] },
-    { id: 2, number: 102, type: 'Deluxe', status: 'occupied', price: 150, capacity: 2, amenities: [], maintenance_notes: [] },
-    { id: 3, number: 103, type: 'Suite', status: 'available', price: 200, capacity: 4, amenities: [], maintenance_notes: [] },
+    { id: 1, number: 101, type: 'Standard', status: 'available', price: 2500, capacity: 2, amenities: [], maintenance_notes: [] },
+    { id: 2, number: 102, type: 'Deluxe', status: 'occupied', price: 3200, capacity: 2, amenities: [], maintenance_notes: [] },
+    { id: 3, number: 103, type: 'Suite', status: 'available', price: 4800, capacity: 4, amenities: [], maintenance_notes: [] },
+    { id: 4, number: 104, type: 'Standard', status: 'dirty', price: 2500, capacity: 2, amenities: [], maintenance_notes: [] },
+    { id: 5, number: 105, type: 'Standard', status: 'available', price: 2500, capacity: 2, amenities: [], maintenance_notes: [] },
+    { id: 6, number: 201, type: 'Apartmán', status: 'available', price: 4200, capacity: 3, amenities: [], maintenance_notes: [] },
+    { id: 7, number: 202, type: 'Apartmán', status: 'occupied', price: 4200, capacity: 3, amenities: [], maintenance_notes: [] },
+    { id: 8, number: 301, type: 'Suite', status: 'maintenance', price: 4800, capacity: 4, amenities: [], maintenance_notes: [] },
   ];
 
   const getStatusLabel = (status: Reservation['status']) => {

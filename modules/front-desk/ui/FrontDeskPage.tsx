@@ -44,16 +44,20 @@ function CRMSection({ companies, setCompanies }: { companies: Company[], setComp
   const { t } = useTranslation('common');
   const [crmTab, setCrmTab] = useState<'guests' | 'leads' | 'companies' | 'newsletter'>('guests');
   const [frequentGuests, setFrequentGuests] = useState<Guest[]>([
-    { id: '1', name: 'John Doe', email: 'john@example.com', phone: '123-456-7890', visits: 5, lastVisit: '2024-11-01' },
-    { id: '2', name: 'Jane Smith', email: 'jane@example.com', phone: '098-765-4321', visits: 3, lastVisit: '2024-10-15' },
+    { id: '1', name: 'Novák Jiří', email: 'jiri.novak@email.cz', phone: '+420 602 123 456', visits: 5, lastVisit: '2024-11-01' },
+    { id: '2', name: 'Svobodová Eva', email: 'eva.svobodova@email.cz', phone: '+420 723 987 654', visits: 3, lastVisit: '2024-10-15' },
+    { id: '3', name: 'Dvořák Petr', email: 'petr.dvorak@email.cz', phone: '+420 608 456 789', visits: 8, lastVisit: '2024-11-05' },
+    { id: '4', name: 'Černá Marie', email: 'marie.cerna@email.cz', phone: '+420 733 258 147', visits: 2, lastVisit: '2024-09-20' },
   ]);
   const [leads, setLeads] = useState<Lead[]>([
-    { id: '1', name: 'Bob Johnson', email: 'bob@example.com', phone: '555-123-4567', source: 'Website', status: 'new' },
-    { id: '2', name: 'Alice Brown', email: 'alice@example.com', phone: '555-987-6543', source: 'Referral', status: 'contacted' },
+    { id: '1', name: 'Procházka Tomáš', email: 'tomas.prochazka@firma.cz', phone: '+420 777 123 456', source: 'Web', status: 'new' },
+    { id: '2', name: 'Kučerová Lenka', email: 'lenka.kucerova@firma.cz', phone: '+420 602 987 654', source: 'Doporučení', status: 'contacted' },
+    { id: '3', name: 'Horák Martin', email: 'martin.horak@email.cz', phone: '+420 723 456 789', source: 'Facebook', status: 'qualified' },
   ]);
   const [subscribers, setSubscribers] = useState<Subscriber[]>([
-    { id: '1', email: 'subscriber1@example.com', subscribedAt: '2024-09-01', status: 'active' },
-    { id: '2', email: 'subscriber2@example.com', subscribedAt: '2024-08-15', status: 'active' },
+    { id: '1', email: 'novak.jiri@email.cz', subscribedAt: '2024-09-01', status: 'active' },
+    { id: '2', email: 'svobodova.eva@email.cz', subscribedAt: '2024-08-15', status: 'active' },
+    { id: '3', email: 'dvorak.p@email.cz', subscribedAt: '2024-10-20', status: 'active' },
   ]);
 
   const [editingGuest, setEditingGuest] = useState<Guest | null>(null);
@@ -407,8 +411,10 @@ export function FrontDeskPage() {
   const [activeTab, setActiveTab] = useState<'checkin' | 'crm'>('checkin');
   const [showCheckInModal, setShowCheckInModal] = useState(false);
   const [companies, setCompanies] = useState<Company[]>([
-    { id: '1', name: 'ABC Corp', tax_id: '123456789', address: '123 Main St', phone: '555-1234', email: 'contact@abc.com', contact_person: 'John Doe' },
-    { id: '2', name: 'XYZ Ltd', tax_id: '987654321', address: '456 Elm St', phone: '555-5678', email: 'info@xyz.com', contact_person: 'Jane Smith' },
+    { id: '1', name: 'Česká software s.r.o.', tax_id: '12345678', address: 'Na Příkopě 20, Praha 1', phone: '+420 222 551 111', email: 'info@ceskasoftware.cz', contact_person: 'Ing. Novák' },
+    { id: '2', name: 'Moravské strojírny a.s.', tax_id: '87654321', address: 'Husova 15, Brno', phone: '+420 533 422 222', email: 'obchod@moravskestrojirny.cz', contact_person: 'Dvořák Tomáš' },
+    { id: '3', name: 'Pražská dopravní a.s.', tax_id: '45678912', address: 'Vinohradská 150, Praha 3', phone: '+420 266 123 456', email: 'nakup@prazskadopravni.cz', contact_person: 'Svobodová Jana' },
+    { id: '4', name: 'Sudetská energetika s.r.o.', tax_id: '78912345', address: 'Teplická 78, Ústí nad Labem', phone: '+420 475 777 888', email: 'objednavky@sudetskaenergetika.cz', contact_person: 'Procházka Martin' },
   ]);
   const [form, setForm] = useState<Omit<CheckIn, 'id' | 'status'>>({
     guest_name: '',

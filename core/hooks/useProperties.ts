@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 export interface Property {
   id: string;
   name: string;
-  type: 'hotel' | 'resort' | 'motel' | 'hostel' | 'apartment' | 'vacation_rental' | 'service';
+  type: 'hotel' | 'resort' | 'motel' | 'hostel' | 'apartment' | 'vacation_rental' | 'service' | 'pension';
   address: string;
   city: string;
   country: string;
@@ -55,26 +55,62 @@ export function useProperties() {
           const parsedProperties = JSON.parse(stored);
           setProperties(parsedProperties);
         } else {
-          // Initialize with default property
-          const defaultProperty: Property = {
-            id: 'prop-1',
-            name: 'AEON Hotel',
-            type: 'hotel',
-            address: '123 Main St',
-            city: 'Prague',
-            country: 'Czech Republic',
-            phone: '+420 123 456 789',
-            email: 'info@aeonhotel.com',
-            website: 'https://aeonhotel.com',
-            totalRooms: 100,
-            currency: 'CZK',
-            timezone: 'Europe/Prague',
-            status: 'active',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
-          };
-          setProperties([defaultProperty]);
-          localStorage.setItem('properties', JSON.stringify([defaultProperty]));
+          // Initialize with Czech demo properties
+          const defaultProperties: Property[] = [
+            {
+              id: 'prop-1',
+              name: 'Hotel Praha Centrum',
+              type: 'hotel',
+              address: 'Husova 15',
+              city: 'Praha 1',
+              country: 'Česká republika',
+              phone: '+420 222 551 234',
+              email: 'info@hotelprahacentrum.cz',
+              website: 'https://hotelprahacentrum.cz',
+              totalRooms: 45,
+              currency: 'CZK',
+              timezone: 'Europe/Prague',
+              status: 'active',
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString()
+            },
+            {
+              id: 'prop-2',
+              name: 'Penzion U Tří Piv',
+              type: 'pension',
+              address: 'Křižovatka 112',
+              city: 'Český Krumlov',
+              country: 'Česká republika',
+              phone: '+420 380 712 345',
+              email: 'info@utripiv.cz',
+              website: 'https://utripiv.cz',
+              totalRooms: 12,
+              currency: 'CZK',
+              timezone: 'Europe/Prague',
+              status: 'active',
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString()
+            },
+            {
+              id: 'prop-3',
+              name: 'Wellness Resort Lázně',
+              type: 'resort',
+              address: 'Lázeňská 28',
+              city: 'Karlovy Vary',
+              country: 'Česká republika',
+              phone: '+420 353 224 567',
+              email: 'rezervace@wellnesslazne.cz',
+              website: 'https://wellnesslazne.cz',
+              totalRooms: 68,
+              currency: 'CZK',
+              timezone: 'Europe/Prague',
+              status: 'active',
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString()
+            }
+          ];
+          setProperties(defaultProperties);
+          localStorage.setItem('properties', JSON.stringify(defaultProperties));
         }
         
         if (currentId) {

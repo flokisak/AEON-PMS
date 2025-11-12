@@ -13,10 +13,14 @@ export function useHousekeeping() {
         if (error) throw error;
         return data as HousekeepingTask[];
       } catch (error) {
-        // Fallback to mock data
+        // Fallback to Czech mock data
         return [
-          { id: 1, room_number: 101, assigned_to: 'Maria', status: 'pending', updated_at: '2024-11-12T10:00:00Z' },
-          { id: 2, room_number: 102, assigned_to: 'Carlos', status: 'in_progress', updated_at: '2024-11-12T09:30:00Z' },
+          { id: 1, room_number: 101, assigned_to: 'Nováková Jana', status: 'pending', updated_at: '2024-11-12T10:00:00Z' },
+          { id: 2, room_number: 102, assigned_to: 'Svoboda Petr', status: 'in_progress', updated_at: '2024-11-12T09:30:00Z' },
+          { id: 3, room_number: 103, assigned_to: 'Dvořáková Marie', status: 'completed', updated_at: '2024-11-12T08:15:00Z' },
+          { id: 4, room_number: 201, assigned_to: 'Procházka Tomáš', status: 'pending', updated_at: '2024-11-12T11:00:00Z' },
+          { id: 5, room_number: 104, assigned_to: 'Černá Lenka', status: 'pending', updated_at: '2024-11-12T12:00:00Z' },
+          { id: 6, room_number: 301, assigned_to: 'Horák Martin', status: 'in_progress', updated_at: '2024-11-12T07:45:00Z' },
         ] as HousekeepingTask[];
       }
     },

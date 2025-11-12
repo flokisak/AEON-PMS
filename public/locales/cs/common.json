@@ -564,7 +564,9 @@
       "single": "Jednolůžkový pokoj",
       "double": "Dvojlůžkový pokoj",
       "suite": "Apartmán",
-      "deluxe": "Luxusní pokoj"
+      "deluxe": "Luxusní pokoj",
+      "standard": "Standard",
+      "apartment": "Apartmán"
     },
     "roomNumberPlaceholder": "např. 101, A205",
     "specialRequestsPlaceholder": "Zadejte jakákoliv speciální přání nebo preference",
