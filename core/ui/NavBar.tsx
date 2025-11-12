@@ -4,9 +4,10 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { FiCalendar, FiMessageSquare, FiTrendingUp, FiUserCheck, FiCreditCard, FiHome, FiBarChart, FiSettings, FiChevronLeft, FiChevronRight, FiPackage, FiUsers } from 'react-icons/fi';
+import { FiCalendar, FiMessageSquare, FiTrendingUp, FiUserCheck, FiCreditCard, FiHome, FiBarChart, FiSettings, FiChevronLeft, FiChevronRight, FiPackage, FiUsers, FiChevronDown, FiMapPin } from 'react-icons/fi';
 import { GiBroom } from 'react-icons/gi';
 import { getActiveModulesForNav } from '../moduleRegistry';
+import { useProperties } from '../hooks/useProperties';
 
 interface Module {
   path: string;
@@ -32,7 +33,9 @@ export function NavBar() {
   const [modules, setModules] = useState<Module[]>([]);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [showPropertySwitcher, setShowPropertySwitcher] = useState(false);
   const pathname = usePathname();
+  const { properties, currentProperty, switchProperty } = useProperties();
 
   useEffect(() => {
     const fetchModules = async () => {
@@ -90,26 +93,36 @@ export function NavBar() {
       {/* Mobile menu button */}
       <button
         onClick={() => setIsMobileOpen(!isMobileOpen)}
-        className="md:hidden fixed top-4 left-4 z-50 p-2 bg-indigo-600 text-white rounded-lg shadow-lg"
+        className="md:hidden fixed top-4 left-4 z-50 p-3 bg-primary text-white rounded-xl shadow-lg border border-primary-dark touch-manipulation"
+        aria-label={isMobileOpen ? 'Close menu' : 'Open menu'}
       >
-        <FiChevronRight size={20} />
+        {isMobileOpen ? (
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        ) : (
+          <FiChevronRight size={20} />
+        )}
       </button>
 
       {/* Overlay for mobile */}
       {isMobileOpen && (
         <div
-          className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+          className="md:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300"
           onClick={() => setIsMobileOpen(false)}
+          aria-label="Close menu overlay"
         />
       )}
 
       <nav
         className={`
-            bg-white text-foreground shadow-sm border-r border-neutral-medium
+            bg-white text-foreground shadow-lg border-r border-neutral-medium
             transition-all duration-300 min-h-screen flex flex-col overflow-visible
             ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
             ${isCollapsed ? 'md:w-16' : 'md:w-64'}
-            fixed md:relative z-50 md:z-auto w-64 md:w-auto
+            fixed md:relative z-50 md:z-auto w-72 md:w-auto
+            md:shadow-sm
           `}
       >
         {/* Header */}
@@ -117,31 +130,35 @@ export function NavBar() {
             {!isCollapsed && <h1 className="text-xl font-bold text-primary">AEON PMS</h1>}
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="hidden md:block p-2 rounded-lg hover:bg-neutral-medium transition-colors text-neutral-dark"
+              className="hidden md:block p-3 rounded-lg hover:bg-neutral-medium transition-colors text-neutral-dark touch-manipulation"
               title={isCollapsed ? t('nav.expandSidebar') : t('nav.collapseSidebar')}
            >
              {isCollapsed ? <FiChevronRight size={20} /> : <FiChevronLeft size={20} />}
            </button>
            <button
              onClick={() => setIsMobileOpen(false)}
-             className="md:hidden p-2 rounded-lg hover:bg-neutral-medium transition-colors text-foreground"
+             className="md:hidden p-3 rounded-lg hover:bg-neutral-medium transition-colors text-foreground touch-manipulation"
+             aria-label="Close menu"
            >
-             ✕
+             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+               <line x1="18" y1="6" x2="6" y2="18"></line>
+               <line x1="6" y1="6" x2="18" y2="18"></line>
+             </svg>
            </button>
         </div>
 
         {/* Navigation Items */}
-        <ul className="flex-1 p-4 space-y-2">
+        <ul className="flex-1 p-4 space-y-2 overflow-y-auto">
           <li>
             <Link
               href="/"
               onClick={() => setIsMobileOpen(false)}
-              className={`flex items-center p-3 hover:bg-neutral-light hover:text-primary rounded-lg transition-all duration-200 group ${pathname === '/' ? 'bg-primary/10 text-primary rounded-lg border-r-2 border-primary' : ''}`}
+              className={`flex items-center p-4 hover:bg-neutral-light hover:text-primary rounded-xl transition-all duration-200 group touch-manipulation ${pathname === '/' ? 'bg-primary/10 text-primary rounded-xl border-l-4 border-primary' : ''}`}
             >
                 <FiHome className="text-xl text-neutral-dark" />
-                {!isCollapsed && <span className="ml-3 font-medium">{t('nav.dashboard')}</span>}
+                {!isCollapsed && <span className="ml-4 font-medium text-base">{t('nav.dashboard')}</span>}
                 {isCollapsed && !isMobileOpen && (
-                  <span className="absolute left-16 bg-white text-foreground px-2 py-1 rounded text-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 shadow-sm border">
+                  <span className="absolute left-16 bg-white text-foreground px-3 py-2 rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 shadow-lg border border-neutral-medium">
                     {t('nav.dashboard')}
                   </span>
                )}
@@ -152,14 +169,14 @@ export function NavBar() {
             return (
               <li key={module.path}>
                  <Link
-                   href={module.path}
-                   onClick={() => setIsMobileOpen(false)}
-                    className={`flex items-center p-3 hover:bg-neutral-light hover:text-primary rounded-lg transition-all duration-200 group ${pathname === module.path ? 'bg-primary/10 text-primary rounded-lg border-r-2 border-primary' : ''}`}
+                    href={module.path}
+                    onClick={() => setIsMobileOpen(false)}
+                     className={`flex items-center p-4 hover:bg-neutral-light hover:text-primary rounded-xl transition-all duration-200 group touch-manipulation ${pathname === module.path ? 'bg-primary/10 text-primary rounded-xl border-l-4 border-primary' : ''}`}
                  >
-                    {Icon && <Icon className="text-xl text-neutral-dark" />}
-                   {!isCollapsed && <span className="ml-3 font-medium">{module.name}</span>}
+                     {Icon && <Icon className="text-xl text-neutral-dark" />}
+                   {!isCollapsed && <span className="ml-4 font-medium text-base">{module.name}</span>}
                    {isCollapsed && !isMobileOpen && (
-                     <span className="absolute left-16 bg-white text-foreground px-2 py-1 rounded text-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 shadow-sm border">
+                     <span className="absolute left-16 bg-white text-foreground px-3 py-2 rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 shadow-lg border border-neutral-medium">
                        {module.name}
                      </span>
                    )}
@@ -171,19 +188,122 @@ export function NavBar() {
             <Link
               href="/admin"
               onClick={() => setIsMobileOpen(false)}
-              className={`flex items-center p-3 hover:bg-neutral-light hover:text-primary rounded-lg transition-all duration-200 group ${pathname === '/admin' ? 'bg-primary/10 text-primary rounded-lg border-r-2 border-primary' : ''}`}
+              className={`flex items-center p-4 hover:bg-neutral-light hover:text-primary rounded-xl transition-all duration-200 group touch-manipulation ${pathname === '/admin' ? 'bg-primary/10 text-primary rounded-xl border-l-4 border-primary' : ''}`}
             >
                 <FiSettings className="text-xl text-neutral-dark" />
-                {!isCollapsed && <span className="ml-3 font-medium">{t('nav.admin')}</span>}
+                {!isCollapsed && <span className="ml-4 font-medium text-base">{t('nav.admin')}</span>}
                 {isCollapsed && !isMobileOpen && (
-                  <span className="absolute left-16 bg-white text-foreground px-2 py-1 rounded text-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 shadow-sm border">
+                  <span className="absolute left-16 bg-white text-foreground px-3 py-2 rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 shadow-lg border border-neutral-medium">
                     {t('nav.admin')}
                   </span>
                )}
             </Link>
-          </li>
-        </ul>
-      </nav>
-    </>
-  );
+           </li>
+         </ul>
+
+         {/* Property Switcher - Only show if user has more than one property */}
+         {properties.length > 1 && (
+           <div className="p-4 border-t border-neutral-medium">
+             {!isCollapsed && (
+               <div className="mb-3">
+                 <div className="text-sm text-neutral-dark font-medium mb-2">
+                   {t('nav.currentProperty')}
+                 </div>
+                 <button
+                   onClick={() => setShowPropertySwitcher(!showPropertySwitcher)}
+                   className="w-full flex items-center justify-between p-3 bg-primary/10 text-primary rounded-xl hover:bg-primary/20 transition-colors touch-manipulation"
+                 >
+                   <div className="flex items-center">
+                     <FiMapPin className="mr-3 text-lg" />
+                     <span className="text-sm font-medium truncate">
+                       {currentProperty?.name || t('nav.selectProperty')}
+                     </span>
+                   </div>
+                   <FiChevronDown className={`transition-transform text-lg ${showPropertySwitcher ? 'rotate-180' : ''}`} />
+                 </button>
+               </div>
+             )}
+
+             {/* Property Dropdown */}
+             {showPropertySwitcher && !isCollapsed && (
+               <div className="mt-3 space-y-2 max-h-64 overflow-y-auto">
+                 {properties.map((property) => (
+                   <button
+                     key={property.id}
+                     onClick={() => {
+                       switchProperty(property.id);
+                       setShowPropertySwitcher(false);
+                       setIsMobileOpen(false); // Close mobile menu after selection
+                     }}
+                     className={`w-full text-left p-3 rounded-xl text-sm transition-all duration-200 touch-manipulation ${
+                       currentProperty?.id === property.id
+                         ? 'bg-primary text-white shadow-md'
+                         : 'hover:bg-neutral-light text-neutral-dark hover:shadow-sm'
+                     }`}
+                   >
+                     <div className="font-medium truncate text-base">{property.name}</div>
+                     <div className="text-xs opacity-75 truncate mt-1">
+                       {property.city}, {property.country}
+                     </div>
+                   </button>
+                 ))}
+               </div>
+             )}
+
+             {/* Collapsed state - show just current property icon */}
+             {isCollapsed && (
+               <div className="relative group">
+                 <button
+                   onClick={() => setShowPropertySwitcher(!showPropertySwitcher)}
+                   className="w-full p-4 hover:bg-neutral-light rounded-xl transition-colors text-neutral-dark touch-manipulation"
+                   title={`${currentProperty?.name || t('nav.selectProperty')} - ${t('nav.clickToSwitch')}`}
+                 >
+                   <FiMapPin className="text-xl" />
+                 </button>
+                 
+                 {/* Tooltip for collapsed state */}
+                 {!isMobileOpen && (
+                   <span className="absolute left-16 bg-white text-foreground px-3 py-2 rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 shadow-lg border border-neutral-medium">
+                     {currentProperty?.name || t('nav.selectProperty')}
+                   </span>
+                 )}
+
+                 {/* Collapsed dropdown */}
+                 {showPropertySwitcher && (
+                   <div className="absolute bottom-full left-0 mb-2 w-72 bg-white rounded-xl shadow-xl border border-neutral-medium z-20">
+                     <div className="p-3 border-b border-neutral-medium">
+                       <div className="text-sm text-neutral-dark font-medium">
+                         {t('nav.switchProperty')}
+                       </div>
+                     </div>
+                     <div className="max-h-64 overflow-y-auto">
+                       {properties.map((property) => (
+                         <button
+                           key={property.id}
+                           onClick={() => {
+                             switchProperty(property.id);
+                             setShowPropertySwitcher(false);
+                           }}
+                           className={`w-full text-left p-3 text-sm transition-all duration-200 touch-manipulation ${
+                             currentProperty?.id === property.id
+                               ? 'bg-primary text-white'
+                               : 'hover:bg-neutral-light text-neutral-dark'
+                           }`}
+                         >
+                           <div className="font-medium text-base">{property.name}</div>
+                           <div className="text-xs opacity-75 mt-1">
+                             {property.city}, {property.country}
+                           </div>
+                         </button>
+                       ))}
+                     </div>
+                   </div>
+                 )}
+               </div>
+             )}
+           </div>
+         )}
+       </nav>
+     </>
+   );
 }

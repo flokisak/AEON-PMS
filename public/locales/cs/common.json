@@ -1,9 +1,13 @@
 {
   "nav": {
-    "dashboard": "Nástěnka",
-    "admin": "Správa",
+    "dashboard": "Přehled",
+    "admin": "Admin",
     "expandSidebar": "Rozbalit postranní panel",
-    "collapseSidebar": "Sbalit postranní panel"
+    "collapseSidebar": "Sbalit postranní panel",
+    "currentProperty": "Aktuální nemovitost",
+    "selectProperty": "Vybrat nemovitost",
+    "switchProperty": "Přepnout nemovitost",
+    "clickToSwitch": "Klikněte pro přepnutí nemovitosti"
   },
   "modules": {
     "reservations": "Rezervace",
@@ -879,6 +883,30 @@
     "pricesRecalculated": "Všechny ceny byly přepočítány na základě nové měny.",
     "conversionRate": "Kurz",
     "totalInBaseCurrency": "Celkem ({{baseCurrency}})",
-    "totalInCurrentCurrency": "Celkem ({{currency}})"
+    "totalInCurrentCurrency": "Celkem ({{currency}})",
+    "properties": "Nemovitosti",
+    "manageProperties": "Správa nemovitostí",
+    "addProperty": "Přidat nemovitost",
+    "addNewProperty": "Přidat novou nemovitost",
+    "editProperty": "Upravit nemovitost",
+    "updateProperty": "Aktualizovat nemovitost",
+    "confirmDeleteProperty": "Opravdu chcete smazat tuto nemovitost?",
+    "propertyName": "Název nemovitosti",
+    "type": "Typ",
+    "location": "Lokalita",
+    "rooms": "Pokoje",
+    "status": "Stav",
+    "switchTo": "Přepnout na",
+    "currentProperty": "Aktuální nemovitost",
+    "currentlyManaging": "Aktuálně spravujete",
+    "hotel": "Hotel",
+    "resort": "Resort",
+    "motel": "Motel",
+    "hostel": "Hostel",
+    "apartment": "Apartmán",
+    "vacationRental": "Rekreační pronájem",
+    "service": "Servisní apartmán",
+    "timezone": "Časová zóna",
+    "cancel": "Zrušit"
   }
 }

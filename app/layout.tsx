@@ -32,9 +32,9 @@ export default function RootLayout({
       >
         <Providers>
           <NavBar />
-          <div className="flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col min-h-0">
             <TopBar />
-            <main className="flex-1 p-6 overflow-auto">
+            <main className="flex-1 p-4 md:p-6 overflow-auto">
               {children}
             </main>
           </div>
