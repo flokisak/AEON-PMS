@@ -17,184 +17,243 @@ let mockInvoices: Invoice[] = [
   {
     id: 1,
     guest_account_id: 'GA001',
-    invoice_number: 'INV-2024-001',
-    guest_name: 'John Doe',
-    guest_email: 'john.doe@email.com',
+    invoice_number: 'FA-2024-001',
+    guest_name: 'Novák Jiří',
+    guest_email: 'jiri.novak@email.cz',
     issue_date: '2024-11-01',
     due_date: '2024-11-15',
     status: 'paid',
-    currency: 'USD',
-    subtotal: 250.00,
-    tax_amount: 20.00,
+    currency: 'CZK',
+    subtotal: 7200.00,
+    tax_amount: 576.00,
     discount_amount: 0,
-    total_amount: 270.00,
-    paid_amount: 270.00,
+    total_amount: 7776.00,
+    paid_amount: 7776.00,
     balance: 0,
     line_items: [
       {
         id: 'li1',
-        description: 'Standard Room - 3 nights',
+        description: 'Standardní pokoj - 3 noci',
         quantity: 3,
-        unit_price: 100.00,
-        total: 300.00,
+        unit_price: 2400.00,
+        total: 7200.00,
         tax_rate: 8.0,
-        tax_amount: 24.00,
+        tax_amount: 576.00,
         category: 'accommodation',
         date: '2024-11-01',
-        reference: 'Room 101'
+        reference: 'Pokoj 101'
       },
       {
         id: 'li2',
-        description: 'Room service - Breakfast',
+        description: 'Pokojová služba - Snídaně',
         quantity: 2,
-        unit_price: 15.00,
-        total: 30.00,
+        unit_price: 180.00,
+        total: 360.00,
         tax_rate: 8.0,
-        tax_amount: 2.40,
+        tax_amount: 28.80,
         category: 'food_beverage',
         date: '2024-11-02',
-        reference: 'Restaurant'
+        reference: 'Restaurace'
       }
     ],
     payments: [
       {
         id: 'p1',
         invoice_id: 1,
-        amount: 270.00,
+        amount: 7776.00,
         payment_method: 'credit_card',
         payment_date: '2024-11-15',
         reference_number: 'CC-123456',
-        processed_by: 'Front Desk'
+        processed_by: 'Recepce'
       }
     ],
-    notes: 'Thank you for staying with us!',
+    notes: 'Děkujeme za Váš pobyt!',
     updated_at: '2024-11-15T10:30:00Z'
   },
   {
     id: 2,
     guest_account_id: 'GA002',
-    invoice_number: 'INV-2024-002',
-    guest_name: 'Jane Smith',
-    guest_email: 'jane.smith@email.com',
+    invoice_number: 'FA-2024-002',
+    guest_name: 'Svobodová Eva',
+    guest_email: 'eva.svobodova@email.cz',
     issue_date: '2024-11-05',
     due_date: '2024-11-20',
       status: 'sent',
-    currency: 'USD',
-    subtotal: 400.00,
-    tax_amount: 32.00,
-    discount_amount: 20.00,
-    total_amount: 412.00,
-    paid_amount: 200.00,
-    balance: 212.00,
+    currency: 'CZK',
+    subtotal: 10800.00,
+    tax_amount: 864.00,
+    discount_amount: 540.00,
+    total_amount: 11124.00,
+    paid_amount: 5400.00,
+    balance: 5724.00,
     line_items: [
       {
         id: 'li3',
-        description: 'Deluxe Suite - 2 nights',
+        description: 'Apartmá Deluxe - 2 noci',
         quantity: 2,
-        unit_price: 150.00,
-        total: 300.00,
+        unit_price: 3600.00,
+        total: 7200.00,
         tax_rate: 8.0,
-        tax_amount: 24.00,
+        tax_amount: 576.00,
         category: 'accommodation',
         date: '2024-11-05',
-        reference: 'Room 201'
+        reference: 'Pokoj 201'
       },
       {
         id: 'li4',
-        description: 'Spa Treatment',
+        description: 'Wellness procedura',
         quantity: 1,
-        unit_price: 100.00,
-        total: 100.00,
+        unit_price: 3600.00,
+        total: 3600.00,
         tax_rate: 8.0,
-        tax_amount: 8.00,
+        tax_amount: 288.00,
         category: 'services',
         date: '2024-11-06',
-        reference: 'Spa'
+        reference: 'Wellness'
       }
     ],
     payments: [
       {
         id: 'p2',
         invoice_id: 2,
-        amount: 200.00,
+        amount: 5400.00,
         payment_method: 'bank_transfer',
         payment_date: '2024-11-10',
         reference_number: 'BT-789012',
-        notes: 'Partial payment'
+        notes: 'Částečná platba'
       }
     ],
-    notes: '20% discount applied for loyalty program',
+    notes: 'Sleva 20% pro věrné hosty',
     updated_at: '2024-11-10T14:20:00Z'
   },
   {
     id: 3,
     guest_account_id: 'GA003',
-    invoice_number: 'INV-2024-003',
-    guest_name: 'Mike Johnson',
+    invoice_number: 'FA-2024-003',
+    guest_name: 'Dvořák Petr',
     issue_date: '2024-11-08',
     due_date: '2024-11-22',
     status: 'overdue',
-    currency: 'USD',
-    subtotal: 180.00,
-    tax_amount: 14.40,
+    currency: 'CZK',
+    subtotal: 5400.00,
+    tax_amount: 432.00,
     discount_amount: 0,
-    total_amount: 194.40,
+    total_amount: 5832.00,
     paid_amount: 0,
-    balance: 194.40,
+    balance: 5832.00,
     line_items: [
       {
         id: 'li5',
-        description: 'Tent Cabin - 3 nights',
+        description: 'Pokoj Superior - 3 noci',
         quantity: 3,
-        unit_price: 60.00,
-        total: 180.00,
+        unit_price: 1800.00,
+        total: 5400.00,
         tax_rate: 8.0,
-        tax_amount: 14.40,
+        tax_amount: 432.00,
         category: 'accommodation',
         date: '2024-11-08',
-        reference: 'Tent 1'
+        reference: 'Pokoj 201'
       }
     ],
     payments: [],
-    notes: 'Payment due - please contact front desk',
+    notes: 'Platba po splatnosti - kontaktujte recepci',
     updated_at: '2024-11-12T09:15:00Z'
+  },
+  {
+    id: 4,
+    guest_account_id: 'GA004',
+    invoice_number: 'FA-2024-004',
+    guest_name: 'Černá Marie',
+    guest_email: 'marie.cerna@email.cz',
+    issue_date: '2024-11-10',
+    due_date: '2024-11-25',
+    status: 'unpaid',
+    currency: 'CZK',
+    subtotal: 16800.00,
+    tax_amount: 1344.00,
+    discount_amount: 840.00,
+    total_amount: 17304.00,
+    paid_amount: 0,
+    balance: 17304.00,
+    line_items: [
+      {
+        id: 'li6',
+        description: 'Prezidentský apartmá - 2 noci',
+        quantity: 2,
+        unit_price: 8500.00,
+        total: 17000.00,
+        tax_rate: 8.0,
+        tax_amount: 1360.00,
+        category: 'accommodation',
+        date: '2024-11-10',
+        reference: 'Pokoj 302'
+      },
+      {
+        id: 'li7',
+        description: 'Večeře pro dvě osoby',
+        quantity: 2,
+        unit_price: 450.00,
+        total: 900.00,
+        tax_rate: 8.0,
+        tax_amount: 72.00,
+        category: 'food_beverage',
+        date: '2024-11-11',
+        reference: 'Restaurace'
+      }
+    ],
+    payments: [],
+    notes: 'Firemní pobyt - sleva 5%',
+    updated_at: '2024-11-10T16:45:00Z'
   }
 ];
 
 const mockGuestAccounts: GuestAccount[] = [
   {
     id: 'GA001',
-    guest_name: 'John Doe',
-    email: 'john.doe@email.com',
-    phone: '+1-555-0101',
-    credit_limit: 1000,
+    guest_name: 'Novák Jiří',
+    email: 'jiri.novak@email.cz',
+    phone: '+420 602 123 456',
+    credit_limit: 25000,
     current_balance: 0,
-    total_charged: 270.00,
-    total_paid: 270.00,
+    total_charged: 7776.00,
+    total_paid: 7776.00,
     last_activity: '2024-11-15',
     status: 'active'
   },
   {
     id: 'GA002',
-    guest_name: 'Jane Smith',
-    email: 'jane.smith@email.com',
-    phone: '+1-555-0102',
-    credit_limit: 2000,
-    current_balance: 212.00,
-    total_charged: 412.00,
-    total_paid: 200.00,
+    guest_name: 'Svobodová Eva',
+    email: 'eva.svobodova@email.cz',
+    phone: '+420 723 987 654',
+    credit_limit: 50000,
+    current_balance: 5724.00,
+    total_charged: 11124.00,
+    total_paid: 5400.00,
     last_activity: '2024-11-10',
     status: 'active'
   },
   {
     id: 'GA003',
-    guest_name: 'Mike Johnson',
-    email: 'mike.johnson@email.com',
-    phone: '+1-555-0103',
-    current_balance: 194.40,
-    total_charged: 194.40,
+    guest_name: 'Dvořák Petr',
+    email: 'petr.dvorak@email.cz',
+    phone: '+420 608 456 789',
+    credit_limit: 20000,
+    current_balance: 5832.00,
+    total_charged: 5832.00,
     total_paid: 0,
     last_activity: '2024-11-08',
+    status: 'active'
+  },
+  {
+    id: 'GA004',
+    guest_name: 'Černá Marie',
+    email: 'marie.cerna@email.cz',
+    phone: '+420 733 258 147',
+    credit_limit: 75000,
+    current_balance: 17304.00,
+    total_charged: 17304.00,
+    total_paid: 0,
+    last_activity: '2024-11-10',
     status: 'active'
   }
 ];
@@ -202,17 +261,24 @@ const mockGuestAccounts: GuestAccount[] = [
 const mockTaxRates: TaxRate[] = [
   {
     id: 'TR001',
-    name: 'Standard Sales Tax',
-    rate: 8.0,
+    name: 'DPH 21%',
+    rate: 21.0,
     is_active: true,
-    applies_to: ['accommodation', 'food_beverage', 'services', 'other']
+    applies_to: ['accommodation', 'services', 'other']
   },
   {
     id: 'TR002',
-    name: 'Reduced Food Tax',
-    rate: 5.0,
+    name: 'DPH 15%',
+    rate: 15.0,
     is_active: true,
     applies_to: ['food_beverage']
+  },
+  {
+    id: 'TR003',
+    name: 'Snížené DPH 10%',
+    rate: 10.0,
+    is_active: true,
+    applies_to: ['accommodation']
   }
 ];
 

@@ -93,36 +93,12 @@ export function EmployeeManagementPage() {
     }
   };
 
-  const tabs = [
-    { id: 'employees' as ActiveTab, label: `👥 ${t('employeeManagement.employees')}`, count: employees?.length || null },
-    { id: 'shifts' as ActiveTab, label: `⏰ ${t('employeeManagement.shifts')}`, count: shifts?.length || null },
-    { id: 'departments' as ActiveTab, label: `🏢 ${t('employeeManagement.departments')}`, count: departments?.length || null },
-    { id: 'attendance' as ActiveTab, label: `📊 ${t('employeeManagement.attendance')}`, count: null },
-    { id: 'payroll' as ActiveTab, label: `💰 ${t('employeeManagement.payroll')}`, count: null },
-  ];
-
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-gray-800">{t('employeeManagement.title')}</h1>
-
-      {/* Tabs */}
-      <div className="flex mb-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-1 border border-indigo-100">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${
-              activeTab === tab.id ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'
-            }`}
-          >
-            <span>{tab.label}</span>
-            {tab.count !== null && (
-              <span className="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-xs ml-2">
-                {tab.count}
-              </span>
-            )}
-          </button>
-        ))}
+      {/* Header */}
+      <div>
+        <h1 className="text-2xl font-bold text-foreground mb-2">{t('employeeManagement.title')}</h1>
+        <p className="text-neutral-dark">{t('employeeManagement.description')}</p>
       </div>
 
       {/* Navigation Tabs */}
@@ -160,7 +136,7 @@ export function EmployeeManagementPage() {
         <div>
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h2 className="text-xl font-semibold mb-4 text-gray-800">{t('employeeManagement.employeeDirectory')}</h2>
+              <h2 className="text-xl font-semibold text-foreground">{t('employeeManagement.employeeDirectory')}</h2>
               <p className="text-neutral-dark">{t('employeeManagement.manageHotelStaff')}</p>
             </div>
             <button
@@ -172,10 +148,10 @@ export function EmployeeManagementPage() {
           </div>
 
           {/* Department Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             {departmentStats.map((stat) => (
-              <div key={stat.department} className="bg-white rounded-lg shadow-sm border border-neutral-medium p-4 min-h-[160px]">
-                  <h3 className="text-xl font-semibold mb-4 text-gray-800 capitalize">
+              <div key={stat.department} className="bg-white rounded-lg shadow-sm border border-neutral-medium p-4">
+                 <h3 className="font-semibold text-foreground capitalize mb-2">
                    {t(`employeeManagement.${stat.department.replace('-', '')}`) || stat.department.replace('-', ' ')}
                  </h3>
                  <div className="space-y-1 text-sm">
@@ -190,9 +166,9 @@ export function EmployeeManagementPage() {
                    <div className="flex justify-between">
                      <span className="text-neutral-dark">{t('employeeManagement.onLeave')}:</span>
                      <span className="font-medium text-amber-600">{stat.on_leave_employees}</span>
-                    </div>
-                  </div>
-               </div>
+                   </div>
+                 </div>
+              </div>
             ))}
           </div>
 
@@ -375,7 +351,7 @@ export function EmployeeManagementPage() {
               </div>
             </div>
             <div className="p-6">
-    <div className="space-y-6 p-4 lg:p-6 xl:p-8">
+              <div className="space-y-6">
                 <div className="flex items-center space-x-4">
                   <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
                     <span className="text-primary font-bold text-2xl">
@@ -391,7 +367,7 @@ export function EmployeeManagementPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                    <div>
                      <label className="form-label text-sm">{t('employeeManagement.email')}</label>
                      <div className="text-foreground">{viewingEmployee.email}</div>

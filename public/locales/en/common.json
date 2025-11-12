@@ -3,11 +3,7 @@
     "dashboard": "Dashboard",
     "admin": "Admin",
     "expandSidebar": "Expand sidebar",
-    "collapseSidebar": "Collapse sidebar",
-    "currentProperty": "Current Property",
-    "selectProperty": "Select Property",
-    "switchProperty": "Switch Property",
-    "clickToSwitch": "Click to switch property"
+    "collapseSidebar": "Collapse sidebar"
   },
   "modules": {
     "reservations": "Reservations",
@@ -884,30 +880,6 @@
     "pricesRecalculated": "All prices have been recalculated based on the new currency.",
     "conversionRate": "Conversion Rate",
     "totalInBaseCurrency": "Total ({{baseCurrency}})",
-    "totalInCurrentCurrency": "Total ({{currency}})",
-    "properties": "Properties",
-    "manageProperties": "Manage Properties",
-    "addProperty": "Add Property",
-    "addNewProperty": "Add New Property",
-    "editProperty": "Edit Property",
-    "updateProperty": "Update Property",
-    "confirmDeleteProperty": "Are you sure you want to delete this property?",
-    "propertyName": "Property Name",
-    "type": "Type",
-    "location": "Location",
-    "rooms": "Rooms",
-    "status": "Status",
-    "switchTo": "Switch To",
-    "currentProperty": "Current Property",
-    "currentlyManaging": "Currently managing",
-    "hotel": "Hotel",
-    "resort": "Resort",
-    "motel": "Motel",
-    "hostel": "Hostel",
-    "apartment": "Apartment",
-    "vacationRental": "Vacation Rental",
-    "service": "Service Apartment",
-    "timezone": "Timezone",
-    "cancel": "Cancel"
+    "totalInCurrentCurrency": "Total ({{currency}})"
   }
 }

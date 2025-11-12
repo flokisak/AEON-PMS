@@ -14,28 +14,64 @@ export function AIConciergePage() {
   const [partners, setPartners] = useState([
     {
       id: '1',
-      name: 'Local Restaurant',
-      category: 'Dining',
-      description: 'Authentic local cuisine with fresh ingredients',
-      website: 'https://localrestaurant.com',
-      openingHours: 'Monday-Friday: 11AM-10PM\nSaturday-Sunday: 12PM-11PM\nClosed on holidays',
-      contact: '+1-555-123-4567',
-      affiliateLink: 'https://example.com/restaurant?ref=hotel',
-      commission: 10,
-      recommendationNotes: 'Recommend to guests interested in local dining, especially families or couples looking for authentic experiences.'
+      name: 'Restaurace U Kalicha',
+      category: 'Gastronomie',
+      description: 'Tradiční česká kuchyně s moderním pojetím, čerstvé suroviny od místních dodavatelů',
+      website: 'https://ukalicha.cz',
+      openingHours: 'Pondělí-Pátek: 11:00-23:00\nSobota-Neděle: 12:00-23:00\nSvátky: 12:00-22:00',
+      contact: '+420 222 222 222',
+      affiliateLink: 'https://example.com/ukalicha?ref=hotel',
+      commission: 12,
+      recommendationNotes: 'Doporučit hostům zájemcům o autentickou českou kuchyni, zejména rodinám s dětmi a párům.'
     },
     {
       id: '2',
-      name: 'Tour Guide Service',
-      category: 'Activities',
-      description: 'Professional guided tours of the area',
-      website: 'https://tourguide.com',
-      openingHours: 'Monday-Saturday: 9AM-6PM\nSunday: 10AM-4PM\nClosed in winter',
-      contact: '+1-555-987-6543',
-      affiliateLink: 'https://example.com/tours?ref=hotel',
+      name: 'Praguestudy s.r.o.',
+      category: 'Exkurze',
+      description: 'Profesionální průvodcovské služby po Praze a okolí v češtině, angličtině a němčině',
+      website: 'https://praguestudy.cz',
+      openingHours: 'Pondělí-Sobota: 9:00-18:00\nNeděle: 10:00-16:00\nZima: omezený provoz',
+      contact: '+420 777 123 456',
+      affiliateLink: 'https://example.com/praguestudy?ref=hotel',
       commission: 15,
-      recommendationNotes: 'Suggest to guests planning outdoor activities, hiking, or sightseeing tours.'
+      recommendationNotes: 'Doporučit hostům plánujícím výlety, poznávání památek a kulturní vyžití.'
     },
+    {
+      id: '3',
+      name: 'Lázní Poděbrady',
+      category: 'Wellness',
+      description: 'Léčebné lázně s moderním wellness centrem, bazénem a saunovým světem',
+      website: 'https://laznepodebrady.cz',
+      openingHours: 'Pondělí-Neděle: 8:00-20:00\nWellness: 10:00-22:00',
+      contact: '+420 325 511 111',
+      affiliateLink: 'https://example.com/lazne?ref=hotel',
+      commission: 10,
+      recommendationNotes: 'Ideální pro hosty hledající relaxaci, odpočinek a lázeňské procedury.'
+    },
+    {
+      id: '4',
+      name: 'Autoškola Praha',
+      category: 'Doprava',
+      description: 'Pronájem vozů s řidičem, letištní transfery a zájezdová doprava',
+      website: 'https://autoskolapraha.cz',
+      openingHours: 'Pondělí-Neděle: 6:00-24:00\nNonstop služba na objednávku',
+      contact: '+420 602 345 678',
+      affiliateLink: 'https://example.com/transfer?ref=hotel',
+      commission: 8,
+      recommendationNotes: 'Doporučit pro transfery na letiště, výlety a služební cesty.'
+    },
+    {
+      id: '5',
+      name: 'Divadlo Na Fidlovačce',
+      category: 'Kultura',
+      description: 'Muzikálové divadlo s bohatým repertoárem pro celou rodinu',
+      website: 'https://fidlovacka.cz',
+      openingHours: 'Představení: Úterý-Neděle 19:00\nVíkendová matiné: 15:00\nPokladna: 10:00-18:00',
+      contact: '+420 222 923 408',
+      affiliateLink: 'https://example.com/divadlo?ref=hotel',
+      commission: 10,
+      recommendationNotes: 'Skvělá volba pro kulturní vyžití, ideální pro páry a rodiny s dětmi.'
+    }
   ]);
   const [newPartner, setNewPartner] = useState({
     name: '',
@@ -106,30 +142,30 @@ export function AIConciergePage() {
   };
 
   return (
-    <div className="space-y-6 p-4 lg:p-6 xl:p-8">
+    <div className="space-y-6 h-full flex flex-col">
       <div>
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">{t('aiConcierge.title')}</h1>
+        <h1 className="text-2xl font-semibold text-foreground mb-2">{t('aiConcierge.title')}</h1>
         <p className="text-neutral-dark">{t('aiConcierge.intelligentAssistant')}</p>
       </div>
 
-      <div className="flex mb-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-1 border border-indigo-100">
+      <div className="flex bg-neutral-light rounded-lg p-1 border border-neutral-medium">
         <button
           onClick={() => setActiveTab('chat')}
-          className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${activeTab === 'chat' ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'}`}
+          className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${activeTab === 'chat' ? 'bg-white shadow-sm text-primary border border-neutral-medium' : 'text-neutral-dark hover:text-primary'}`}
         >
-          💬 {t('aiConcierge.chat')}
+          {t('aiConcierge.chat')}
         </button>
         <button
           onClick={() => setActiveTab('workflows')}
-          className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${activeTab === 'workflows' ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'}`}
+          className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${activeTab === 'workflows' ? 'bg-white shadow-sm text-primary border border-neutral-medium' : 'text-neutral-dark hover:text-primary'}`}
         >
-          ⚙️ {t('aiConcierge.workflows')}
+          {t('aiConcierge.workflows')}
         </button>
         <button
           onClick={() => setActiveTab('partners')}
-          className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${activeTab === 'partners' ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'}`}
+          className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${activeTab === 'partners' ? 'bg-white shadow-sm text-primary border border-neutral-medium' : 'text-neutral-dark hover:text-primary'}`}
         >
-          🤝 {t('aiConcierge.partners')}
+          {t('aiConcierge.partners')}
         </button>
       </div>
 
@@ -175,23 +211,23 @@ export function AIConciergePage() {
               <h3 className="text-lg font-semibold text-primary mb-3">{t('aiConcierge.partnerRecommendations')}</h3>
               <div className="space-y-3">
                 {suggestedPartners.map((partner) => (
-                  <div key={partner.id} className="bg-white p-3 rounded-lg shadow-sm border border-neutral-medium min-h-[200px]">
+                  <div key={partner.id} className="bg-white p-3 rounded-lg shadow-sm border border-neutral-medium">
                     <h4 className="font-semibold text-foreground">{partner.name}</h4>
                     <p className="text-sm text-neutral-dark mb-2">{partner.description}</p>
                      <p className="text-sm text-neutral-dark mb-2"><strong>{t('aiConcierge.hours')}:</strong> {partner.openingHours.replace('\n', ', ')}</p>
                      <p className="text-sm text-neutral-dark mb-3"><strong>{t('aiConcierge.contact')}:</strong> {partner.contact}</p>
-                     <button
-                       onClick={() => {
-                         // Simulate sending reservation request
-                         setPendingReservations([...pendingReservations, { ...partner, requestedAt: new Date() }]);
-                         sendMessage(`Great! I've sent a reservation request to ${partner.name}. I'll confirm once they respond.`);
-                         setRecommendationMode(false);
-                         setSuggestedPartners([]);
-                       }}
-                       className="btn-success px-4 py-2 text-sm"
-                     >
+                    <button
+                      onClick={() => {
+                        // Simulate sending reservation request
+                        setPendingReservations([...pendingReservations, { ...partner, requestedAt: new Date() }]);
+                        sendMessage(`Great! I've sent a reservation request to ${partner.name}. I'll confirm once they respond.`);
+                        setRecommendationMode(false);
+                        setSuggestedPartners([]);
+                      }}
+                      className="btn-success px-4 py-2 text-sm"
+                    >
 {t('aiConcierge.requestReservation')}
-                     </button>
+                    </button>
                   </div>
                 ))}
               </div>
@@ -269,12 +305,12 @@ export function AIConciergePage() {
 
         {activeTab === 'workflows' && (
          <div className="flex-1 overflow-y-auto">
-            <h2 className="text-xl font-semibold mb-4 text-gray-800">{t('aiConcierge.workflowConfiguration')}</h2>
+           <h2 className="text-lg font-semibold mb-4 text-foreground">{t('aiConcierge.workflowConfiguration')}</h2>
            <p className="text-neutral-dark mb-6">{t('aiConcierge.customizeAutomatedProcesses')}</p>
 
            <div className="bg-white p-4 rounded-lg shadow-sm mb-6 border border-neutral-medium">
              <h3 className="font-semibold mb-4 text-foreground">{t('aiConcierge.createNewWorkflow')}</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                <input
                  type="text"
                  placeholder={t('aiConcierge.workflowName')}
@@ -371,12 +407,12 @@ export function AIConciergePage() {
 
       {activeTab === 'partners' && (
         <div className="flex-1 overflow-y-auto">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800">{t('aiConcierge.partnersManagement')}</h2>
+          <h2 className="text-lg font-semibold mb-4 text-foreground">{t('aiConcierge.partnersManagement')}</h2>
           <p className="text-neutral-dark mb-6">{t('aiConcierge.partnerManagementDesc')}</p>
 
           <div className="bg-white p-4 rounded-lg shadow-sm mb-6 border border-neutral-medium">
             <h3 className="font-semibold mb-4 text-foreground">{t('aiConcierge.addNewPartner')}</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                <input
                  type="text"
                   placeholder={t('aiConcierge.partnerName')}
@@ -462,7 +498,7 @@ export function AIConciergePage() {
                     <h4 className="font-semibold text-foreground">{partner.name}</h4>
                     <p className="text-sm text-neutral-dark mb-2">{partner.category}</p>
                     <p className="text-sm text-neutral-dark mb-1">{partner.description}</p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 text-sm">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
                        <p><strong>{t('aiConcierge.website')}:</strong> <a href={partner.website} target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary-dark">{partner.website}</a></p>
                        <div><strong>{t('aiConcierge.hours')}:</strong><br /><span style={{ whiteSpace: 'pre-line' }}>{partner.openingHours}</span></div>
                        <p><strong>{t('aiConcierge.contact')}:</strong> {partner.contact}</p>

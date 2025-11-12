@@ -15,7 +15,7 @@ export function ReportsPage() {
   const { rooms } = useRooms();
   const { tasks } = useHousekeeping();
   const { formatCurrency } = useCurrency();
-  const [selectedReport, setSelectedReport] = useState<'overview' | 'maintenance' | 'guests' | 'stayovers' | 'housekeeping' | 'occupancy' | 'revenue'>('overview');
+  const [selectedReport, setSelectedReport] = useState<'overview' | 'maintenance' | 'guests' | 'stayovers' | 'housekeeping'>('overview');
 
   // Add currency change listener for auto-refresh
   useEffect(() => {
@@ -49,42 +49,9 @@ export function ReportsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-gray-800">{t('reports.title')}</h1>
-
-      {/* Report Tabs */}
-      <div className="flex mb-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-1 border border-indigo-100">
-        <button
-          onClick={() => setSelectedReport('overview')}
-          className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${
-            selectedReport === 'overview' ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'
-          }`}
-        >
-          📊 {t('reports.overview')}
-        </button>
-        <button
-          onClick={() => setSelectedReport('maintenance')}
-          className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${
-            selectedReport === 'maintenance' ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'
-          }`}
-        >
-          🔧 {t('reports.maintenance')}
-        </button>
-        <button
-          onClick={() => setSelectedReport('occupancy')}
-          className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${
-            selectedReport === 'occupancy' ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'
-          }`}
-        >
-          🏠 {t('reports.occupancy')}
-        </button>
-        <button
-          onClick={() => setSelectedReport('revenue')}
-          className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${
-            selectedReport === 'revenue' ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'
-          }`}
-        >
-          💰 {t('reports.revenue')}
-        </button>
+      <div>
+        <h1 className="text-2xl font-semibold text-foreground mb-2">{t('reports.title')}</h1>
+        <p className="text-neutral-dark">{t('reports.description')}</p>
       </div>
 
       <div className="flex gap-2 mb-6">
@@ -163,32 +130,32 @@ export function ReportsPage() {
               {t('reports.share')}
             </button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-neutral-medium min-h-[160px]">
-              <h2 className="text-xl font-semibold mb-4 text-gray-800">{t('reports.totalRevenue')}</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-neutral-medium">
+              <h2 className="text-lg font-semibold mb-2 text-foreground">{t('reports.totalRevenue')}</h2>
               <p className="text-3xl font-bold text-primary">{formatCurrency(reportData?.totalRevenue || 0)}</p>
               <p className="text-sm text-neutral-dark">{t('reports.thisMonth')}</p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-neutral-medium min-h-[160px]">
-              <h2 className="text-xl font-semibold mb-4 text-gray-800">{t('reports.occupancyRate')}</h2>
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-neutral-medium">
+              <h2 className="text-lg font-semibold mb-2 text-foreground">{t('reports.occupancyRate')}</h2>
               <p className="text-3xl font-bold text-emerald-600">{reportData?.totalOccupancy}%</p>
               <p className="text-sm text-neutral-dark">{t('reports.average')}</p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-neutral-medium min-h-[160px]">
-              <h2 className="text-xl font-semibold mb-4 text-gray-800">{t('reports.totalGuests')}</h2>
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-neutral-medium">
+              <h2 className="text-lg font-semibold mb-2 text-foreground">{t('reports.totalGuests')}</h2>
               <p className="text-3xl font-bold text-amber-600">{reportData?.totalGuests}</p>
               <p className="text-sm text-neutral-dark">{t('reports.thisMonth')}</p>
             </div>
           </div>
           <div className="bg-neutral-light rounded-lg p-6 border border-neutral-medium">
             <h2 className="text-lg font-semibold mb-4 text-foreground">{t('reports.additionalMetrics')}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              <div className="bg-white p-4 rounded-lg shadow-sm border border-neutral-medium min-h-[120px]">
-                <h3 className="text-xl font-semibold mb-4 text-gray-800">{t('reports.averageStayDuration')}</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-white p-4 rounded-lg shadow-sm border border-neutral-medium">
+                <h3 className="font-semibold text-neutral-dark">{t('reports.averageStayDuration')}</h3>
                 <p className="text-2xl font-bold text-primary">3.2 {t('reports.nights')}</p>
               </div>
-              <div className="bg-white p-4 rounded-lg shadow-sm border border-neutral-medium min-h-[120px]">
-                <h3 className="text-xl font-semibold mb-4 text-gray-800">{t('reports.cancellationRate')}</h3>
+              <div className="bg-white p-4 rounded-lg shadow-sm border border-neutral-medium">
+                <h3 className="font-semibold text-neutral-dark">{t('reports.cancellationRate')}</h3>
                 <p className="text-2xl font-bold text-red-600">5.1%</p>
               </div>
             </div>
@@ -300,7 +267,7 @@ export function ReportsPage() {
       )}
 
       {selectedReport === 'guests' && (
-    <div className="space-y-6 p-4 lg:p-6 xl:p-8">
+        <div className="space-y-6">
           <div className="flex justify-end gap-2 mb-4">
             <button
               onClick={() => window.print()}

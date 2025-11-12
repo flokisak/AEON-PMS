@@ -23,19 +23,19 @@ const mockEmployees: Employee[] = [
   {
     id: '1',
     employee_id: 'EMP001',
-    first_name: 'John',
-    last_name: 'Smith',
-    email: 'john.smith@hotel.com',
-    phone: '+1-555-0101',
-    address: '123 Main St, City, State 12345',
+    first_name: 'Pavel',
+    last_name: 'Novák',
+    email: 'pavel.novak@hotel.cz',
+    phone: '+420 602 123 456',
+    address: 'Husova 123, Praha 1, 110 00',
     date_of_birth: '1985-06-15',
     hire_date: '2022-01-15',
-    position: 'Front Desk Manager',
+    position: 'Manažer recepce',
     department: 'front-desk' as unknown as Department,
     employment_type: 'full-time',
     status: 'active',
-    salary: 45000,
-    hourly_rate: 25,
+    salary: 450000,
+    hourly_rate: 280,
     work_schedule: {
       monday: { is_working: true, start_time: '08:00', end_time: '16:00', break_duration: 60 },
       tuesday: { is_working: true, start_time: '08:00', end_time: '16:00', break_duration: 60 },
@@ -46,17 +46,17 @@ const mockEmployees: Employee[] = [
       sunday: { is_working: false }
     },
     emergency_contact: {
-      name: 'Jane Smith',
-      relationship: 'Spouse',
-      phone: '+1-555-0102',
-      email: 'jane.smith@email.com'
+      name: 'Jana Nováková',
+      relationship: 'Manželka',
+      phone: '+420 602 123 457',
+      email: 'jana.novakova@email.cz'
     },
-    skills: ['Customer Service', 'Multilingual', 'PMS Software', 'Conflict Resolution'],
+    skills: ['Zákaznický servis', 'Jazykové znalosti', 'PMS software', 'Řešení konfliktů'],
     certifications: [
       {
         id: '1',
-        name: 'Hospitality Management Certificate',
-        issuing_organization: 'American Hotel Association',
+        name: 'Certifikát hotelového managementu',
+        issuing_organization: 'Česká hotelová asociace',
         issue_date: '2021-09-01',
         expiry_date: '2024-09-01',
         status: 'active'
@@ -68,19 +68,19 @@ const mockEmployees: Employee[] = [
   {
     id: '2',
     employee_id: 'EMP002',
-    first_name: 'Maria',
-    last_name: 'Garcia',
-    email: 'maria.garcia@hotel.com',
-    phone: '+1-555-0103',
-    address: '456 Oak Ave, City, State 12345',
+    first_name: 'Marie',
+    last_name: 'Svobodová',
+    email: 'marie.svobodova@hotel.cz',
+    phone: '+420 723 987 654',
+    address: 'Mánesova 456, Praha 2, 120 00',
     date_of_birth: '1990-03-22',
     hire_date: '2023-03-10',
-    position: 'Housekeeping Supervisor',
+    position: 'Vedoucí úklidu',
     department: 'housekeeping' as unknown as Department,
     employment_type: 'full-time',
     status: 'active',
-    salary: 38000,
-    hourly_rate: 20,
+    salary: 380000,
+    hourly_rate: 220,
     work_schedule: {
       monday: { is_working: true, start_time: '07:00', end_time: '15:00', break_duration: 60 },
       tuesday: { is_working: true, start_time: '07:00', end_time: '15:00', break_duration: 60 },
@@ -91,16 +91,16 @@ const mockEmployees: Employee[] = [
       sunday: { is_working: false }
     },
     emergency_contact: {
-      name: 'Carlos Garcia',
-      relationship: 'Husband',
-      phone: '+1-555-0104'
+      name: 'Petr Svoboda',
+      relationship: 'Manžel',
+      phone: '+420 723 987 655'
     },
-    skills: ['Team Leadership', 'Quality Control', 'Training', 'Time Management'],
+    skills: ['Vedení týmu', 'Kontrola kvality', 'Školení', 'Time management'],
     certifications: [
       {
         id: '2',
-        name: 'Housekeeping Management',
-        issuing_organization: 'EcoLab',
+        name: 'Management úklidových služeb',
+        issuing_organization: 'EcoLab Czech',
         issue_date: '2022-11-15',
         expiry_date: '2025-11-15',
         status: 'active'
@@ -108,6 +108,95 @@ const mockEmployees: Employee[] = [
     ],
     created_at: '2023-03-10T00:00:00Z',
     updated_at: '2024-01-20T00:00:00Z'
+  },
+  {
+    id: '3',
+    employee_id: 'EMP003',
+    first_name: 'Tomáš',
+    last_name: 'Dvořák',
+    email: 'tomas.dvorak@hotel.cz',
+    phone: '+420 608 456 789',
+    address: 'Národní 789, Praha 1, 110 00',
+    date_of_birth: '1988-11-30',
+    hire_date: '2021-06-01',
+    position: 'Šéfkuchař',
+    department: 'food-beverage' as unknown as Department,
+    employment_type: 'full-time',
+    status: 'active',
+    salary: 420000,
+    hourly_rate: 260,
+    work_schedule: {
+      monday: { is_working: true, start_time: '10:00', end_time: '20:00', break_duration: 90 },
+      tuesday: { is_working: true, start_time: '10:00', end_time: '20:00', break_duration: 90 },
+      wednesday: { is_working: true, start_time: '10:00', end_time: '20:00', break_duration: 90 },
+      thursday: { is_working: true, start_time: '10:00', end_time: '20:00', break_duration: 90 },
+      friday: { is_working: true, start_time: '10:00', end_time: '20:00', break_duration: 90 },
+      saturday: { is_working: true, start_time: '12:00', end_time: '22:00', break_duration: 60 },
+      sunday: { is_working: false }
+    },
+    emergency_contact: {
+      name: 'Lucie Dvořáková',
+      relationship: 'Partnerka',
+      phone: '+420 608 456 790',
+      email: 'lucie.dvorakova@email.cz'
+    },
+    skills: ['Vaření', 'Management kuchyně', 'Plánování menu', 'Hygienické standardy'],
+    certifications: [
+      {
+        id: '3',
+        name: 'Kuchařský certifikát',
+        issuing_organization: 'Gastronomický institut Praha',
+        issue_date: '2020-05-15',
+        expiry_date: '2025-05-15',
+        status: 'active'
+      }
+    ],
+    created_at: '2021-06-01T00:00:00Z',
+    updated_at: '2024-02-10T00:00:00Z'
+  },
+  {
+    id: '4',
+    employee_id: 'EMP004',
+    first_name: 'Jana',
+    last_name: 'Procházková',
+    email: 'jana.prochazkova@hotel.cz',
+    phone: '+420 733 258 147',
+    address: 'Vinohradská 321, Praha 3, 130 00',
+    date_of_birth: '1992-07-18',
+    hire_date: '2022-09-15',
+    position: 'Účetní',
+    department: 'management' as unknown as Department,
+    employment_type: 'full-time',
+    status: 'active',
+    salary: 480000,
+    hourly_rate: 300,
+    work_schedule: {
+      monday: { is_working: true, start_time: '08:00', end_time: '16:30', break_duration: 60 },
+      tuesday: { is_working: true, start_time: '08:00', end_time: '16:30', break_duration: 60 },
+      wednesday: { is_working: true, start_time: '08:00', end_time: '16:30', break_duration: 60 },
+      thursday: { is_working: true, start_time: '08:00', end_time: '16:30', break_duration: 60 },
+      friday: { is_working: true, start_time: '08:00', end_time: '16:30', break_duration: 60 },
+      saturday: { is_working: false },
+      sunday: { is_working: false }
+    },
+    emergency_contact: {
+      name: 'Martin Procházka',
+      relationship: 'Manžel',
+      phone: '+420 733 258 148'
+    },
+    skills: ['Účetnictví', 'Daňové přiznání', 'MS Excel', 'Pohoda'],
+    certifications: [
+      {
+        id: '4',
+        name: 'Certifikovaný účetní',
+        issuing_organization: 'Komora auditorů',
+        issue_date: '2021-03-20',
+        expiry_date: '2026-03-20',
+        status: 'active'
+      }
+    ],
+    created_at: '2022-09-15T00:00:00Z',
+    updated_at: '2024-01-05T00:00:00Z'
   }
 ];
 
@@ -142,11 +231,11 @@ const mockShifts: Shift[] = [
 ];
 
 const mockDepartments: DepartmentInfo[] = [
-  { id: '1', name: 'Front Desk', description: 'Guest check-in/out and customer service', head_of_department: 'John Smith', budget: 150000 },
-  { id: '2', name: 'Housekeeping', description: 'Room cleaning and maintenance', head_of_department: 'Maria Garcia', budget: 200000 },
-  { id: '3', name: 'Maintenance', description: 'Building and equipment maintenance', budget: 100000 },
-  { id: '4', name: 'Food & Beverage', description: 'Restaurant and bar operations', budget: 300000 },
-  { id: '5', name: 'Management', description: 'Hotel management and administration', budget: 250000 }
+  { id: '1', name: 'Recepce', description: 'Příjezdy a odjezdy hostů, zákaznický servis', head_of_department: 'Pavel Novák', budget: 3500000 },
+  { id: '2', name: 'Úklid', description: 'Úklid pokojů a údržba čistoty', head_of_department: 'Marie Svobodová', budget: 4200000 },
+  { id: '3', name: 'Údržba', description: 'Údržba budovy a vybavení', head_of_department: 'Technický vedoucí', budget: 2800000 },
+  { id: '4', name: 'Gastronomie', description: 'Provoz restaurace a baru', head_of_department: 'Tomáš Dvořák', budget: 6500000 },
+  { id: '5', name: 'Management', description: 'Vedení hotelu a administrativa', head_of_department: 'Ředitel hotelu', budget: 5200000 }
 ];
 
 export function useEmployeeManagement() {

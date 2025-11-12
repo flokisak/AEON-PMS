@@ -48,16 +48,25 @@ function CRMSection({ companies, setCompanies }: { companies: Company[], setComp
     { id: '2', name: 'Svobodová Eva', email: 'eva.svobodova@email.cz', phone: '+420 723 987 654', visits: 3, lastVisit: '2024-10-15' },
     { id: '3', name: 'Dvořák Petr', email: 'petr.dvorak@email.cz', phone: '+420 608 456 789', visits: 8, lastVisit: '2024-11-05' },
     { id: '4', name: 'Černá Marie', email: 'marie.cerna@email.cz', phone: '+420 733 258 147', visits: 2, lastVisit: '2024-09-20' },
+    { id: '5', name: 'Procházka Tomáš', email: 'tomas.prochazka@email.cz', phone: '+420 603 789 123', visits: 12, lastVisit: '2024-11-10' },
+    { id: '6', name: 'Kučerová Lenka', email: 'lenka.kucerova@email.cz', phone: '+420 722 456 789', visits: 6, lastVisit: '2024-11-08' },
+    { id: '7', name: 'Horák Martin', email: 'martin.horak@email.cz', phone: '+420 608 123 456', visits: 4, lastVisit: '2024-11-03' },
+    { id: '8', name: 'Marešová Jana', email: 'jana.maresova@email.cz', phone: '+420 733 987 654', visits: 9, lastVisit: '2024-11-09' },
   ]);
   const [leads, setLeads] = useState<Lead[]>([
-    { id: '1', name: 'Procházka Tomáš', email: 'tomas.prochazka@firma.cz', phone: '+420 777 123 456', source: 'Web', status: 'new' },
-    { id: '2', name: 'Kučerová Lenka', email: 'lenka.kucerova@firma.cz', phone: '+420 602 987 654', source: 'Doporučení', status: 'contacted' },
-    { id: '3', name: 'Horák Martin', email: 'martin.horak@email.cz', phone: '+420 723 456 789', source: 'Facebook', status: 'qualified' },
+    { id: '1', name: 'Beneš David', email: 'david.benes@firma.cz', phone: '+420 777 123 456', source: 'Web', status: 'new' },
+    { id: '2', name: 'Němcová Kateřina', email: 'katerina.nemcova@firma.cz', phone: '+420 602 987 654', source: 'Doporučení', status: 'contacted' },
+    { id: '3', name: 'Zeman Pavel', email: 'pavel.zeman@email.cz', phone: '+420 723 456 789', source: 'Facebook', status: 'qualified' },
+    { id: '4', name: 'Veselá Lucie', email: 'lucie.vesela@firma.cz', phone: '+420 608 234 567', source: 'Instagram', status: 'new' },
+    { id: '5', name: 'Kříž Jan', email: 'jan.kriz@email.cz', phone: '+420 733 890 123', source: 'Google', status: 'contacted' },
   ]);
   const [subscribers, setSubscribers] = useState<Subscriber[]>([
     { id: '1', email: 'novak.jiri@email.cz', subscribedAt: '2024-09-01', status: 'active' },
     { id: '2', email: 'svobodova.eva@email.cz', subscribedAt: '2024-08-15', status: 'active' },
     { id: '3', email: 'dvorak.p@email.cz', subscribedAt: '2024-10-20', status: 'active' },
+    { id: '4', email: 'cerna.marie@email.cz', subscribedAt: '2024-07-10', status: 'active' },
+    { id: '5', email: 'prochazka.tomas@email.cz', subscribedAt: '2024-11-01', status: 'active' },
+    { id: '6', email: 'kucerova.lenka@email.cz', subscribedAt: '2024-09-25', status: 'unsubscribed' },
   ]);
 
   const [editingGuest, setEditingGuest] = useState<Guest | null>(null);
@@ -103,38 +112,38 @@ function CRMSection({ companies, setCompanies }: { companies: Company[], setComp
 
   return (
     <div>
-      <div className="flex mb-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-1 border border-indigo-100">
+      <div className="flex bg-neutral-light rounded-lg p-1 border border-neutral-medium mb-6">
         <button
           onClick={() => setCrmTab('guests')}
-          className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${
-            crmTab === 'guests' ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'
+          className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
+            crmTab === 'guests' ? 'bg-white shadow-sm text-primary border border-neutral-medium' : 'text-neutral-dark hover:text-primary'
           }`}
         >
-          👤 {t('frontDesk.frequentGuests')}
+          {t('frontDesk.frequentGuests')}
         </button>
         <button
           onClick={() => setCrmTab('leads')}
-          className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${
-            crmTab === 'leads' ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'
+          className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
+            crmTab === 'leads' ? 'bg-white shadow-sm text-primary border border-neutral-medium' : 'text-neutral-dark hover:text-primary'
           }`}
         >
-          🎯 {t('frontDesk.leads')}
+          {t('frontDesk.leads')}
         </button>
         <button
           onClick={() => setCrmTab('companies')}
-          className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${
-            crmTab === 'companies' ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'
+          className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
+            crmTab === 'companies' ? 'bg-white shadow-sm text-primary border border-neutral-medium' : 'text-neutral-dark hover:text-primary'
           }`}
         >
-          🏢 {t('frontDesk.companies')}
+          {t('frontDesk.companies')}
         </button>
         <button
           onClick={() => setCrmTab('newsletter')}
-          className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${
-            crmTab === 'newsletter' ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'
+          className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
+            crmTab === 'newsletter' ? 'bg-white shadow-sm text-primary border border-neutral-medium' : 'text-neutral-dark hover:text-primary'
           }`}
         >
-          📧 {t('frontDesk.newsletter')}
+          {t('frontDesk.newsletter')}
         </button>
       </div>
 
@@ -415,6 +424,10 @@ export function FrontDeskPage() {
     { id: '2', name: 'Moravské strojírny a.s.', tax_id: '87654321', address: 'Husova 15, Brno', phone: '+420 533 422 222', email: 'obchod@moravskestrojirny.cz', contact_person: 'Dvořák Tomáš' },
     { id: '3', name: 'Pražská dopravní a.s.', tax_id: '45678912', address: 'Vinohradská 150, Praha 3', phone: '+420 266 123 456', email: 'nakup@prazskadopravni.cz', contact_person: 'Svobodová Jana' },
     { id: '4', name: 'Sudetská energetika s.r.o.', tax_id: '78912345', address: 'Teplická 78, Ústí nad Labem', phone: '+420 475 777 888', email: 'objednavky@sudetskaenergetika.cz', contact_person: 'Procházka Martin' },
+    { id: '5', name: 'Skupina ČEZ a.s.', tax_id: '45274649', address: 'Dukelská 130, Praha 4', phone: '+420 224 005 111', email: 'objednavky@cez.cz', contact_person: 'Novotná Petra' },
+    { id: '6', name: 'Agrofert a.s.', tax_id: '25573320', address: 'Třeboňská 621, Praha 4', phone: '+420 225 022 111', email: 'obchod@agrofert.cz', contact_person: 'Bárta Miroslav' },
+    { id: '7', name: 'Pivovary Staropramen s.r.o.', tax_id: '25765741', address: 'Na Hřebenkách 92, Praha 5', phone: '+420 257 011 111', email: 'zakazky@staropramen.cz', contact_person: 'Malá Lenka' },
+    { id: '8', name: 'Kooperativa pojišťovna', tax_id: '47114983', address: 'Spálená 75/16, Praha 1', phone: '+420 222 010 111', email: 'obchod@kooperativa.cz', contact_person: 'Kučera Josef' },
   ]);
   const [form, setForm] = useState<Omit<CheckIn, 'id' | 'status'>>({
     guest_name: '',
@@ -465,28 +478,28 @@ export function FrontDeskPage() {
   );
 
   return (
-    <div className="space-y-6 p-4 lg:p-6 xl:p-8">
+    <div className="space-y-6">
        <div>
-         <h1 className="text-3xl font-bold text-gray-800 mb-2">{t('frontDesk.title')}</h1>
+         <h1 className="text-2xl font-bold text-foreground mb-2">{t('frontDesk.title')}</h1>
          <p className="text-neutral-dark">{t('frontDesk.description')}</p>
        </div>
 
-      <div className="flex mb-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-1 border border-indigo-100">
+      <div className="flex bg-neutral-light rounded-lg p-1 border border-neutral-medium">
         <button
           onClick={() => setActiveTab('checkin')}
-          className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${
-            activeTab === 'checkin' ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'
+          className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
+            activeTab === 'checkin' ? 'bg-white shadow-sm text-primary border border-neutral-medium' : 'text-neutral-dark hover:text-primary'
           }`}
          >
-           🏨 {t('frontDesk.checkin')}
+           {t('frontDesk.checkin')}
          </button>
          <button
            onClick={() => setActiveTab('crm')}
-           className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${
-             activeTab === 'crm' ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'
+           className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
+             activeTab === 'crm' ? 'bg-white shadow-sm text-primary border border-neutral-medium' : 'text-neutral-dark hover:text-primary'
            }`}
          >
-           👥 {t('frontDesk.crm')}
+           {t('frontDesk.crm')}
          </button>
       </div>
 
@@ -494,7 +507,7 @@ export function FrontDeskPage() {
         <div>
            <div className="flex justify-between items-center mb-6">
              <div>
-                <h2 className="text-xl font-semibold mb-4 text-gray-800">{t('frontDesk.recentCheckins')}</h2>
+               <h2 className="text-xl font-semibold text-foreground">{t('frontDesk.recentCheckins')}</h2>
                <p className="text-neutral-dark">{t('frontDesk.recentCheckinsDescription')}</p>
              </div>
              <div>
@@ -558,21 +571,21 @@ export function FrontDeskPage() {
 
       {/* Check-in Modal */}
       {showCheckInModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col">
-            <div className="p-4 sm:p-6 lg:p-8 border-b border-neutral-medium flex-shrink-0">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-neutral-medium">
               <div className="flex justify-between items-center">
-                <h3 className="text-lg sm:text-xl font-semibold text-foreground">{t('frontDesk.checkInGuest')}</h3>
+                <h3 className="text-xl font-semibold text-foreground">{t('frontDesk.checkInGuest')}</h3>
                 <button
                   onClick={() => setShowCheckInModal(false)}
-                  className="text-neutral-dark hover:text-foreground text-2xl p-2 hover:bg-neutral-light rounded-lg transition-colors"
+                  className="text-neutral-dark hover:text-foreground text-2xl"
                 >
                   ×
                 </button>
               </div>
             </div>
-             <div className="p-4 sm:p-6 lg:p-8 overflow-y-auto flex-1">
-                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6 mb-4 sm:mb-6">
+            <div className="p-6">
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                  <div>
                    <label className="form-label">{t('frontDesk.guestName')} *</label>
                    <input
@@ -621,7 +634,7 @@ export function FrontDeskPage() {
                    />
                  </div>
                </div>
-               <div className="flex items-center space-x-3 sm:space-x-4 mb-4 sm:mb-6">
+               <div className="flex items-center space-x-4 mb-6">
                  <label className="flex items-center">
                    <input
                      type="checkbox"
@@ -632,9 +645,9 @@ export function FrontDeskPage() {
                    {t('frontDesk.companyBooking')}
                  </label>
                </div>
-               {form.is_company && (
-                 <div className="mb-4 sm:mb-6">
-                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 bg-neutral-light p-4 sm:p-6 rounded-lg border border-neutral-medium">
+              {form.is_company && (
+                <div className="mb-6">
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-neutral-light p-4 rounded-lg border border-neutral-medium">
                      <div>
                        <label className="form-label">{t('frontDesk.companyName')} *</label>
                        <input
@@ -684,7 +697,7 @@ export function FrontDeskPage() {
                    </div>
                 </div>
               )}
-               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                  <div>
                    <label className="form-label">{t('frontDesk.roomNumber')}</label>
                    <input

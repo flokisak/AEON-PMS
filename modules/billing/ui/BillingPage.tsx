@@ -76,12 +76,12 @@ export function BillingPage() {
   }
 
   return (
-    <div className="space-y-6 p-4 lg:p-6 xl:p-8">
+    <div className="space-y-6">
       {/* Header */}
       <div className="bg-white rounded-lg shadow-sm border border-neutral-medium p-6">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">{t('billing.title')} & Financial Management</h1>
+            <h1 className="text-2xl font-semibold text-foreground mb-2">{t('billing.title')} & Financial Management</h1>
             <p className="text-neutral-dark">Comprehensive billing system for hospitality operations</p>
           </div>
           <div className="flex gap-6 text-sm">
@@ -107,7 +107,7 @@ export function BillingPage() {
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex mb-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-1 border border-indigo-100">
+        <div className="flex bg-neutral-light rounded-lg p-1 border border-neutral-medium">
           {[
             { id: 'invoices', label: t('billing.invoices'), count: invoices?.length || 0 },
             { id: 'guest-accounts', label: t('billing.guestAccounts'), count: guestAccounts?.length || 0 },
@@ -117,10 +117,10 @@ export function BillingPage() {
             <button
               key={tab.id}
               onClick={() => setCurrentView(tab.id as ViewType)}
-              className={`flex-1 px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-200 ${
+              className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
                 currentView === tab.id
-                  ? 'bg-white shadow-md text-indigo-700 border border-indigo-200'
-                  : 'text-indigo-600 hover:text-indigo-800'
+                  ? 'bg-white text-primary shadow-sm border border-neutral-medium'
+                  : 'text-neutral-dark hover:text-primary'
               }`}
             >
               {tab.label}
@@ -139,7 +139,7 @@ export function BillingPage() {
         <div className="bg-white rounded-lg shadow-sm border border-neutral-medium">
           <div className="p-6 border-b border-neutral-medium">
             <div className="flex justify-between items-center">
-               <h2 className="text-xl font-semibold mb-4 text-gray-800">{t('billing.invoices')}</h2>
+               <h2 className="text-lg font-semibold text-foreground">{t('billing.invoices')}</h2>
               <div className="flex gap-3">
                  <select className="border border-neutral-medium rounded-lg px-3 py-2 text-sm bg-white">
                   <option>{t('billing.allStatus')}</option>

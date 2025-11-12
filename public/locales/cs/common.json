@@ -1,13 +1,9 @@
 {
   "nav": {
-    "dashboard": "Přehled",
-    "admin": "Admin",
+    "dashboard": "Nástěnka",
+    "admin": "Správa",
     "expandSidebar": "Rozbalit postranní panel",
-    "collapseSidebar": "Sbalit postranní panel",
-    "currentProperty": "Aktuální nemovitost",
-    "selectProperty": "Vybrat nemovitost",
-    "switchProperty": "Přepnout nemovitost",
-    "clickToSwitch": "Klikněte pro přepnutí nemovitosti"
+    "collapseSidebar": "Sbalit postranní panel"
   },
   "modules": {
     "reservations": "Rezervace",
@@ -564,9 +560,7 @@
       "single": "Jednolůžkový pokoj",
       "double": "Dvojlůžkový pokoj",
       "suite": "Apartmán",
-      "deluxe": "Luxusní pokoj",
-      "standard": "Standard",
-      "apartment": "Apartmán"
+      "deluxe": "Luxusní pokoj"
     },
     "roomNumberPlaceholder": "např. 101, A205",
     "specialRequestsPlaceholder": "Zadejte jakákoliv speciální přání nebo preference",
@@ -885,30 +879,6 @@
     "pricesRecalculated": "Všechny ceny byly přepočítány na základě nové měny.",
     "conversionRate": "Kurz",
     "totalInBaseCurrency": "Celkem ({{baseCurrency}})",
-    "totalInCurrentCurrency": "Celkem ({{currency}})",
-    "properties": "Nemovitosti",
-    "manageProperties": "Správa nemovitostí",
-    "addProperty": "Přidat nemovitost",
-    "addNewProperty": "Přidat novou nemovitost",
-    "editProperty": "Upravit nemovitost",
-    "updateProperty": "Aktualizovat nemovitost",
-    "confirmDeleteProperty": "Opravdu chcete smazat tuto nemovitost?",
-    "propertyName": "Název nemovitosti",
-    "type": "Typ",
-    "location": "Lokalita",
-    "rooms": "Pokoje",
-    "status": "Stav",
-    "switchTo": "Přepnout na",
-    "currentProperty": "Aktuální nemovitost",
-    "currentlyManaging": "Aktuálně spravujete",
-    "hotel": "Hotel",
-    "resort": "Resort",
-    "motel": "Motel",
-    "hostel": "Hostel",
-    "apartment": "Apartmán",
-    "vacationRental": "Rekreační pronájem",
-    "service": "Servisní apartmán",
-    "timezone": "Časová zóna",
-    "cancel": "Zrušit"
+    "totalInCurrentCurrency": "Celkem ({{currency}})"
   }
 }

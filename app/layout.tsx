@@ -31,14 +31,12 @@ export default function RootLayout({
         className={`${inter.variable} ${geistMono.variable} antialiased flex bg-neutral-light min-h-screen`}
       >
         <Providers>
-          <div className="flex min-h-screen">
-            <NavBar />
-            <div className="flex-1 flex flex-col min-h-0">
-              <TopBar />
-              <main className="flex-1 overflow-auto">
-                {children}
-              </main>
-            </div>
+          <NavBar />
+          <div className="flex-1 flex flex-col">
+            <TopBar />
+            <main className="flex-1 p-6 overflow-auto">
+              {children}
+            </main>
           </div>
         </Providers>
       </body>

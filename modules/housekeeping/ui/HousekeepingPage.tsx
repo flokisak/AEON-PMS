@@ -27,13 +27,13 @@ export function HousekeepingPage() {
   );
 
   return (
-    <div className="space-y-6 p-4 lg:p-6 xl:p-8">
+    <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">{t('housekeeping.title')}</h1>
+        <h1 className="text-2xl font-semibold text-foreground mb-2">{t('housekeeping.title')}</h1>
         <p className="text-neutral-dark">{t('housekeeping.description')}</p>
       </div>
       <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg border border-neutral-medium shadow-sm">
-        <h2 className="text-xl font-semibold mb-6 text-gray-800">{t('housekeeping.addNewTask')}</h2>
+        <h2 className="text-lg font-semibold mb-6 text-foreground">{t('housekeeping.addNewTask')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div>
             <label className="form-label">{t('housekeeping.roomNumber')}</label>
