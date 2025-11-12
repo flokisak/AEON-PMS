@@ -118,19 +118,28 @@ body {
     padding: 12px 20px;
     font-size: 16px;
     border-radius: 12px;
-    width: 100%; /* Full-width buttons on mobile */
-    margin-bottom: 8px;
+    box-sizing: border-box;
   }
   
-  /* Button groups */
-  .flex.space-x-4 .btn-primary,
-  .flex.space-x-4 .btn-secondary,
-  .flex.space-x-4 .btn-success,
-  .flex.space-x-4 .btn-warning,
-  .flex.space-x-4 .btn-error,
-  .flex.space-x-4 .btn-danger {
+  /* Only make buttons full-width in specific contexts */
+  .w-full .btn-primary,
+  .w-full .btn-secondary,
+  .w-full .btn-success,
+  .w-full .btn-warning,
+  .w-full .btn-error,
+  .w-full .btn-danger {
+    width: 100%;
+  }
+  
+  /* Button groups maintain layout */
+  .flex .btn-primary,
+  .flex .btn-secondary,
+  .flex .btn-success,
+  .flex .btn-warning,
+  .flex .btn-error,
+  .flex .btn-danger {
     width: auto;
-    margin-bottom: 0;
+    flex-shrink: 0;
   }
 }
 
@@ -207,6 +216,19 @@ body {
     font-size: 16px;
     line-height: 1.5;
     -webkit-text-size-adjust: 100%;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+  }
+  
+  /* Prevent layout shifts */
+  * {
+    box-sizing: border-box;
+  }
+  
+  /* Fix viewport issues */
+  html, body {
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
   }
   
   /* Mobile-friendly form inputs */

@@ -325,136 +325,147 @@ export function ReservationsPage() {
       )}
 
       {activeTab === 'gantt' && (
-        <div className="mb-6 flex flex-wrap gap-4 items-center">
-          <div className="flex gap-2">
-            <button
-              onClick={() => setViewMode('day')}
-              className={`px-4 py-2 rounded-lg font-medium ${viewMode === 'day' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700'}`}
-            >
-              {t('reservations.today')}
-            </button>
-            <button
-              onClick={() => setViewMode('week')}
-              className={`px-4 py-2 rounded-lg font-medium ${viewMode === 'week' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700'}`}
-            >
-              {t('reservations.week')}
-            </button>
-            <button
-              onClick={() => setViewMode('month')}
-              className={`px-4 py-2 rounded-lg font-medium ${viewMode === 'month' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700'}`}
-            >
-              {t('reservations.month')}
-            </button>
-            <button
-              onClick={() => setViewMode('custom')}
-              className={`px-4 py-2 rounded-lg font-medium ${viewMode === 'custom' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700'}`}
-            >
-              Custom
-            </button>
+        <div className="mb-6">
+          {/* Mobile-friendly view controls */}
+          <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setViewMode('day')}
+                className={`px-3 py-2 rounded-lg font-medium text-sm ${viewMode === 'day' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+              >
+                {t('reservations.today')}
+              </button>
+              <button
+                onClick={() => setViewMode('week')}
+                className={`px-3 py-2 rounded-lg font-medium text-sm ${viewMode === 'week' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+              >
+                {t('reservations.week')}
+              </button>
+              <button
+                onClick={() => setViewMode('month')}
+                className={`px-3 py-2 rounded-lg font-medium text-sm ${viewMode === 'month' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+              >
+                {t('reservations.month')}
+              </button>
+              <button
+                onClick={() => setViewMode('custom')}
+                className={`px-3 py-2 rounded-lg font-medium text-sm ${viewMode === 'custom' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+              >
+                Custom
+              </button>
+            </div>
+            {viewMode === 'custom' && (
+              <input
+                type="date"
+                value={customDate}
+                onChange={(e) => setCustomDate(e.target.value)}
+                className="form-input text-sm"
+              />
+            )}
           </div>
-          {viewMode === 'custom' && (
-            <input
-              type="date"
-              value={customDate}
-              onChange={(e) => setCustomDate(e.target.value)}
-              className="form-input"
-            />
-          )}
         </div>
       )}
 
       {activeTab === 'gantt' && (
         <DndContext onDragEnd={handleDragEnd}>
-          <div className="overflow-x-auto bg-white rounded-lg shadow-sm border border-neutral-medium" onMouseUp={handleMouseUp}>
-            <div className="min-w-max">
-              {/* Header */}
-              <div className="flex border-b border-neutral-medium bg-neutral-light">
-                <div className="w-32 p-3 font-semibold text-foreground border-r border-neutral-medium">Room</div>
-                {days.map(day => (
-                  <div key={day} style={{ width: `${cellWidth}px` }} className="p-2 text-xs text-center border-r border-neutral-medium text-neutral-dark font-medium">
-                    {new Date(day).getDate()}
+          <div className="bg-white rounded-lg shadow-sm border border-neutral-medium overflow-hidden">
+            {/* Mobile-responsive Gantt container */}
+            <div className="overflow-x-auto overflow-y-auto max-h-[60vh] md:max-h-[70vh]" onMouseUp={handleMouseUp}>
+              <div className="min-w-[800px] md:min-w-max">
+                {/* Header */}
+                <div className="flex border-b border-neutral-medium bg-neutral-light sticky top-0 z-10">
+                  <div className="w-24 sm:w-32 p-2 sm:p-3 font-semibold text-foreground border-r border-neutral-medium text-xs sm:text-sm">Room</div>
+                  {days.map(day => (
+                    <div key={day} style={{ width: `${Math.max(cellWidth, 40)}px` }} className="p-1 sm:p-2 text-xs text-center border-r border-neutral-medium text-neutral-dark font-medium">
+                      {new Date(day).getDate()}
+                    </div>
+                  ))}
+                </div>
+                {/* Rows */}
+                {rooms.map(room => (
+                  <div key={room.id} className="flex border-b border-neutral-medium relative hover:bg-neutral-light/30 transition-colors min-h-[60px]">
+                      <div className="w-24 sm:w-32 p-2 font-medium text-xs sm:text-sm text-foreground bg-neutral-light border-r border-neutral-medium flex flex-col justify-center">
+                       <span className="truncate">{room.number}</span>
+                       <span className="text-xs text-neutral-dark hidden sm:block">({room.type})</span>
+                       <span className="text-xs text-neutral-dark">{formatCurrency(room.price)}</span>
+                       <select
+                         value={room.status}
+                         onChange={(e) => {
+                           e.stopPropagation();
+                           updateRoom.mutate({ id: room.id, status: e.target.value as Room['status'] });
+                         }}
+                          className={`text-xs px-1 py-0.5 rounded border-0 w-20 sm:w-24 ${
+                           room.status === 'available' ? 'bg-green-50 text-green-700' :
+                           room.status === 'occupied' ? 'bg-red-50 text-red-700' :
+                           room.status === 'dirty' ? 'bg-amber-50 text-amber-700' :
+                           room.status === 'cleaning' ? 'bg-cyan-50 text-cyan-700' :
+                           'bg-neutral-100 text-neutral-700'
+                         }`}
+                       >
+                         <option value="available">Avail</option>
+                         <option value="occupied">Occ</option>
+                         <option value="maintenance">Maint</option>
+                         <option value="dirty">Dirty</option>
+                         <option value="cleaning">Clean</option>
+                       </select>
+                     </div>
+                    <div className="flex relative h-8 sm:h-10">
+                      {days.map(day => (
+                        <DroppableCell key={day} date={day} roomNumber={room.number} onSelect={handleCellSelect} width={Math.max(cellWidth, 40)} />
+                      ))}
+                      {reservations?.filter(res => res.room_number === room.number).map(res => {
+                        // Mock check_in and check_out
+                        const checkIn = res.created_at.split('T')[0];
+                        const checkOut = new Date(new Date(checkIn).getTime() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+                        const { left, width } = getPosition(checkIn, checkOut);
+                        return (
+                          <div key={res.id} className="absolute top-1" style={{ left: left * Math.max(cellWidth, 40) / 32, width: width * Math.max(cellWidth, 40) / 32 }}>
+                            <DraggableReservation reservation={{ ...res, check_in: checkIn, check_out: checkOut }} />
+                          </div>
+                        );
+                      })}
+                      {selection && selection.room === room.number && (
+                        <div className="absolute top-1 bg-yellow-200 opacity-50 rounded" style={{
+                          left: Math.min(days.indexOf(selection.start), days.indexOf(selection.end)) * Math.max(cellWidth, 40),
+                          width: (Math.abs(days.indexOf(selection.end) - days.indexOf(selection.start)) + 1) * Math.max(cellWidth, 40)
+                        }}></div>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
-              {/* Rows */}
-              {rooms.map(room => (
-                <div key={room.id} className="flex border-b border-neutral-medium relative hover:bg-neutral-light/30 transition-colors">
-                    <div className="w-32 p-2 font-medium text-sm text-foreground bg-neutral-light border-r border-neutral-medium flex flex-col justify-center">
-                     <span className="truncate">{room.number} ({room.type})</span>
-                     <span className="text-xs text-neutral-dark">{formatCurrency(room.price)}</span>
-                     <select
-                       value={room.status}
-                       onChange={(e) => {
-                         e.stopPropagation();
-                         updateRoom.mutate({ id: room.id, status: e.target.value as Room['status'] });
-                       }}
-                        className={`text-xs px-1 py-0.5 rounded border-0 w-24 ${
-                          room.status === 'available' ? 'bg-green-50 text-green-700' :
-                          room.status === 'occupied' ? 'bg-red-50 text-red-700' :
-                          room.status === 'dirty' ? 'bg-amber-50 text-amber-700' :
-                          room.status === 'cleaning' ? 'bg-cyan-50 text-cyan-700' :
-                          'bg-neutral-100 text-neutral-700'
-                        }`}
-                     >
-                       <option value="available">Available</option>
-                       <option value="occupied">Occupied</option>
-                       <option value="maintenance">Maintenance</option>
-                       <option value="dirty">Dirty</option>
-                       <option value="cleaning">Cleaning</option>
-                     </select>
-                   </div>
-                  <div className="flex relative h-10">
-                    {days.map(day => (
-                      <DroppableCell key={day} date={day} roomNumber={room.number} onSelect={handleCellSelect} width={cellWidth} />
-                    ))}
-                    {reservations?.filter(res => res.room_number === room.number).map(res => {
-                      // Mock check_in and check_out
-                      const checkIn = res.created_at.split('T')[0];
-                      const checkOut = new Date(new Date(checkIn).getTime() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-                      const { left, width } = getPosition(checkIn, checkOut);
-                      return (
-                        <div key={res.id} className="absolute top-1" style={{ left: left * cellWidth / 32, width: width * cellWidth / 32 }}>
-                          <DraggableReservation reservation={{ ...res, check_in: checkIn, check_out: checkOut }} />
-                        </div>
-                      );
-                    })}
-                    {selection && selection.room === room.number && (
-                      <div className="absolute top-1 bg-yellow-200 opacity-50 rounded" style={{
-                        left: Math.min(days.indexOf(selection.start), days.indexOf(selection.end)) * cellWidth,
-                        width: (Math.abs(days.indexOf(selection.end) - days.indexOf(selection.start)) + 1) * cellWidth
-                      }}></div>
-                    )}
-                  </div>
+            </div>
+            
+            {/* Mobile-friendly legend */}
+            <div className="p-4 border-t border-neutral-medium">
+              <div className="flex flex-wrap gap-2 sm:gap-4">
+                <div className="flex items-center bg-primary/10 px-2 py-1 sm:px-3 sm:py-2 rounded-lg">
+                  <div className="w-2 h-2 sm:w-3 sm:h-3 bg-primary rounded mr-1 sm:mr-2"></div>
+                   <span className="text-xs sm:text-sm font-medium text-primary">{t('reservations.booked')}</span>
                 </div>
-              ))}
+                <div className="flex items-center bg-emerald-50 px-2 py-1 sm:px-3 sm:py-2 rounded-lg">
+                   <div className="w-2 h-2 sm:w-3 sm:h-3 bg-emerald-500 rounded mr-1 sm:mr-2"></div>
+                   <span className="text-xs sm:text-sm font-medium text-emerald-700">{t('reservations.checkedIn')}</span>
+                </div>
+                <div className="flex items-center bg-green-50 px-2 py-1 sm:px-3 sm:py-2 rounded-lg">
+                  <div className="w-2 h-2 sm:w-3 sm:h-3 bg-green-400 rounded mr-1 sm:mr-2"></div>
+                   <span className="text-xs sm:text-sm font-medium text-green-700">{t('reservations.available')}</span>
+                </div>
+                <div className="flex items-center bg-red-50 px-2 py-1 sm:px-3 sm:py-2 rounded-lg">
+                  <div className="w-2 h-2 sm:w-3 sm:h-3 bg-red-400 rounded mr-1 sm:mr-2"></div>
+                   <span className="text-xs sm:text-sm font-medium text-red-700">{t('reservations.occupied')}</span>
+                </div>
+                <div className="flex items-center bg-amber-50 px-2 py-1 sm:px-3 sm:py-2 rounded-lg">
+                  <div className="w-2 h-2 sm:w-3 sm:h-3 bg-amber-400 rounded mr-1 sm:mr-2"></div>
+                   <span className="text-xs sm:text-sm font-medium text-amber-700">{t('reservations.dirty')}</span>
+                </div>
+                <div className="flex items-center bg-cyan-50 px-2 py-1 sm:px-3 sm:py-2 rounded-lg">
+                  <div className="w-2 h-2 sm:w-3 sm:h-3 bg-cyan-400 rounded mr-1 sm:mr-2"></div>
+                   <span className="text-xs sm:text-sm font-medium text-cyan-700">{t('reservations.cleaning')}</span>
+                </div>
+              </div>
             </div>
           </div>
-            <div className="mt-6 flex flex-wrap gap-4">
-              <div className="flex items-center bg-primary/10 px-3 py-2 rounded-lg">
-                <div className="w-3 h-3 bg-primary rounded mr-2"></div>
-                 <span className="text-sm font-medium text-primary">{t('reservations.booked')}</span>
-              </div>
-              <div className="flex items-center bg-emerald-50 px-3 py-2 rounded-lg">
-                 <div className="w-3 h-3 bg-emerald-500 rounded mr-2"></div>
-                 <span className="text-sm font-medium text-emerald-700">{t('reservations.checkedIn')}</span>
-              </div>
-              <div className="flex items-center bg-green-50 px-3 py-2 rounded-lg">
-                <div className="w-3 h-3 bg-green-400 rounded mr-2"></div>
-                 <span className="text-sm font-medium text-green-700">{t('reservations.available')}</span>
-              </div>
-              <div className="flex items-center bg-red-50 px-3 py-2 rounded-lg">
-                <div className="w-3 h-3 bg-red-400 rounded mr-2"></div>
-                 <span className="text-sm font-medium text-red-700">{t('reservations.occupied')}</span>
-              </div>
-              <div className="flex items-center bg-amber-50 px-3 py-2 rounded-lg">
-                <div className="w-3 h-3 bg-amber-400 rounded mr-2"></div>
-                 <span className="text-sm font-medium text-amber-700">{t('reservations.dirty')}</span>
-              </div>
-              <div className="flex items-center bg-cyan-50 px-3 py-2 rounded-lg">
-                <div className="w-3 h-3 bg-cyan-400 rounded mr-2"></div>
-                 <span className="text-sm font-medium text-cyan-700">{t('reservations.cleaning')}</span>
-              </div>
-            </div>
         </DndContext>
       )}
     </div>

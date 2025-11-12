@@ -552,21 +552,21 @@ export function FrontDeskPage() {
 
       {/* Check-in Modal */}
       {showCheckInModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-neutral-medium">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="p-4 sm:p-6 border-b border-neutral-medium flex-shrink-0">
               <div className="flex justify-between items-center">
-                <h3 className="text-xl font-semibold text-foreground">{t('frontDesk.checkInGuest')}</h3>
+                <h3 className="text-lg sm:text-xl font-semibold text-foreground">{t('frontDesk.checkInGuest')}</h3>
                 <button
                   onClick={() => setShowCheckInModal(false)}
-                  className="text-neutral-dark hover:text-foreground text-2xl"
+                  className="text-neutral-dark hover:text-foreground text-2xl p-2 hover:bg-neutral-light rounded-lg transition-colors"
                 >
                   ×
                 </button>
               </div>
             </div>
-            <div className="p-6">
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+             <div className="p-4 sm:p-6 overflow-y-auto flex-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
                  <div>
                    <label className="form-label">{t('frontDesk.guestName')} *</label>
                    <input
@@ -615,7 +615,7 @@ export function FrontDeskPage() {
                    />
                  </div>
                </div>
-               <div className="flex items-center space-x-4 mb-6">
+               <div className="flex items-center space-x-3 sm:space-x-4 mb-4 sm:mb-6">
                  <label className="flex items-center">
                    <input
                      type="checkbox"
@@ -626,9 +626,9 @@ export function FrontDeskPage() {
                    {t('frontDesk.companyBooking')}
                  </label>
                </div>
-              {form.is_company && (
-                <div className="mb-6">
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-neutral-light p-4 rounded-lg border border-neutral-medium">
+               {form.is_company && (
+                 <div className="mb-4 sm:mb-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 bg-neutral-light p-3 sm:p-4 rounded-lg border border-neutral-medium">
                      <div>
                        <label className="form-label">{t('frontDesk.companyName')} *</label>
                        <input
@@ -678,7 +678,7 @@ export function FrontDeskPage() {
                    </div>
                 </div>
               )}
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
                  <div>
                    <label className="form-label">{t('frontDesk.roomNumber')}</label>
                    <input

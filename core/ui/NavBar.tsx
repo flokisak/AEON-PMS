@@ -90,10 +90,10 @@ export function NavBar() {
 
   return (
     <>
-      {/* Mobile menu button */}
+      {/* Mobile menu button - positioned to avoid overlap */}
       <button
         onClick={() => setIsMobileOpen(!isMobileOpen)}
-        className="md:hidden fixed top-4 left-4 z-50 p-3 bg-primary text-white rounded-xl shadow-lg border border-primary-dark touch-manipulation"
+        className="md:hidden fixed top-16 left-4 z-50 p-3 bg-primary text-white rounded-xl shadow-lg border border-primary-dark touch-manipulation"
         aria-label={isMobileOpen ? 'Close menu' : 'Open menu'}
       >
         {isMobileOpen ? (
@@ -118,10 +118,10 @@ export function NavBar() {
       <nav
         className={`
             bg-white text-foreground shadow-lg border-r border-neutral-medium
-            transition-all duration-300 min-h-screen flex flex-col overflow-visible
+            transition-all duration-300 min-h-screen flex flex-col overflow-hidden
             ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
             ${isCollapsed ? 'md:w-16' : 'md:w-64'}
-            fixed md:relative z-50 md:z-auto w-72 md:w-auto
+            fixed md:relative z-50 md:z-auto w-64 md:w-auto
             md:shadow-sm
           `}
       >
@@ -148,7 +148,7 @@ export function NavBar() {
         </div>
 
         {/* Navigation Items */}
-        <ul className="flex-1 p-4 space-y-2 overflow-y-auto">
+        <ul className="flex-1 p-4 space-y-2 overflow-y-auto overflow-x-hidden">
           <li>
             <Link
               href="/"
@@ -226,7 +226,7 @@ export function NavBar() {
 
              {/* Property Dropdown */}
              {showPropertySwitcher && !isCollapsed && (
-               <div className="mt-3 space-y-2 max-h-64 overflow-y-auto">
+               <div className="mt-3 space-y-2 max-h-60 overflow-y-auto">
                  {properties.map((property) => (
                    <button
                      key={property.id}
@@ -235,13 +235,13 @@ export function NavBar() {
                        setShowPropertySwitcher(false);
                        setIsMobileOpen(false); // Close mobile menu after selection
                      }}
-                     className={`w-full text-left p-3 rounded-xl text-sm transition-all duration-200 touch-manipulation ${
+                     className={`w-full text-left p-3 rounded-xl text-sm transition-all duration-200 touch-manipulation whitespace-normal ${
                        currentProperty?.id === property.id
                          ? 'bg-primary text-white shadow-md'
                          : 'hover:bg-neutral-light text-neutral-dark hover:shadow-sm'
                      }`}
                    >
-                     <div className="font-medium truncate text-base">{property.name}</div>
+                     <div className="font-medium text-base truncate">{property.name}</div>
                      <div className="text-xs opacity-75 truncate mt-1">
                        {property.city}, {property.country}
                      </div>
@@ -270,13 +270,13 @@ export function NavBar() {
 
                  {/* Collapsed dropdown */}
                  {showPropertySwitcher && (
-                   <div className="absolute bottom-full left-0 mb-2 w-72 bg-white rounded-xl shadow-xl border border-neutral-medium z-20">
-                     <div className="p-3 border-b border-neutral-medium">
+                   <div className="absolute bottom-full left-0 mb-2 w-64 bg-white rounded-xl shadow-xl border border-neutral-medium z-20 max-h-80 overflow-hidden">
+                     <div className="p-3 border-b border-neutral-medium flex-shrink-0">
                        <div className="text-sm text-neutral-dark font-medium">
                          {t('nav.switchProperty')}
                        </div>
                      </div>
-                     <div className="max-h-64 overflow-y-auto">
+                     <div className="max-h-60 overflow-y-auto">
                        {properties.map((property) => (
                          <button
                            key={property.id}
@@ -284,14 +284,14 @@ export function NavBar() {
                              switchProperty(property.id);
                              setShowPropertySwitcher(false);
                            }}
-                           className={`w-full text-left p-3 text-sm transition-all duration-200 touch-manipulation ${
+                           className={`w-full text-left p-3 text-sm transition-all duration-200 touch-manipulation whitespace-normal ${
                              currentProperty?.id === property.id
                                ? 'bg-primary text-white'
                                : 'hover:bg-neutral-light text-neutral-dark'
                            }`}
                          >
-                           <div className="font-medium text-base">{property.name}</div>
-                           <div className="text-xs opacity-75 mt-1">
+                           <div className="font-medium text-base truncate">{property.name}</div>
+                           <div className="text-xs opacity-75 mt-1 truncate">
                              {property.city}, {property.country}
                            </div>
                          </button>
