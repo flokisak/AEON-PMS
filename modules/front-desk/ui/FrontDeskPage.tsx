@@ -103,38 +103,38 @@ function CRMSection({ companies, setCompanies }: { companies: Company[], setComp
 
   return (
     <div>
-      <div className="flex bg-neutral-light rounded-lg p-1 border border-neutral-medium mb-6">
+      <div className="flex mb-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-1 border border-indigo-100">
         <button
           onClick={() => setCrmTab('guests')}
-          className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
-            crmTab === 'guests' ? 'bg-white shadow-sm text-primary border border-neutral-medium' : 'text-neutral-dark hover:text-primary'
+          className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${
+            crmTab === 'guests' ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'
           }`}
         >
-          {t('frontDesk.frequentGuests')}
+          👤 {t('frontDesk.frequentGuests')}
         </button>
         <button
           onClick={() => setCrmTab('leads')}
-          className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
-            crmTab === 'leads' ? 'bg-white shadow-sm text-primary border border-neutral-medium' : 'text-neutral-dark hover:text-primary'
+          className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${
+            crmTab === 'leads' ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'
           }`}
         >
-          {t('frontDesk.leads')}
+          🎯 {t('frontDesk.leads')}
         </button>
         <button
           onClick={() => setCrmTab('companies')}
-          className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
-            crmTab === 'companies' ? 'bg-white shadow-sm text-primary border border-neutral-medium' : 'text-neutral-dark hover:text-primary'
+          className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${
+            crmTab === 'companies' ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'
           }`}
         >
-          {t('frontDesk.companies')}
+          🏢 {t('frontDesk.companies')}
         </button>
         <button
           onClick={() => setCrmTab('newsletter')}
-          className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
-            crmTab === 'newsletter' ? 'bg-white shadow-sm text-primary border border-neutral-medium' : 'text-neutral-dark hover:text-primary'
+          className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${
+            crmTab === 'newsletter' ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'
           }`}
         >
-          {t('frontDesk.newsletter')}
+          📧 {t('frontDesk.newsletter')}
         </button>
       </div>
 
@@ -467,26 +467,26 @@ export function FrontDeskPage() {
   return (
     <div className="space-y-6 p-4 lg:p-6 xl:p-8">
        <div>
-         <h1 className="text-2xl font-bold text-foreground mb-2">{t('frontDesk.title')}</h1>
+         <h1 className="text-3xl font-bold text-gray-800 mb-2">{t('frontDesk.title')}</h1>
          <p className="text-neutral-dark">{t('frontDesk.description')}</p>
        </div>
 
-      <div className="flex bg-neutral-light rounded-lg p-1 border border-neutral-medium">
+      <div className="flex mb-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-1 border border-indigo-100">
         <button
           onClick={() => setActiveTab('checkin')}
-          className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
-            activeTab === 'checkin' ? 'bg-white shadow-sm text-primary border border-neutral-medium' : 'text-neutral-dark hover:text-primary'
+          className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${
+            activeTab === 'checkin' ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'
           }`}
          >
-           {t('frontDesk.checkin')}
+           🏨 {t('frontDesk.checkin')}
          </button>
          <button
            onClick={() => setActiveTab('crm')}
-           className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
-             activeTab === 'crm' ? 'bg-white shadow-sm text-primary border border-neutral-medium' : 'text-neutral-dark hover:text-primary'
+           className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${
+             activeTab === 'crm' ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'
            }`}
          >
-           {t('frontDesk.crm')}
+           👥 {t('frontDesk.crm')}
          </button>
       </div>
 
@@ -494,7 +494,7 @@ export function FrontDeskPage() {
         <div>
            <div className="flex justify-between items-center mb-6">
              <div>
-               <h2 className="text-xl font-semibold text-foreground">{t('frontDesk.recentCheckins')}</h2>
+                <h2 className="text-xl font-semibold mb-4 text-gray-800">{t('frontDesk.recentCheckins')}</h2>
                <p className="text-neutral-dark">{t('frontDesk.recentCheckinsDescription')}</p>
              </div>
              <div>

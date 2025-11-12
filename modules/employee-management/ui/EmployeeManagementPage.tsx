@@ -95,10 +95,26 @@ export function EmployeeManagementPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-foreground mb-2">{t('employeeManagement.title')}</h1>
-        <p className="text-neutral-dark">{t('employeeManagement.description')}</p>
+      <h1 className="text-3xl font-bold text-gray-800">{t('employeeManagement.title')}</h1>
+
+      {/* Tabs */}
+      <div className="flex mb-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-1 border border-indigo-100">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${
+              activeTab === tab.id ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'
+            }`}
+          >
+            <span>{tab.label}</span>
+            {tab.count !== null && (
+              <span className="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-xs ml-2">
+                {tab.count}
+              </span>
+            )}
+          </button>
+        ))}
       </div>
 
       {/* Navigation Tabs */}
@@ -136,7 +152,7 @@ export function EmployeeManagementPage() {
         <div>
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h2 className="text-xl font-semibold text-foreground">{t('employeeManagement.employeeDirectory')}</h2>
+              <h2 className="text-xl font-semibold mb-4 text-gray-800">{t('employeeManagement.employeeDirectory')}</h2>
               <p className="text-neutral-dark">{t('employeeManagement.manageHotelStaff')}</p>
             </div>
             <button
@@ -151,7 +167,7 @@ export function EmployeeManagementPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
             {departmentStats.map((stat) => (
               <div key={stat.department} className="bg-white rounded-lg shadow-sm border border-neutral-medium p-4 min-h-[160px]">
-                 <h3 className="font-semibold text-foreground capitalize mb-2">
+                  <h3 className="text-xl font-semibold mb-4 text-gray-800 capitalize">
                    {t(`employeeManagement.${stat.department.replace('-', '')}`) || stat.department.replace('-', ' ')}
                  </h3>
                  <div className="space-y-1 text-sm">

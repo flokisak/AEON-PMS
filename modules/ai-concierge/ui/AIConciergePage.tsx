@@ -108,28 +108,28 @@ export function AIConciergePage() {
   return (
     <div className="space-y-6 p-4 lg:p-6 xl:p-8">
       <div>
-        <h1 className="text-2xl font-semibold text-foreground mb-2">{t('aiConcierge.title')}</h1>
+        <h1 className="text-3xl font-bold text-gray-800 mb-2">{t('aiConcierge.title')}</h1>
         <p className="text-neutral-dark">{t('aiConcierge.intelligentAssistant')}</p>
       </div>
 
-      <div className="flex bg-neutral-light rounded-lg p-1 border border-neutral-medium">
+      <div className="flex mb-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-1 border border-indigo-100">
         <button
           onClick={() => setActiveTab('chat')}
-          className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${activeTab === 'chat' ? 'bg-white shadow-sm text-primary border border-neutral-medium' : 'text-neutral-dark hover:text-primary'}`}
+          className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${activeTab === 'chat' ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'}`}
         >
-          {t('aiConcierge.chat')}
+          💬 {t('aiConcierge.chat')}
         </button>
         <button
           onClick={() => setActiveTab('workflows')}
-          className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${activeTab === 'workflows' ? 'bg-white shadow-sm text-primary border border-neutral-medium' : 'text-neutral-dark hover:text-primary'}`}
+          className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${activeTab === 'workflows' ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'}`}
         >
-          {t('aiConcierge.workflows')}
+          ⚙️ {t('aiConcierge.workflows')}
         </button>
         <button
           onClick={() => setActiveTab('partners')}
-          className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${activeTab === 'partners' ? 'bg-white shadow-sm text-primary border border-neutral-medium' : 'text-neutral-dark hover:text-primary'}`}
+          className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${activeTab === 'partners' ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'}`}
         >
-          {t('aiConcierge.partners')}
+          🤝 {t('aiConcierge.partners')}
         </button>
       </div>
 
@@ -269,7 +269,7 @@ export function AIConciergePage() {
 
         {activeTab === 'workflows' && (
          <div className="flex-1 overflow-y-auto">
-           <h2 className="text-lg font-semibold mb-4 text-foreground">{t('aiConcierge.workflowConfiguration')}</h2>
+            <h2 className="text-xl font-semibold mb-4 text-gray-800">{t('aiConcierge.workflowConfiguration')}</h2>
            <p className="text-neutral-dark mb-6">{t('aiConcierge.customizeAutomatedProcesses')}</p>
 
            <div className="bg-white p-4 rounded-lg shadow-sm mb-6 border border-neutral-medium">
@@ -371,7 +371,7 @@ export function AIConciergePage() {
 
       {activeTab === 'partners' && (
         <div className="flex-1 overflow-y-auto">
-          <h2 className="text-lg font-semibold mb-4 text-foreground">{t('aiConcierge.partnersManagement')}</h2>
+          <h2 className="text-xl font-semibold mb-4 text-gray-800">{t('aiConcierge.partnersManagement')}</h2>
           <p className="text-neutral-dark mb-6">{t('aiConcierge.partnerManagementDesc')}</p>
 
           <div className="bg-white p-4 rounded-lg shadow-sm mb-6 border border-neutral-medium">

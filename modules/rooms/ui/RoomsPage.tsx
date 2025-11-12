@@ -403,11 +403,40 @@ export function RoomsPage() {
 
    return (
      <div className="space-y-6 p-4 lg:p-6 xl:p-8">
-       <div className="flex justify-between items-center">
-         <div>
-           <h1 className="text-2xl font-semibold text-foreground mb-2">{t('rooms.title')}</h1>
-           <p className="text-neutral-dark">{t('rooms.description')}</p>
-         </div>
+        <h1 className="text-3xl font-bold text-gray-800">{t('rooms.title')}</h1>
+
+        {/* View Tabs */}
+        <div className="flex mb-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-1 border border-indigo-100">
+          <button
+            onClick={() => setView('list')}
+            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${
+              view === 'list' ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'
+            }`}
+          >
+            <FiList className="inline mr-2" />
+            {t('rooms.views.list')}
+          </button>
+          <button
+            onClick={() => setView('rooms')}
+            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${
+              view === 'rooms' ? 'bg-white shadow-md text-indigo-700 border border-indigo-200' : 'text-indigo-600 hover:text-indigo-800'
+            }`}
+          >
+            <FiGrid className="inline mr-2" />
+            {t('rooms.views.rooms')}
+          </button>
+        </div>
+
+        {/* Add Button */}
+        <div className="flex justify-end">
+          <button
+            onClick={() => setShowForm(true)}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium flex items-center"
+          >
+            <FiPlus className="mr-2" />
+            {t('rooms.addRoom')}
+          </button>
+        </div>
          <div className="flex gap-3">
              <div className="flex bg-neutral-light rounded-lg p-1 border border-neutral-medium">
                <button
@@ -602,9 +631,9 @@ export function RoomsPage() {
                   >
                     {t('rooms.backToRoomSelection')}
                   </button>
-                  <h2 className="text-xl font-semibold text-foreground">
-                    {t('rooms.maintenanceNotes')} - {t('rooms.roomNumber')} {rooms?.find(r => r.id === selectedRoomId)?.number}
-                  </h2>
+                   <h2 className="text-xl font-semibold mb-4 text-gray-800">
+                     {t('rooms.maintenanceNotes')} - {t('rooms.roomNumber')} {rooms?.find(r => r.id === selectedRoomId)?.number}
+                   </h2>
                </div>
                <MaintenancePanel roomId={selectedRoomId} />
              </div>
