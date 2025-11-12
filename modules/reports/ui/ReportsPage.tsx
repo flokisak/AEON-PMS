@@ -15,7 +15,7 @@ export function ReportsPage() {
   const { rooms } = useRooms();
   const { tasks } = useHousekeeping();
   const { formatCurrency } = useCurrency();
-  const [selectedReport, setSelectedReport] = useState<'overview' | 'maintenance' | 'guests' | 'stayovers' | 'housekeeping'>('overview');
+  const [selectedReport, setSelectedReport] = useState<'overview' | 'maintenance' | 'guests' | 'stayovers' | 'housekeeping' | 'occupancy' | 'revenue'>('overview');
 
   // Add currency change listener for auto-refresh
   useEffect(() => {

@@ -6,7 +6,7 @@ import { useRooms } from '../logic/useRooms';
 import { Room } from '../../../core/types';
 import { MaintenancePanel } from './MaintenancePanel';
 import { AmenitiesManager } from './AmenitiesManager';
-import { FiWifi, FiWind, FiCoffee, FiTv, FiShield, FiDroplet, FiList, FiGrid, FiTool, FiStar } from 'react-icons/fi';
+import { FiWifi, FiWind, FiCoffee, FiTv, FiShield, FiDroplet, FiList, FiGrid, FiTool, FiStar, FiPlus } from 'react-icons/fi';
 import { useCurrency } from '@/core/hooks/useCurrency';
 
 function RoomCard({ room, onEdit, onDelete, onMaintenance }: {
@@ -483,11 +483,10 @@ export function RoomsPage() {
              >
                {t('rooms.addRoom')}
              </button>
-           )}
-         </div>
-           </div>
+            )}
+          </div>
 
-        {view === 'list' && (
+         {view === 'list' && (
          <div className="flex gap-4 mb-6">
            <div>
               <label className="form-label text-sm">{t('rooms.sortBy')}</label>

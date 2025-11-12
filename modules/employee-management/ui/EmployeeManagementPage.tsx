@@ -93,6 +93,14 @@ export function EmployeeManagementPage() {
     }
   };
 
+  const tabs = [
+    { id: 'employees' as ActiveTab, label: `👥 ${t('employeeManagement.employees')}`, count: employees?.length || null },
+    { id: 'shifts' as ActiveTab, label: `⏰ ${t('employeeManagement.shifts')}`, count: shifts?.length || null },
+    { id: 'departments' as ActiveTab, label: `🏢 ${t('employeeManagement.departments')}`, count: departments?.length || null },
+    { id: 'attendance' as ActiveTab, label: `📊 ${t('employeeManagement.attendance')}`, count: null },
+    { id: 'payroll' as ActiveTab, label: `💰 ${t('employeeManagement.payroll')}`, count: null },
+  ];
+
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold text-gray-800">{t('employeeManagement.title')}</h1>
