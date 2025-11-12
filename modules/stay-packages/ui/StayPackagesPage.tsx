@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useStayPackages } from '../logic/useStayPackages';
+import { useCurrency } from '@/core/hooks/useCurrency';
 import { StayPackage, PackageComponent, PackagePricingRule } from '../../../core/types';
 import { FiPackage, FiPlus, FiEdit, FiTrash, FiStar, FiCalendar, FiUsers, FiDollarSign } from 'react-icons/fi';
 
@@ -11,6 +13,9 @@ function PackageCard({ pkg, onEdit, onDelete, onViewDetails }: {
   onDelete: () => void;
   onViewDetails: () => void;
 }) {
+  const { t } = useTranslation('common');
+  const { formatCurrency } = useCurrency();
+  
   const getCategoryColor = (category: string) => {
     switch (category) {
       case 'romantic': return 'bg-pink-100 text-pink-800';
@@ -21,8 +26,6 @@ function PackageCard({ pkg, onEdit, onDelete, onViewDetails }: {
       default: return 'bg-gray-100 text-gray-800';
     }
   };
-
-  const formatCurrency = (amount: number) => `$${amount.toFixed(2)}`;
 
   return (
     <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow duration-200">
@@ -64,11 +67,11 @@ function PackageCard({ pkg, onEdit, onDelete, onViewDetails }: {
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div className="text-center">
             <div className="text-2xl font-bold text-green-600">{formatCurrency(pkg.base_price)}</div>
-            <div className="text-xs text-gray-600">Base Price</div>
+            <div className="text-xs text-gray-600">{t('stayPackages.basePrice')}</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-blue-600">{pkg.minimum_stay}</div>
-            <div className="text-xs text-gray-600">Min Stay</div>
+            <div className="text-xs text-gray-600">{t('stayPackages.minStay')}</div>
           </div>
         </div>
 
@@ -76,17 +79,17 @@ function PackageCard({ pkg, onEdit, onDelete, onViewDetails }: {
           <div className="text-center">
             <FiUsers className="mx-auto mb-1 text-gray-400" size={16} />
             <div className="text-sm font-medium">{pkg.max_guests}</div>
-            <div className="text-xs text-gray-500">Guests</div>
+            <div className="text-xs text-gray-500">{t('stayPackages.guests')}</div>
           </div>
           <div className="text-center">
             <FiStar className="mx-auto mb-1 text-gray-400" size={16} />
-            <div className="text-sm font-medium">{pkg.average_rating?.toFixed(1) || 'N/A'}</div>
-            <div className="text-xs text-gray-500">Rating</div>
+            <div className="text-sm font-medium">{pkg.average_rating?.toFixed(1) || t('stayPackages.na')}</div>
+            <div className="text-xs text-gray-500">{t('stayPackages.rating')}</div>
           </div>
           <div className="text-center">
             <FiCalendar className="mx-auto mb-1 text-gray-400" size={16} />
             <div className="text-sm font-medium">{pkg.total_bookings}</div>
-            <div className="text-xs text-gray-500">Bookings</div>
+            <div className="text-xs text-gray-500">{t('stayPackages.bookings')}</div>
           </div>
         </div>
 
@@ -101,7 +104,7 @@ function PackageCard({ pkg, onEdit, onDelete, onViewDetails }: {
               ))}
               {pkg.highlights.length > 2 && (
                 <span className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded">
-                  +{pkg.highlights.length - 2} more
+                  +{pkg.highlights.length - 2} {t('stayPackages.more')}
                 </span>
               )}
             </div>
@@ -112,7 +115,7 @@ function PackageCard({ pkg, onEdit, onDelete, onViewDetails }: {
           onClick={onViewDetails}
           className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors"
         >
-          View Details & Book
+          {t('stayPackages.viewDetailsAndBook')}
         </button>
       </div>
     </div>
@@ -124,6 +127,7 @@ function PackageEditor({ pkg, onSave, onCancel }: {
   onSave: (data: Omit<StayPackage, 'id' | 'created_at' | 'updated_at' | 'total_bookings' | 'total_revenue' | 'review_count'>) => void;
   onCancel: () => void;
 }) {
+  const { t } = useTranslation('common');
   const [formData, setFormData] = useState<Omit<StayPackage, 'id' | 'created_at' | 'updated_at' | 'total_bookings' | 'total_revenue' | 'review_count'>>({
     code: pkg?.code || '',
     name: pkg?.name || '',
@@ -161,14 +165,14 @@ function PackageEditor({ pkg, onSave, onCancel }: {
         <div className="p-6 border-b border-gray-200">
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-semibold text-gray-800">
-              {pkg ? 'Edit Package' : 'Create New Package'}
+              {pkg ? t('stayPackages.editPackage') : t('stayPackages.createPackage')}
             </h2>
             <div className="flex gap-3">
               <button onClick={onCancel} className="btn-secondary px-4">
-                Cancel
+                {t('common.cancel')}
               </button>
               <button onClick={handleSubmit} className="btn-primary px-4">
-                {pkg ? 'Update Package' : 'Create Package'}
+                {pkg ? t('stayPackages.updatePackage') : t('stayPackages.createPackage')}
               </button>
             </div>
           </div>
@@ -178,10 +182,10 @@ function PackageEditor({ pkg, onSave, onCancel }: {
         <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
           <div className="flex gap-1">
             {[
-              { id: 'basic', label: 'Basic Info' },
-              { id: 'components', label: 'Components' },
-              { id: 'pricing', label: 'Pricing Rules' },
-              { id: 'availability', label: 'Availability' },
+              { id: 'basic', label: t('stayPackages.basicInfo') },
+              { id: 'components', label: t('stayPackages.components') },
+              { id: 'pricing', label: t('stayPackages.pricingRules') },
+              { id: 'availability', label: t('stayPackages.availability') },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -203,73 +207,73 @@ function PackageEditor({ pkg, onSave, onCancel }: {
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="form-label">Package Code</label>
+                  <label className="form-label">{t('stayPackages.packageCode')}</label>
                   <input
                     type="text"
                     value={formData.code}
                     onChange={(e) => setFormData(prev => ({ ...prev, code: e.target.value.toUpperCase() }))}
                     className="form-input w-full"
-                    placeholder="e.g., ROMANCE2024"
+                    placeholder="např., ROMANCE2024"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="form-label">Category</label>
+                  <label className="form-label">{t('stayPackages.category')}</label>
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value as StayPackage['category'] }))}
                     className="form-input w-full"
                   >
-                    <option value="romantic">Romantic</option>
-                    <option value="family">Family</option>
-                    <option value="business">Business</option>
-                    <option value="wellness">Wellness</option>
-                    <option value="adventure">Adventure</option>
-                    <option value="luxury">Luxury</option>
-                    <option value="budget">Budget</option>
-                    <option value="seasonal">Seasonal</option>
-                    <option value="other">Other</option>
+                    <option value="romantic">{t('stayPackages.romantic')}</option>
+                    <option value="family">{t('stayPackages.family')}</option>
+                    <option value="business">{t('stayPackages.business')}</option>
+                    <option value="wellness">{t('stayPackages.wellness')}</option>
+                    <option value="adventure">{t('stayPackages.adventure')}</option>
+                    <option value="luxury">{t('stayPackages.luxury')}</option>
+                    <option value="budget">{t('stayPackages.budget')}</option>
+                    <option value="seasonal">{t('stayPackages.seasonal')}</option>
+                    <option value="other">{t('stayPackages.other')}</option>
                   </select>
                 </div>
               </div>
 
-              <div>
-                <label className="form-label">Package Name</label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  className="form-input w-full"
-                  required
-                />
-              </div>
+                <div>
+                  <label className="form-label">{t('stayPackages.packageName')}</label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                    className="form-input w-full"
+                    required
+                  />
+                </div>
 
-              <div>
-                <label className="form-label">Short Description</label>
-                <input
-                  type="text"
-                  value={formData.short_description}
-                  onChange={(e) => setFormData(prev => ({ ...prev, short_description: e.target.value }))}
-                  className="form-input w-full"
-                  placeholder="Brief description for listings"
-                />
-              </div>
+                <div>
+                  <label className="form-label">{t('stayPackages.shortDescription')}</label>
+                  <input
+                    type="text"
+                    value={formData.short_description}
+                    onChange={(e) => setFormData(prev => ({ ...prev, short_description: e.target.value }))}
+                    className="form-input w-full"
+                    placeholder={t('stayPackages.briefDescriptionForListings')}
+                  />
+                </div>
 
-              <div>
-                <label className="form-label">Full Description</label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                  className="form-input w-full"
-                  rows={4}
-                  required
-                />
-              </div>
+                <div>
+                  <label className="form-label">{t('stayPackages.fullDescription')}</label>
+                  <textarea
+                    value={formData.description}
+                    onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                    className="form-input w-full"
+                    rows={4}
+                    required
+                  />
+                </div>
 
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div>
-                  <label className="form-label">Base Price ($)</label>
+                  <label className="form-label">{t('stayPackages.basePrice')}</label>
                   <input
                     type="number"
                     step="0.01"
@@ -282,7 +286,7 @@ function PackageEditor({ pkg, onSave, onCancel }: {
                 </div>
 
                 <div>
-                  <label className="form-label">Min Stay (nights)</label>
+                  <label className="form-label">{t('stayPackages.minStay')} ({t('stayPackages.nights')})</label>
                   <input
                     type="number"
                     value={formData.minimum_stay}
@@ -294,7 +298,7 @@ function PackageEditor({ pkg, onSave, onCancel }: {
                 </div>
 
                 <div>
-                  <label className="form-label">Max Stay (nights)</label>
+                  <label className="form-label">{t('stayPackages.maxStay')} ({t('stayPackages.nights')})</label>
                   <input
                     type="number"
                     value={formData.maximum_stay}
@@ -305,7 +309,7 @@ function PackageEditor({ pkg, onSave, onCancel }: {
                 </div>
 
                 <div>
-                  <label className="form-label">Max Guests</label>
+                  <label className="form-label">{t('stayPackages.maxGuests')}</label>
                   <input
                     type="number"
                     value={formData.max_guests}
@@ -319,7 +323,7 @@ function PackageEditor({ pkg, onSave, onCancel }: {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="form-label">Valid From</label>
+                  <label className="form-label">{t('stayPackages.validFrom')}</label>
                   <input
                     type="date"
                     value={formData.valid_from}
@@ -330,7 +334,7 @@ function PackageEditor({ pkg, onSave, onCancel }: {
                 </div>
 
                 <div>
-                  <label className="form-label">Valid To (optional)</label>
+                  <label className="form-label">{t('stayPackages.validTo')} ({t('common.optional')})</label>
                   <input
                     type="date"
                     value={formData.valid_to}
@@ -340,34 +344,34 @@ function PackageEditor({ pkg, onSave, onCancel }: {
                 </div>
               </div>
 
-              <div>
-                <label className="form-label">Status</label>
-                <select
-                  value={formData.status}
-                  onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value as StayPackage['status'] }))}
-                  className="form-input w-full"
-                >
-                  <option value="draft">Draft</option>
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                  <option value="archived">Archived</option>
-                </select>
-              </div>
+                <div>
+                  <label className="form-label">{t('stayPackages.status')}</label>
+                  <select
+                    value={formData.status}
+                    onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value as StayPackage['status'] }))}
+                    className="form-input w-full"
+                  >
+                    <option value="draft">{t('stayPackages.draft')}</option>
+                    <option value="active">{t('stayPackages.active')}</option>
+                    <option value="inactive">{t('stayPackages.inactive')}</option>
+                    <option value="archived">{t('common.archived')}</option>
+                  </select>
+                </div>
             </div>
           )}
 
           {activeTab === 'components' && (
             <div className="space-y-4">
               <div className="flex justify-between items-center">
-                <h3 className="text-lg font-semibold">Package Components</h3>
-                <button className="btn-primary text-sm">Add Component</button>
+                <h3 className="text-lg font-semibold">{t('stayPackages.packageComponents')}</h3>
+                <button className="btn-primary text-sm">{t('stayPackages.addComponent')}</button>
               </div>
 
               {formData.components.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
                   <FiPackage size={48} className="mx-auto mb-4 opacity-50" />
-                  <p>No components added yet.</p>
-                  <p className="text-sm">Add rooms, services, meals, and amenities to your package.</p>
+                  <p>{t('stayPackages.noComponentsAdded')}</p>
+                  <p className="text-sm">{t('stayPackages.addRoomsServicesMeals')}</p>
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -380,7 +384,7 @@ function PackageEditor({ pkg, onSave, onCancel }: {
                             <span className={`px-2 py-1 rounded text-xs ${
                               component.is_mandatory ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800'
                             }`}>
-                              {component.is_mandatory ? 'Required' : 'Optional'}
+                              {component.is_mandatory ? t('stayPackages.required') : t('stayPackages.optional')}
                             </span>
                           </div>
                           {component.description && (
@@ -391,8 +395,8 @@ function PackageEditor({ pkg, onSave, onCancel }: {
                           </div>
                         </div>
                         <div className="flex gap-2">
-                          <button className="text-blue-600 hover:text-blue-800 text-sm">Edit</button>
-                          <button className="text-red-600 hover:text-red-800 text-sm">Remove</button>
+                          <button className="text-blue-600 hover:text-blue-800 text-sm">{t('stayPackages.edit')}</button>
+                          <button className="text-red-600 hover:text-red-800 text-sm">{t('stayPackages.remove')}</button>
                         </div>
                       </div>
                     </div>
@@ -405,15 +409,15 @@ function PackageEditor({ pkg, onSave, onCancel }: {
           {activeTab === 'pricing' && (
             <div className="space-y-4">
               <div className="flex justify-between items-center">
-                <h3 className="text-lg font-semibold">Pricing Rules</h3>
-                <button className="btn-primary text-sm">Add Rule</button>
+                <h3 className="text-lg font-semibold">{t('stayPackages.pricingRulesConfig')}</h3>
+                <button className="btn-primary text-sm">{t('stayPackages.addRule')}</button>
               </div>
 
               {formData.pricing_rules.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
                   <FiDollarSign size={48} className="mx-auto mb-4 opacity-50" />
-                  <p>No pricing rules configured.</p>
-                  <p className="text-sm">Add seasonal discounts, early bird pricing, etc.</p>
+                  <p>{t('stayPackages.noPricingRules')}</p>
+                  <p className="text-sm">{t('stayPackages.addSeasonalDiscounts')}</p>
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -429,8 +433,8 @@ function PackageEditor({ pkg, onSave, onCancel }: {
                           </p>
                         </div>
                         <div className="flex gap-2">
-                          <button className="text-blue-600 hover:text-blue-800 text-sm">Edit</button>
-                          <button className="text-red-600 hover:text-red-800 text-sm">Remove</button>
+                          <button className="text-blue-600 hover:text-blue-800 text-sm">{t('stayPackages.edit')}</button>
+                          <button className="text-red-600 hover:text-red-800 text-sm">{t('stayPackages.remove')}</button>
                         </div>
                       </div>
                     </div>
@@ -442,11 +446,11 @@ function PackageEditor({ pkg, onSave, onCancel }: {
 
           {activeTab === 'availability' && (
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Availability Rules</h3>
+              <h3 className="text-lg font-semibold">{t('stayPackages.availability')}</h3>
               <div className="text-center py-8 text-gray-500">
                 <FiCalendar size={48} className="mx-auto mb-4 opacity-50" />
-                <p>Availability configuration coming soon.</p>
-                <p className="text-sm">Set date ranges, blackout dates, and booking limits.</p>
+                <p>{t('stayPackages.availabilityConfig')}</p>
+                <p className="text-sm">{t('stayPackages.setDateRanges')}</p>
               </div>
             </div>
           )}
@@ -457,6 +461,8 @@ function PackageEditor({ pkg, onSave, onCancel }: {
 }
 
 export function StayPackagesPage() {
+  const { t } = useTranslation('common');
+  const { formatCurrency } = useCurrency();
   const { stayPackages, isLoading, createPackage, updatePackage, deletePackage } = useStayPackages();
   const [showEditor, setShowEditor] = useState(false);
   const [editingPackage, setEditingPackage] = useState<StayPackage | undefined>();
@@ -482,7 +488,7 @@ export function StayPackagesPage() {
   };
 
   const handleDeletePackage = (id: string) => {
-    if (confirm('Are you sure you want to delete this package? This action cannot be undone.')) {
+    if (confirm(t('stayPackages.confirmDeletePackage'))) {
       deletePackage.mutate(id);
     }
   };
@@ -510,40 +516,40 @@ export function StayPackagesPage() {
       <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">Packages</h1>
-            <p className="text-gray-600 mt-1">Create and manage comprehensive accommodation packages</p>
+            <h1 className="text-3xl font-bold text-gray-800">{t('stayPackages.title')}</h1>
+            <p className="text-gray-600 mt-1">{t('stayPackages.description')}</p>
           </div>
           <button
             onClick={handleCreatePackage}
             className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium flex items-center"
           >
             <FiPlus className="mr-2" />
-            Create Package
+            {t('stayPackages.createPackage')}
           </button>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
           <div className="bg-indigo-50 p-4 rounded-lg">
-            <div className="text-sm text-indigo-600">Total Packages</div>
+            <div className="text-sm text-indigo-600">{t('stayPackages.totalPackages')}</div>
             <div className="text-3xl font-bold text-indigo-600">{stayPackages?.length || 0}</div>
           </div>
           <div className="bg-green-50 p-4 rounded-lg">
-            <div className="text-sm text-green-600">Active Packages</div>
+            <div className="text-sm text-green-600">{t('stayPackages.activePackages')}</div>
             <div className="text-3xl font-bold text-green-600">
               {stayPackages?.filter(p => p.status === 'active').length || 0}
             </div>
           </div>
           <div className="bg-blue-50 p-4 rounded-lg">
-            <div className="text-sm text-blue-600">Total Bookings</div>
+            <div className="text-sm text-blue-600">{t('stayPackages.totalBookings')}</div>
             <div className="text-3xl font-bold text-blue-600">
               {stayPackages?.reduce((sum, p) => sum + p.total_bookings, 0) || 0}
             </div>
           </div>
           <div className="bg-purple-50 p-4 rounded-lg">
-            <div className="text-sm text-purple-600">Total Revenue</div>
+            <div className="text-sm text-purple-600">{t('stayPackages.totalRevenue')}</div>
             <div className="text-3xl font-bold text-purple-600">
-              ${stayPackages?.reduce((sum, p) => sum + p.total_revenue, 0).toLocaleString() || '0'}
+              {formatCurrency(stayPackages?.reduce((sum, p) => sum + p.total_revenue, 0) || 0)}
             </div>
           </div>
         </div>
@@ -552,13 +558,13 @@ export function StayPackagesPage() {
       {/* Filters */}
       <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
         <div className="flex gap-4 items-center">
-          <span className="font-medium text-gray-700">Filter:</span>
+          <span className="font-medium text-gray-700">{t('stayPackages.filter')}</span>
           <div className="flex gap-2">
             {[
-              { value: 'all', label: 'All Packages' },
-              { value: 'active', label: 'Active' },
-              { value: 'draft', label: 'Draft' },
-              { value: 'inactive', label: 'Inactive' },
+              { value: 'all', label: t('stayPackages.allPackages') },
+              { value: 'active', label: t('stayPackages.active') },
+              { value: 'draft', label: t('stayPackages.draft') },
+              { value: 'inactive', label: t('stayPackages.inactive') },
             ].map((option) => (
               <button
                 key={option.value}
@@ -592,15 +598,15 @@ export function StayPackagesPage() {
       {filteredPackages?.length === 0 && (
         <div className="text-center py-12">
           <FiPackage size={64} className="mx-auto mb-4 text-gray-300" />
-          <h3 className="text-xl font-semibold text-gray-600 mb-2">No packages found</h3>
+          <h3 className="text-xl font-semibold text-gray-600 mb-2">{t('stayPackages.noPackagesFound')}</h3>
           <p className="text-gray-500 mb-6">
-            {filter === 'all' ? 'Get started by creating your first stay package.' : `No ${filter} packages found.`}
+            {filter === 'all' ? t('stayPackages.getStartedCreatePackage') : t(`stayPackages.no${filter.charAt(0).toUpperCase() + filter.slice(1)}Packages`)}
           </p>
           <button
             onClick={handleCreatePackage}
             className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium"
           >
-            Create Your First Package
+            {t('stayPackages.createFirstPackage')}
           </button>
         </div>
       )}

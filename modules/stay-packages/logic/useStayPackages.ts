@@ -11,14 +11,14 @@ import {
 let mockStayPackages: StayPackage[] = [
   {
     id: '1',
-    code: 'ROMANCE2024',
-    name: 'Romantic Getaway Package',
-    description: 'Perfect romantic escape with champagne breakfast, couples massage, and private dinner',
-    short_description: 'Romantic escape for couples',
+    code: 'ROMANTIK2024',
+    name: 'Romantický útěk',
+    description: 'Dokonalý romantický únik se šampaňskou snídaní, párovou masáží a soukromou večeří',
+    short_description: 'Romantický útěk pro páry',
     category: 'romantic',
     status: 'active',
-    base_price: 450.00,
-    currency: 'USD',
+    base_price: 10500.00,
+    currency: 'CZK',
     minimum_stay: 2,
     maximum_stay: 7,
     max_guests: 2,
@@ -129,14 +129,14 @@ let mockStayPackages: StayPackage[] = [
   },
   {
     id: '2',
-    code: 'FAMILYFUN2024',
-    name: 'Family Adventure Package',
-    description: 'Exciting family package with activities, kids club, and family-friendly amenities',
-    short_description: 'Adventure for the whole family',
+    code: 'RODINNA2024',
+    name: 'Rodinné dobrodružství',
+    description: 'Vzrušující rodinný balíček s aktivitami, dětským koutkem a přátelským vybavením',
+    short_description: 'Dobrodružství pro celou rodinu',
     category: 'family',
     status: 'active',
-    base_price: 320.00,
-    currency: 'USD',
+    base_price: 8500.00,
+    currency: 'CZK',
     minimum_stay: 3,
     maximum_stay: 10,
     max_guests: 4,
@@ -144,8 +144,8 @@ let mockStayPackages: StayPackage[] = [
       {
         id: 'comp5',
         type: 'accommodation',
-        name: 'Family Suite',
-        description: 'Spacious suite perfect for families',
+        name: 'Rodinný apartmá',
+        description: 'Prostorný apartmá ideální pro rodiny',
         quantity: 1,
         unit_price: 180.00,
         total_price: 180.00,
@@ -155,8 +155,8 @@ let mockStayPackages: StayPackage[] = [
       {
         id: 'comp6',
         type: 'activity',
-        name: 'Kids Club Access',
-        description: 'Full access to supervised kids activities',
+        name: 'Přístup do dětského koutku',
+        description: 'Plný přístup k hlídaným dětským aktivitám',
         quantity: 1,
         unit_price: 50.00,
         total_price: 50.00,
@@ -166,8 +166,8 @@ let mockStayPackages: StayPackage[] = [
       {
         id: 'comp7',
         type: 'activity',
-        name: 'Family Hiking Tour',
-        description: 'Guided family hiking adventure',
+        name: 'Rodinný výlet',
+        description: 'Vedené rodinné turistické dobrodružství',
         quantity: 1,
         unit_price: 40.00,
         total_price: 40.00,
@@ -177,8 +177,8 @@ let mockStayPackages: StayPackage[] = [
       {
         id: 'comp8',
         type: 'meal',
-        name: 'Family-Style Dining',
-        description: 'Special family dining experience',
+        name: 'Rodinné stravování',
+        description: 'Speciální rodinný zážitek ze stravování',
         quantity: 1,
         unit_price: 50.00,
         total_price: 50.00,
@@ -189,7 +189,7 @@ let mockStayPackages: StayPackage[] = [
     pricing_rules: [
       {
         id: 'rule3',
-        name: 'Family Discount (3+ nights)',
+        name: 'Rodinná sleva (3+ noci)',
         type: 'base',
         conditions: {
           min_stay: 3
@@ -216,17 +216,17 @@ let mockStayPackages: StayPackage[] = [
     ],
     images: ['family-suite.jpg', 'kids-club.jpg'],
     highlights: [
-      'Spacious family suite',
-      'Supervised kids activities',
-      'Guided family adventures',
-      'Special family dining'
+      'Prostorný rodinný apartmá',
+      'Hlídané dětské aktivity',
+      'Vedená rodinná dobrodružství',
+      'Speciální rodinné stravování'
     ],
     created_at: '2024-02-01T00:00:00Z',
     updated_at: '2024-02-10T00:00:00Z',
     valid_from: '2024-06-01',
     valid_to: '2024-08-31',
     total_bookings: 15,
-    total_revenue: 4800.00,
+    total_revenue: 127500.00,
     average_rating: 4.6,
     review_count: 12
   }

@@ -231,7 +231,7 @@ function PackageForm({
           />
         </div>
         <div>
-          <label className="form-label">{t('packagesEvents.price')} ($) *</label>
+          <label className="form-label">{t('packagesEvents.price')} *</label>
           <input
             type="number"
             step="0.01"
@@ -492,7 +492,7 @@ function EventForm({
           />
         </div>
         <div>
-          <label className="form-label">{t('packagesEvents.price')} ($) *</label>
+          <label className="form-label">{t('packagesEvents.price')} *</label>
           <input
             type="number"
             step="0.01"
@@ -1104,9 +1104,9 @@ export function PackagesEventsPage() {
           <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-neutral-medium">
               <div className="flex justify-between items-center">
-                <h3 className="text-xl font-semibold text-foreground">
-                  {editingItem ? 'Edit' : 'Add'} {activeTab === 'packages' ? 'Package' : 'Event'}
-                </h3>
+                 <h3 className="text-xl font-semibold text-foreground">
+                   {editingItem ? t('common.edit') : t('common.add')} {activeTab === 'packages' ? t('packagesEvents.package') : t('packagesEvents.event')}
+                 </h3>
                 <button
                   onClick={() => {
                     setShowForm(false);

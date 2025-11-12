@@ -88,23 +88,23 @@ export function usePackagesEvents() {
       return [
         {
           id: 1,
-          name: 'Sunset Winery',
-          description: 'Local winery offering wine tasting tours',
+          name: 'Vinařství Západ slunce',
+          description: 'Místní vinařství nabízející ochutnávky vín',
           category: 'winery' as const,
           contact_email: 'info@sunsetwinery.com',
           contact_phone: '+1234567890',
-          address: '123 Vineyard Lane, Wine Country',
+          address: 'Vinohradská 123, Vinařská oblast',
           commission_rate: 15,
           status: 'active' as const
         },
         {
           id: 2,
-          name: 'Tranquil Spa',
-          description: 'Full-service spa and wellness center',
+          name: 'Wellness Klid',
+          description: 'Plně vybavené wellness a relaxační centrum',
           category: 'spa' as const,
           contact_email: 'bookings@tranquilspa.com',
           contact_phone: '+1234567891',
-          address: '456 Relaxation Road',
+          address: 'Relaxační 456',
           commission_rate: 20,
           status: 'active' as const
         }
@@ -120,9 +120,9 @@ export function usePackagesEvents() {
         {
           id: 1,
           partner_id: 1,
-          name: 'Wine Tasting Experience',
-          description: 'Guided tour of our vineyards with tasting of 5 premium wines',
-          price: 45,
+          name: 'Ochutnávka vín',
+          description: 'Prohlídka našich vinic s ochutnávkou 5 prémiových vín',
+          price: 1200,
           duration_minutes: 90,
           capacity_per_slot: 10,
           availability: {
@@ -136,9 +136,9 @@ export function usePackagesEvents() {
         {
           id: 2,
           partner_id: 2,
-          name: 'Couples Massage Package',
-          description: '60-minute couples massage with aromatherapy',
-          price: 180,
+          name: 'Párová masáž',
+          description: '60minutová párová masáž s aromaterapií',
+          price: 4800,
           duration_minutes: 60,
           capacity_per_slot: 2,
           availability: {
@@ -185,11 +185,11 @@ export function usePackagesEvents() {
       return [
         {
           id: 1,
-          name: 'Romantic Weekend',
-          description: 'Perfect getaway for couples',
-          price: 299,
+          name: 'Romantický víkend',
+          description: 'Dokonalý útěk pro páry',
+          price: 7900,
           duration: 2,
-          includes: ['Breakfast', 'Late checkout'],
+          includes: ['Snídaně', 'Pozdní odhlášení'],
           partner_offers: [
             { partner_offer_id: 1, included_in_package: true, auto_book: true },
             { partner_offer_id: 2, included_in_package: true, auto_book: false }
@@ -201,11 +201,11 @@ export function usePackagesEvents() {
         },
         {
           id: 2,
-          name: 'Family Fun Package',
-          description: 'Great for families with kids',
-          price: 450,
+          name: 'Rodinná zábava',
+          description: 'Skvělé pro rodiny s dětmi',
+          price: 12000,
           duration: 3,
-          includes: ['All meals', 'Kids activities', 'Entertainment'],
+          includes: ['Všechna jídla', 'Dětské aktivity', 'Zábava'],
           partner_offers: [],
           available_from: '2024-06-01',
           available_to: '2024-08-31',
@@ -223,25 +223,17 @@ export function usePackagesEvents() {
       return [
         {
           id: 1,
-          name: 'Summer Wedding',
-          description: 'Beautiful outdoor wedding ceremony',
-          date: '2024-07-15',
-          start_time: '16:00',
-          end_time: '22:00',
-          capacity: 100,
-          price: 5000,
+          name: 'Letní svatba',
+          description: 'Krásný venkovní svatební obřad',
+          price: 130000,
           type: 'wedding',
           status: 'upcoming'
         },
         {
           id: 2,
-          name: 'Tech Conference 2024',
-          description: 'Annual technology conference',
-          date: '2024-09-20',
-          start_time: '09:00',
-          end_time: '18:00',
-          capacity: 200,
-          price: 150,
+          name: 'Technologická konference 2024',
+          description: 'Roční technologická konference',
+          price: 4000,
           type: 'conference',
           status: 'upcoming'
         }
