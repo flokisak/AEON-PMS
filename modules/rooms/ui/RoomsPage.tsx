@@ -8,6 +8,7 @@ import { MaintenancePanel } from './MaintenancePanel';
 import { AmenitiesManager } from './AmenitiesManager';
 import { FiWifi, FiWind, FiCoffee, FiTv, FiShield, FiDroplet, FiList, FiGrid, FiTool, FiStar } from 'react-icons/fi';
 import { useCurrency } from '@/core/hooks/useCurrency';
+import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator } from '@/core/ui/DropdownMenu';
 
 function RoomCard({ room, onEdit, onDelete, onMaintenance }: {
   room: Room;
@@ -104,19 +105,28 @@ function RoomCard({ room, onEdit, onDelete, onMaintenance }: {
           </select>
         </div>
 
-        <div className="flex gap-2">
-          <button
-            onClick={() => onEdit(room)}
-            className="btn-secondary flex-1 text-sm py-2"
+        <div className="flex justify-end">
+          <DropdownMenu
+            trigger={
+              <button className="text-gray-400 hover:text-gray-600 p-2 rounded hover:bg-gray-100">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"/>
+                </svg>
+              </button>
+            }
+            align="right"
           >
-            {t('edit')}
-          </button>
-          <button
-            onClick={() => onMaintenance(room.id)}
-            className="bg-amber-500 hover:bg-amber-600 text-white flex-1 text-sm py-2 rounded-lg transition-all duration-200"
-          >
-            {t('rooms.maintenance')}
-          </button>
+            <DropdownMenuItem onClick={() => onEdit(room)}>
+              <span className="text-blue-600">{t('edit')}</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onMaintenance(room.id)}>
+              <span className="text-amber-600">{t('rooms.maintenance')}</span>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => onDelete(room.id)}>
+              <span className="text-red-600">{t('rooms.deleteRoom')}</span>
+            </DropdownMenuItem>
+          </DropdownMenu>
         </div>
       </div>
     </div>
@@ -531,31 +541,32 @@ export function RoomsPage() {
                       </td>
                        <td className="p-4 text-neutral-dark">${room.price}</td>
                        <td className="p-4 text-neutral-dark">{room.capacity} {t('rooms.guests')}</td>
-                       <td className="p-4">
-                         <div className="flex gap-2">
-                           <button
-                             onClick={() => handleEditRoom(room)}
-                             className="btn-secondary text-sm px-3 py-1"
-                           >
-                             {t('edit')}
-                           </button>
-                           <button
-                             onClick={() => handleDeleteRoom(room.id)}
-                             className="btn-error text-sm px-3 py-1"
-                           >
-                             {t('rooms.deleteRoom')}
-                           </button>
-                           <button
-                             onClick={() => {
-                               setSelectedRoomId(room.id);
-                               setView('maintenance');
-                             }}
-                             className="bg-amber-500 hover:bg-amber-600 text-white text-sm px-3 py-1 rounded-lg transition-all duration-200"
-                           >
-                             {t('rooms.maintenance')}
-                           </button>
-                         </div>
-                       </td>
+                        <td className="p-4">
+                          <DropdownMenu
+                            trigger={
+                              <button className="text-gray-400 hover:text-gray-600 p-1 rounded hover:bg-gray-100">
+                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                  <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"/>
+                                </svg>
+                              </button>
+                            }
+                            align="right"
+                          >
+                            <DropdownMenuItem onClick={() => handleEditRoom(room)}>
+                              <span className="text-blue-600">{t('edit')}</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => {
+                              setSelectedRoomId(room.id);
+                              setView('maintenance');
+                            }}>
+                              <span className="text-amber-600">{t('rooms.maintenance')}</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={() => handleDeleteRoom(room.id)}>
+                              <span className="text-red-600">{t('rooms.deleteRoom')}</span>
+                            </DropdownMenuItem>
+                          </DropdownMenu>
+                        </td>
                     </tr>
                  ))}
               </tbody>
