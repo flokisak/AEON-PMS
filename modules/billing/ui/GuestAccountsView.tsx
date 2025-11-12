@@ -2,13 +2,15 @@
 
 import { useTranslation } from 'react-i18next';
 import { useBilling } from '../logic/useBilling';
+import { useCurrency } from '@/core/hooks/useCurrency';
 import { GuestAccount } from '../../../core/types';
 
 export function GuestAccountsView() {
   const { t } = useTranslation('common');
+  const { formatCurrency } = useCurrency();
   const { guestAccounts, isLoading } = useBilling();
 
-  const formatCurrency = (amount: number) => `$${amount.toFixed(2)}`;
+
 
   if (isLoading) {
     return (

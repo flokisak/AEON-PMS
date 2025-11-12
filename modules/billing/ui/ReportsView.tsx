@@ -3,10 +3,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useBilling } from '../logic/useBilling';
+import { useCurrency } from '@/core/hooks/useCurrency';
 import { BillingReport } from '../../../core/types';
 
 export function ReportsView() {
   const { t } = useTranslation('common');
+  const { formatCurrency } = useCurrency();
   const { invoices, generateReport } = useBilling();
   const [reportType, setReportType] = useState<BillingReport['report_type']>('daily_revenue');
   const [dateRange, setDateRange] = useState(() => {
@@ -18,7 +20,7 @@ export function ReportsView() {
   });
   const [generatedReport, setGeneratedReport] = useState<BillingReport | null>(null);
 
-  const formatCurrency = (amount: number) => `$${amount.toFixed(2)}`;
+
 
   const handleGenerateReport = () => {
     generateReport.mutate({

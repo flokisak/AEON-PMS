@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useBilling } from '../logic/useBilling';
+import { useCurrency } from '@/core/hooks/useCurrency';
 import { Invoice, InvoiceLineItem, GuestAccount } from '../../../core/types';
 
 interface InvoiceEditorProps {
@@ -13,6 +14,7 @@ interface InvoiceEditorProps {
 
 export function InvoiceEditor({ invoice, onSave, onCancel }: InvoiceEditorProps) {
   const { t } = useTranslation('common');
+  const { formatCurrency } = useCurrency();
   const { guestAccounts, taxRates, addLineItem, updateLineItem, removeLineItem, invoiceTemplates } = useBilling();
   const [editedInvoice, setEditedInvoice] = useState<Invoice>({ ...invoice });
   const [showAddItem, setShowAddItem] = useState(false);
@@ -24,7 +26,7 @@ export function InvoiceEditor({ invoice, onSave, onCancel }: InvoiceEditorProps)
     date: new Date().toISOString().split('T')[0],
   });
 
-  const formatCurrency = (amount: number) => `$${amount.toFixed(2)}`;
+
 
   const calculateTotals = (lineItems: InvoiceLineItem[]) => {
     const subtotal = lineItems.reduce((sum, item) => sum + item.total, 0);

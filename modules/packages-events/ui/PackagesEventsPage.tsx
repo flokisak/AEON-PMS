@@ -128,7 +128,7 @@ function EventCard({ event, onEdit, onDelete }: { event: Event; onEdit: () => vo
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
           <p className="text-sm text-gray-600">{t('packagesEvents.date')}</p>
-          <p className="text-lg font-bold">{new Date(event.date).toLocaleDateString()}</p>
+          <p className="text-lg font-bold">{new Date(event.date).toLocaleDateString('cs-CZ')}</p>
         </div>
         <div>
           <p className="text-sm text-gray-600">{t('packagesEvents.time')}</p>

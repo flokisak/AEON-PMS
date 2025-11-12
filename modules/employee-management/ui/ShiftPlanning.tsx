@@ -83,7 +83,7 @@ export function ShiftPlanning({ shifts, employees, onAddShift, onUpdateShift, on
                 ←
               </button>
               <span className="font-medium text-foreground">
-                {weekDates[0].toLocaleDateString()} - {weekDates[6].toLocaleDateString()}
+                 {weekDates[0].toLocaleDateString('cs-CZ')} - {weekDates[6].toLocaleDateString('cs-CZ')}
               </span>
               <button
                 onClick={() => navigateWeek('next')}
@@ -136,10 +136,10 @@ export function ShiftPlanning({ shifts, employees, onAddShift, onUpdateShift, on
               {weekDates.map((date, index) => (
                 <div key={index} className="p-4 bg-neutral-light text-center">
                   <div className="font-semibold text-foreground">
-                    {date.toLocaleDateString('en-US', { weekday: 'short' })}
+                    {date.toLocaleDateString('cs-CZ', { weekday: 'short' })}
                   </div>
                   <div className="text-sm text-neutral-dark">
-                    {date.toLocaleDateString()}
+                    {date.toLocaleDateString('cs-CZ')}
                   </div>
                 </div>
               ))}
@@ -249,7 +249,7 @@ export function ShiftPlanning({ shifts, employees, onAddShift, onUpdateShift, on
                           </div>
                         </td>
                         <td className="p-4 text-foreground">
-                          {new Date(shift.date).toLocaleDateString()}
+                          {new Date(shift.date).toLocaleDateString('cs-CZ')}
                         </td>
                         <td className="p-4 text-foreground">
                           {shift.start_time} - {shift.end_time}

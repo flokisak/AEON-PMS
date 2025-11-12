@@ -167,7 +167,7 @@ export function EmployeeList({ employees, onEdit, onDelete, onView }: EmployeeLi
                    </span>
                  </td>
                 <td className="p-4 text-neutral-dark">
-                  {new Date(employee.hire_date).toLocaleDateString()}
+                  {new Date(employee.hire_date).toLocaleDateString('cs-CZ')}
                 </td>
                 <td className="p-4">
                   <div className="flex space-x-2">

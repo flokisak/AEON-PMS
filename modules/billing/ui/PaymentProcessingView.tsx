@@ -3,10 +3,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useBilling } from '../logic/useBilling';
+import { useCurrency } from '@/core/hooks/useCurrency';
 import { Payment, Invoice } from '../../../core/types';
 
 export function PaymentProcessingView() {
   const { t } = useTranslation('common');
+  const { formatCurrency } = useCurrency();
   const { invoices, addPayment, transferPayment, splitAccount, voidInvoice } = useBilling();
   const [selectedInvoice, setSelectedInvoice] = useState<number | null>(null);
   const [paymentForm, setPaymentForm] = useState({
@@ -28,7 +30,7 @@ export function PaymentProcessingView() {
   });
   const [activeTab, setActiveTab] = useState<'record' | 'transfer' | 'split' | 'void'>('record');
 
-  const formatCurrency = (amount: number) => `$${amount.toFixed(2)}`;
+
 
   const selectedInvoiceData = invoices?.find(inv => inv.id === selectedInvoice);
 

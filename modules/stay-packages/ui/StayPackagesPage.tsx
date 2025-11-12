@@ -128,6 +128,7 @@ function PackageEditor({ pkg, onSave, onCancel }: {
   onCancel: () => void;
 }) {
   const { t } = useTranslation('common');
+  const { formatCurrency } = useCurrency();
   const [formData, setFormData] = useState<Omit<StayPackage, 'id' | 'created_at' | 'updated_at' | 'total_bookings' | 'total_revenue' | 'review_count'>>({
     code: pkg?.code || '',
     name: pkg?.name || '',
@@ -391,7 +392,7 @@ function PackageEditor({ pkg, onSave, onCancel }: {
                             <p className="text-sm text-gray-600 mb-2">{component.description}</p>
                           )}
                           <div className="text-sm text-gray-500">
-                            {component.quantity}x @ ${component.unit_price.toFixed(2)} = ${component.total_price.toFixed(2)}
+                            {component.quantity}x @ {formatCurrency(component.unit_price)} = {formatCurrency(component.total_price)}
                           </div>
                         </div>
                         <div className="flex gap-2">
@@ -428,8 +429,8 @@ function PackageEditor({ pkg, onSave, onCancel }: {
                           <h4 className="font-medium">{rule.name}</h4>
                           <p className="text-sm text-gray-600">
                             {rule.adjustment_type === 'percentage' ? `${rule.adjustment_value}%` :
-                             rule.adjustment_type === 'fixed' ? `$${rule.adjustment_value}` :
-                             `${rule.adjustment_value}x multiplier`}
+                              rule.adjustment_type === 'fixed' ? formatCurrency(rule.adjustment_value) :
+                              `${rule.adjustment_value}x multiplier`}
                           </p>
                         </div>
                         <div className="flex gap-2">

@@ -231,7 +231,7 @@ export function EmployeeManagementPage() {
                       <td className="p-4 text-neutral-dark">{department.description}</td>
                        <td className="p-4 text-foreground">{department.head_of_department || t('employeeManagement.na')}</td>
                       <td className="p-4 text-foreground">
-                         {department.budget ? `$${department.budget.toLocaleString()}` : t('employeeManagement.na')}
+                          {department.budget ? `${department.budget.toLocaleString()} Kč` : t('employeeManagement.na')}
                       </td>
                       <td className="p-4 text-foreground">{deptEmployees.length}</td>
                       <td className="p-4">
@@ -391,7 +391,7 @@ export function EmployeeManagementPage() {
                    <div>
                      <label className="form-label text-sm">{t('employeeManagement.hireDate')}</label>
                      <div className="text-foreground">
-                       {new Date(viewingEmployee.hire_date).toLocaleDateString()}
+                        {new Date(viewingEmployee.hire_date).toLocaleDateString('cs-CZ')}
                      </div>
                    </div>
                    <div>
