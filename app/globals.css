@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+  --primary: #06b6d4;
+  --primary-dark: #0891b2;
+  --secondary: #f3f4f6;
+  --accent: #e5e7eb;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --info: #06b6d4;
+  --neutral-light: #f9fafb;
+  --neutral-medium: #e5e7eb;
+  --neutral-dark: #6b7280;
+  --beige: #fef7ed;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-dark: var(--primary-dark);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --color-info: var(--info);
+  --color-neutral-light: var(--neutral-light);
+  --color-neutral-medium: var(--neutral-medium);
+  --color-neutral-dark: var(--neutral-dark);
+  --color-beige: var(--beige);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0f172a;
+    --foreground: #f1f5f9;
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --secondary: #8b5cf6;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Enhanced button styles */
+.btn-primary {
+  @apply bg-cyan-500 hover:bg-cyan-600 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md;
+}
+
+.btn-secondary {
+  @apply bg-neutral-600 hover:bg-neutral-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md;
+}
+
+.btn-success {
+  @apply bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg;
+}
+
+.btn-warning {
+  @apply bg-amber-600 hover:bg-amber-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg;
+}
+
+.btn-error {
+  @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg;
+}
+
+/* Card styles */
+.card {
+  @apply bg-white rounded-lg shadow-sm border border-neutral-medium p-6 transition-all duration-200 hover:shadow-md;
+}
+
+.card-header {
+  @apply border-b border-neutral-medium pb-4 mb-4;
+}
+
+.card-title {
+  @apply text-xl font-semibold text-foreground;
+}
+
+/* Form styles */
+.form-input {
+  @apply border border-neutral-medium rounded-lg px-4 py-3 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-200 bg-white;
+}
+
+.form-label {
+  @apply block text-sm font-medium text-neutral-dark mb-2;
+}
+
+/* Status badges */
+.status-badge {
+  @apply px-3 py-1 rounded-full text-xs font-medium;
+}
+
+.status-booked {
+  @apply bg-cyan-50 text-cyan-700;
+}
+
+.status-checked-in {
+  @apply bg-emerald-50 text-emerald-700;
+}
+
+.status-checked-out {
+  @apply bg-neutral-100 text-neutral-700;
+}
+
+.status-cancelled {
+  @apply bg-red-50 text-red-700;
+}
+
+.status-available {
+  @apply bg-green-50 text-green-700;
+}
+
+.status-occupied {
+  @apply bg-orange-50 text-orange-700;
+}
