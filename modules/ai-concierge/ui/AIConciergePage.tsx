@@ -175,7 +175,7 @@ export function AIConciergePage() {
               <h3 className="text-lg font-semibold text-primary mb-3">{t('aiConcierge.partnerRecommendations')}</h3>
               <div className="space-y-3">
                 {suggestedPartners.map((partner) => (
-                  <div key={partner.id} className="bg-white p-3 rounded-lg shadow-sm border border-neutral-medium h-[200px] flex flex-col">
+                  <div key={partner.id} className="bg-white p-3 rounded-lg shadow-sm border border-neutral-medium">
                     <h4 className="font-semibold text-foreground">{partner.name}</h4>
                     <p className="text-sm text-neutral-dark mb-2">{partner.description}</p>
                      <p className="text-sm text-neutral-dark mb-2"><strong>{t('aiConcierge.hours')}:</strong> {partner.openingHours.replace('\n', ', ')}</p>
@@ -188,7 +188,7 @@ export function AIConciergePage() {
                          setRecommendationMode(false);
                          setSuggestedPartners([]);
                        }}
-                       className="btn-success px-4 py-2 text-sm mt-auto"
+                       className="btn-success px-4 py-2 text-sm"
                      >
 {t('aiConcierge.requestReservation')}
                      </button>

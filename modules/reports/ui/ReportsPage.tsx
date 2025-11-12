@@ -131,32 +131,32 @@ export function ReportsPage() {
             </button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-neutral-medium h-[160px] flex flex-col">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-neutral-medium">
               <h2 className="text-lg font-semibold mb-2 text-foreground">{t('reports.totalRevenue')}</h2>
               <p className="text-3xl font-bold text-primary">{formatCurrency(reportData?.totalRevenue || 0)}</p>
-              <p className="text-sm text-neutral-dark mt-auto">{t('reports.thisMonth')}</p>
+              <p className="text-sm text-neutral-dark">{t('reports.thisMonth')}</p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-neutral-medium h-[160px] flex flex-col">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-neutral-medium">
               <h2 className="text-lg font-semibold mb-2 text-foreground">{t('reports.occupancyRate')}</h2>
               <p className="text-3xl font-bold text-emerald-600">{reportData?.totalOccupancy}%</p>
-              <p className="text-sm text-neutral-dark mt-auto">{t('reports.average')}</p>
+              <p className="text-sm text-neutral-dark">{t('reports.average')}</p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-neutral-medium h-[160px] flex flex-col">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-neutral-medium">
               <h2 className="text-lg font-semibold mb-2 text-foreground">{t('reports.totalGuests')}</h2>
               <p className="text-3xl font-bold text-amber-600">{reportData?.totalGuests}</p>
-              <p className="text-sm text-neutral-dark mt-auto">{t('reports.thisMonth')}</p>
+              <p className="text-sm text-neutral-dark">{t('reports.thisMonth')}</p>
             </div>
           </div>
           <div className="bg-neutral-light rounded-lg p-6 border border-neutral-medium">
             <h2 className="text-lg font-semibold mb-4 text-foreground">{t('reports.additionalMetrics')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-white p-4 rounded-lg shadow-sm border border-neutral-medium h-[120px] flex flex-col">
+              <div className="bg-white p-4 rounded-lg shadow-sm border border-neutral-medium">
                 <h3 className="font-semibold text-neutral-dark">{t('reports.averageStayDuration')}</h3>
-                <p className="text-2xl font-bold text-primary mt-auto">3.2 {t('reports.nights')}</p>
+                <p className="text-2xl font-bold text-primary">3.2 {t('reports.nights')}</p>
               </div>
-              <div className="bg-white p-4 rounded-lg shadow-sm border border-neutral-medium h-[120px] flex flex-col">
+              <div className="bg-white p-4 rounded-lg shadow-sm border border-neutral-medium">
                 <h3 className="font-semibold text-neutral-dark">{t('reports.cancellationRate')}</h3>
-                <p className="text-2xl font-bold text-red-600 mt-auto">5.1%</p>
+                <p className="text-2xl font-bold text-red-600">5.1%</p>
               </div>
             </div>
           </div>
