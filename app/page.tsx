@@ -74,7 +74,7 @@ export default function Home() {
     .map(t => `Room ${t.room_number} - ${t.status}`) || [];
 
    return (
-     <div className="space-y-8">
+     <div className="space-y-8 p-4 lg:p-6 xl:p-8">
        <div>
          <h1 className="text-2xl font-semibold text-foreground mb-2">{t('dashboard.title')}</h1>
          <p className="text-neutral-dark">{t('dashboard.welcomeMessage')}</p>

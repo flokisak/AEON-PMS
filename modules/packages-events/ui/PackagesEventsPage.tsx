@@ -927,7 +927,7 @@ export function PackagesEventsPage() {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-4 lg:p-6 xl:p-8">
       <h1 className="text-3xl font-bold text-gray-800">{t('packagesEvents.title')}</h1>
 
       {/* Tabs */}

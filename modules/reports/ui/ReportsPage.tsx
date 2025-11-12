@@ -267,7 +267,7 @@ export function ReportsPage() {
       )}
 
       {selectedReport === 'guests' && (
-        <div className="space-y-6">
+    <div className="space-y-6 p-4 lg:p-6 xl:p-8">
           <div className="flex justify-end gap-2 mb-4">
             <button
               onClick={() => window.print()}

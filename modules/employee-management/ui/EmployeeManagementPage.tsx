@@ -351,7 +351,7 @@ export function EmployeeManagementPage() {
               </div>
             </div>
             <div className="p-6">
-              <div className="space-y-6">
+    <div className="space-y-6 p-4 lg:p-6 xl:p-8">
                 <div className="flex items-center space-x-4">
                   <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
                     <span className="text-primary font-bold text-2xl">

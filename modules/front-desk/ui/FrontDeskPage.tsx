@@ -465,7 +465,7 @@ export function FrontDeskPage() {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-4 lg:p-6 xl:p-8">
        <div>
          <h1 className="text-2xl font-bold text-foreground mb-2">{t('frontDesk.title')}</h1>
          <p className="text-neutral-dark">{t('frontDesk.description')}</p>

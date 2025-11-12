@@ -106,7 +106,7 @@ export function AIConciergePage() {
   };
 
   return (
-    <div className="space-y-6 h-full flex flex-col">
+    <div className="space-y-6 h-full flex flex-col p-4 lg:p-6 xl:p-8">
       <div>
         <h1 className="text-2xl font-semibold text-foreground mb-2">{t('aiConcierge.title')}</h1>
         <p className="text-neutral-dark">{t('aiConcierge.intelligentAssistant')}</p>

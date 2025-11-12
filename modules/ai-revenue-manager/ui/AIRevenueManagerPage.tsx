@@ -46,7 +46,7 @@ export function AIRevenueManagerPage() {
   const avgOccupancy = revenueData?.length ? Math.round(revenueData.reduce((sum, data) => sum + data.occupancy, 0) / revenueData.length) : 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-4 lg:p-6 xl:p-8">
       <div>
         <h1 className="text-2xl font-semibold text-foreground mb-2">{t('aiRevenueManager.title')}</h1>
         <p className="text-neutral-dark">{t('aiRevenueManager.description')}</p>

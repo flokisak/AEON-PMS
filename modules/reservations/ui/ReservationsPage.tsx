@@ -187,7 +187,7 @@ export function ReservationsPage() {
   if (isLoading) return <div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div><p className="ml-4 text-gray-600">{t('reservations.loading')}</p></div>;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-4 lg:p-6 xl:p-8">
       <div>
         <h1 className="text-2xl font-semibold text-foreground mb-2">{t('reservations.title')}</h1>
         <p className="text-neutral-dark">Manage reservations and room assignments</p>

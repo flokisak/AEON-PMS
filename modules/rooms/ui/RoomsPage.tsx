@@ -564,7 +564,7 @@ export function RoomsPage() {
         )}
 
        {view === 'maintenance' && (
-         <div className="space-y-6">
+     <div className="space-y-6 p-4 lg:p-6 xl:p-8">
            {!selectedRoomId ? (
              <div className="text-center py-12">
                <p className="text-gray-500 mb-4">{t('rooms.selectRoom')}</p>

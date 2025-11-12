@@ -35,7 +35,7 @@ export default function RootLayout({
             <NavBar />
             <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
               <TopBar />
-              <main className="flex-1 p-3 sm:p-4 lg:p-6 xl:p-8 overflow-auto">
+              <main className="flex-1 overflow-auto">
                 {children}
               </main>
             </div>

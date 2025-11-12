@@ -27,7 +27,7 @@ export function HousekeepingPage() {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-4 lg:p-6 xl:p-8">
       <div>
         <h1 className="text-2xl font-semibold text-foreground mb-2">{t('housekeeping.title')}</h1>
         <p className="text-neutral-dark">{t('housekeeping.description')}</p>
