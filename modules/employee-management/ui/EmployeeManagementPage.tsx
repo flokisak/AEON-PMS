@@ -150,7 +150,7 @@ export function EmployeeManagementPage() {
           {/* Department Stats */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             {departmentStats.map((stat) => (
-              <div key={stat.department} className="bg-white rounded-lg shadow-sm border border-neutral-medium p-4">
+              <div key={stat.department} className="bg-white rounded-lg shadow-sm border border-neutral-medium p-4 h-[160px] flex flex-col">
                  <h3 className="font-semibold text-foreground capitalize mb-2">
                    {t(`employeeManagement.${stat.department.replace('-', '')}`) || stat.department.replace('-', ' ')}
                  </h3>
@@ -166,9 +166,10 @@ export function EmployeeManagementPage() {
                    <div className="flex justify-between">
                      <span className="text-neutral-dark">{t('employeeManagement.onLeave')}:</span>
                      <span className="font-medium text-amber-600">{stat.on_leave_employees}</span>
-                   </div>
-                 </div>
-              </div>
+                    </div>
+                  </div>
+                  <div className="mt-auto"></div>
+               </div>
             ))}
           </div>
 

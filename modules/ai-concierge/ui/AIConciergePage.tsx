@@ -106,7 +106,7 @@ export function AIConciergePage() {
   };
 
   return (
-    <div className="space-y-6 h-full flex flex-col p-4 lg:p-6 xl:p-8">
+    <div className="space-y-6 p-4 lg:p-6 xl:p-8">
       <div>
         <h1 className="text-2xl font-semibold text-foreground mb-2">{t('aiConcierge.title')}</h1>
         <p className="text-neutral-dark">{t('aiConcierge.intelligentAssistant')}</p>
@@ -175,23 +175,23 @@ export function AIConciergePage() {
               <h3 className="text-lg font-semibold text-primary mb-3">{t('aiConcierge.partnerRecommendations')}</h3>
               <div className="space-y-3">
                 {suggestedPartners.map((partner) => (
-                  <div key={partner.id} className="bg-white p-3 rounded-lg shadow-sm border border-neutral-medium">
+                  <div key={partner.id} className="bg-white p-3 rounded-lg shadow-sm border border-neutral-medium h-[200px] flex flex-col">
                     <h4 className="font-semibold text-foreground">{partner.name}</h4>
                     <p className="text-sm text-neutral-dark mb-2">{partner.description}</p>
                      <p className="text-sm text-neutral-dark mb-2"><strong>{t('aiConcierge.hours')}:</strong> {partner.openingHours.replace('\n', ', ')}</p>
                      <p className="text-sm text-neutral-dark mb-3"><strong>{t('aiConcierge.contact')}:</strong> {partner.contact}</p>
-                    <button
-                      onClick={() => {
-                        // Simulate sending reservation request
-                        setPendingReservations([...pendingReservations, { ...partner, requestedAt: new Date() }]);
-                        sendMessage(`Great! I've sent a reservation request to ${partner.name}. I'll confirm once they respond.`);
-                        setRecommendationMode(false);
-                        setSuggestedPartners([]);
-                      }}
-                      className="btn-success px-4 py-2 text-sm"
-                    >
+                     <button
+                       onClick={() => {
+                         // Simulate sending reservation request
+                         setPendingReservations([...pendingReservations, { ...partner, requestedAt: new Date() }]);
+                         sendMessage(`Great! I've sent a reservation request to ${partner.name}. I'll confirm once they respond.`);
+                         setRecommendationMode(false);
+                         setSuggestedPartners([]);
+                       }}
+                       className="btn-success px-4 py-2 text-sm mt-auto"
+                     >
 {t('aiConcierge.requestReservation')}
-                    </button>
+                     </button>
                   </div>
                 ))}
               </div>

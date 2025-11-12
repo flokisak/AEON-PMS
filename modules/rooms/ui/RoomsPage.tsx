@@ -35,7 +35,7 @@ function RoomCard({ room, onEdit, onDelete, onMaintenance }: {
 
 
   return (
-    <div className="bg-white rounded-lg p-6 shadow-sm border border-neutral-medium hover:shadow-md transition-all duration-200">
+    <div className="bg-white rounded-lg p-6 shadow-sm border border-neutral-medium hover:shadow-md transition-all duration-200 h-[400px] flex flex-col">
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-xl font-bold text-foreground">{t('rooms.roomNumber')} {room.number}</h3>
@@ -104,7 +104,7 @@ function RoomCard({ room, onEdit, onDelete, onMaintenance }: {
           </select>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 mt-auto">
           <button
             onClick={() => onEdit(room)}
             className="btn-secondary flex-1 text-sm py-2"
@@ -402,7 +402,7 @@ export function RoomsPage() {
   );
 
    return (
-     <div className="space-y-6">
+     <div className="space-y-6 p-4 lg:p-6 xl:p-8">
        <div className="flex justify-between items-center">
          <div>
            <h1 className="text-2xl font-semibold text-foreground mb-2">{t('rooms.title')}</h1>

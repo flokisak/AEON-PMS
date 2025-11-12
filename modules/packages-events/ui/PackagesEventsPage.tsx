@@ -26,7 +26,7 @@ function PackageCard({ pkg, onEdit, onDelete, onBook }: {
     .filter(item => item.offer && item.partner);
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200 h-[400px] flex flex-col">
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-lg font-semibold text-gray-800">{pkg.name}</h3>
@@ -84,23 +84,23 @@ function PackageCard({ pkg, onEdit, onDelete, onBook }: {
         </div>
       )}
       
-      <div className="flex justify-between items-center">
-        <div className="text-sm text-gray-600">
-          <span>{t('packagesEvents.maxGuests')}: {pkg.max_guests}</span>
-          <span className={`ml-2 px-2 py-1 rounded text-xs ${
-            pkg.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-          }`}>
-            {t(`packagesEvents.${pkg.status}`)}
-          </span>
-        </div>
-        <button
-          onClick={onBook}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded text-sm font-medium"
-          disabled={pkg.status !== 'active'}
-        >
-          {t('packagesEvents.bookPackage')}
-        </button>
-      </div>
+       <div className="flex justify-between items-center mt-auto">
+         <div className="text-sm text-gray-600">
+           <span>{t('packagesEvents.maxGuests')}: {pkg.max_guests}</span>
+           <span className={`ml-2 px-2 py-1 rounded text-xs ${
+             pkg.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+           }`}>
+             {t(`packagesEvents.${pkg.status}`)}
+           </span>
+         </div>
+         <button
+           onClick={onBook}
+           className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded text-sm font-medium"
+           disabled={pkg.status !== 'active'}
+         >
+           {t('packagesEvents.bookPackage')}
+         </button>
+       </div>
     </div>
   );
 }
@@ -110,7 +110,7 @@ function EventCard({ event, onEdit, onDelete }: { event: Event; onEdit: () => vo
   const { formatCurrency } = useCurrency();
   
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200 h-[400px] flex flex-col">
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-lg font-semibold text-gray-800">{event.name}</h3>
@@ -145,7 +145,7 @@ function EventCard({ event, onEdit, onDelete }: { event: Event; onEdit: () => vo
           <p className="text-xl font-bold text-green-600">{formatCurrency(event.price)}</p>
         </div>
       </div>
-      <div className="flex justify-between text-sm text-gray-600">
+      <div className="flex justify-between text-sm text-gray-600 mt-auto">
         <span className={`px-2 py-1 rounded text-xs ${
           event.type === 'wedding' ? 'bg-pink-100 text-pink-800' :
           event.type === 'conference' ? 'bg-blue-100 text-blue-800' :
@@ -574,7 +574,7 @@ function PartnerCard({ partner, onEdit, onDelete }: { partner: Partner; onEdit: 
   const { t } = useTranslation('common');
   
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200 h-[400px] flex flex-col">
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-lg font-semibold text-gray-800">{partner.name}</h3>
@@ -611,7 +611,7 @@ function PartnerCard({ partner, onEdit, onDelete }: { partner: Partner; onEdit: 
           <span>{t('packagesEvents.commissionRate')}: {partner.commission_rate}%</span>
         </div>
       </div>
-      <div className="mt-4">
+      <div className="mt-auto">
         <span className={`px-2 py-1 rounded text-xs ${
           partner.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
         }`}>
@@ -632,7 +632,7 @@ function PartnerOfferCard({ offer, partner, onEdit, onDelete }: {
   const { formatCurrency } = useCurrency();
   
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200 h-[400px] flex flex-col">
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-lg font-semibold text-gray-800">{offer.name}</h3>
@@ -673,7 +673,7 @@ function PartnerOfferCard({ offer, partner, onEdit, onDelete }: {
           <p>{t('packagesEvents.hours')}: {offer.availability.start_time} - {offer.availability.end_time}</p>
         </div>
       </div>
-      <div className="flex justify-between">
+      <div className="flex justify-between mt-auto">
         <span className={`px-2 py-1 rounded text-xs ${
           offer.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
         }`}>
@@ -692,7 +692,7 @@ function PartnerReservationCard({ reservation, offer, partner }: {
   const { t } = useTranslation('common');
   
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200 h-[400px] flex flex-col">
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-lg font-semibold text-gray-800">{offer.name}</h3>
@@ -708,7 +708,7 @@ function PartnerReservationCard({ reservation, offer, partner }: {
           {t(`packagesEvents.${reservation.status}`)}
         </span>
       </div>
-      <div className="space-y-2 text-sm">
+      <div className="space-y-2 text-sm flex-1">
         <div className="flex justify-between">
           <span className="text-gray-600">{t('packagesEvents.guestName')}:</span>
           <span className="font-medium">{reservation.guest_name}</span>

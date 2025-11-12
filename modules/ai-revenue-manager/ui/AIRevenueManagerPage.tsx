@@ -8,7 +8,7 @@ import { FiTrendingUp, FiDollarSign, FiCalendar, FiTarget } from 'react-icons/fi
 
 function MetricCard({ title, value, icon: Icon, color }: { title: string; value: string | number; icon: any; color: string }) {
   return (
-    <div className={`bg-white rounded-lg shadow-sm p-6 border-l-4 ${color} border border-neutral-medium`}>
+    <div className={`bg-white rounded-lg shadow-sm p-6 border-l-4 ${color} border border-neutral-medium h-[120px] flex flex-col justify-center`}>
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-neutral-dark">{title}</p>

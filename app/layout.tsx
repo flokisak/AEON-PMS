@@ -28,12 +28,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <body
-        className={`${inter.variable} ${geistMono.variable} antialiased flex bg-neutral-light min-h-screen overflow-hidden`}
+        className={`${inter.variable} ${geistMono.variable} antialiased flex bg-neutral-light min-h-screen`}
       >
         <Providers>
           <div className="flex min-h-screen">
             <NavBar />
-            <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+            <div className="flex-1 flex flex-col min-h-0">
               <TopBar />
               <main className="flex-1 overflow-auto">
                 {children}
