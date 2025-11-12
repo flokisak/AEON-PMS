@@ -120,7 +120,7 @@ body {
     border-radius: 12px;
     box-sizing: border-box;
   }
-  
+   
   /* Only make buttons full-width in specific contexts */
   .w-full .btn-primary,
   .w-full .btn-secondary,
@@ -140,6 +140,56 @@ body {
   .flex .btn-danger {
     width: auto;
     flex-shrink: 0;
+  }
+}
+
+/* Desktop button optimizations */
+@media (min-width: 1024px) {
+  .btn-primary,
+  .btn-secondary,
+  .btn-success,
+  .btn-warning,
+  .btn-error,
+  .btn-danger {
+    padding: 12px 24px;
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .btn-primary,
+  .btn-secondary,
+  .btn-success,
+  .btn-warning,
+  .btn-error,
+  .btn-danger {
+    padding: 14px 28px;
+    font-size: 16px;
+  }
+}
+
+/* Desktop button optimizations */
+@media (min-width: 1024px) {
+  .btn-primary,
+  .btn-secondary,
+  .btn-success,
+  .btn-warning,
+  .btn-error,
+  .btn-danger {
+    padding: 12px 24px;
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .btn-primary,
+  .btn-secondary,
+  .btn-success,
+  .btn-warning,
+  .btn-error,
+  .btn-danger {
+    padding: 14px 28px;
+    font-size: 16px;
   }
 }
 
@@ -177,6 +227,31 @@ body {
   .form-label {
     font-size: 14px;
     margin-bottom: 8px;
+  }
+}
+
+/* Desktop form optimizations */
+@media (min-width: 1024px) {
+  .form-input {
+    padding: 14px 18px;
+    font-size: 16px;
+  }
+  
+  .form-label {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .form-input {
+    padding: 16px 20px;
+    font-size: 16px;
+  }
+  
+  .form-label {
+    font-size: 15px;
+    margin-bottom: 10px;
   }
 }
 

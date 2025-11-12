@@ -97,7 +97,7 @@ export function ReservationsPage() {
   };
 
   const days = getDays();
-  const cellWidth = Math.max(24, Math.min(64, 800 / days.length)); // Dynamic width: min 24px, max 64px, based on 800px total width
+  const cellWidth = Math.max(50, Math.min(120, days.length <= 7 ? 140 : days.length <= 14 ? 100 : days.length <= 30 ? 80 : 60)); // Dynamic width based on days count
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -206,7 +206,7 @@ export function ReservationsPage() {
         <div>
           <form onSubmit={handleSubmit} className="mb-8 bg-white p-6 rounded-lg border border-neutral-medium shadow-sm">
             <h2 className="text-lg font-semibold mb-6 text-foreground">{t('reservations.newReservation')}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-7 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-4 lg:gap-6">
               <div>
                 <label className="form-label">{t('reservations.guestName')}</label>
                 <input
@@ -369,32 +369,32 @@ export function ReservationsPage() {
       {activeTab === 'gantt' && (
         <DndContext onDragEnd={handleDragEnd}>
           <div className="bg-white rounded-lg shadow-sm border border-neutral-medium overflow-hidden">
-            {/* Mobile-responsive Gantt container */}
-            <div className="overflow-x-auto overflow-y-auto max-h-[60vh] md:max-h-[70vh]" onMouseUp={handleMouseUp}>
-              <div className="min-w-[800px] md:min-w-max">
+            {/* Desktop-optimized Gantt container */}
+            <div className="overflow-x-auto overflow-y-auto max-h-[70vh] lg:max-h-[80vh] xl:max-h-[85vh]" onMouseUp={handleMouseUp}>
+              <div className="min-w-[1000px] lg:min-w-[1200px] xl:min-w-max">
                 {/* Header */}
                 <div className="flex border-b border-neutral-medium bg-neutral-light sticky top-0 z-10">
-                  <div className="w-24 sm:w-32 p-2 sm:p-3 font-semibold text-foreground border-r border-neutral-medium text-xs sm:text-sm">Room</div>
+                  <div className="w-32 sm:w-36 lg:w-40 xl:w-44 p-3 lg:p-4 font-semibold text-foreground border-r border-neutral-medium text-sm lg:text-base">Room</div>
                   {days.map(day => (
-                    <div key={day} style={{ width: `${Math.max(cellWidth, 40)}px` }} className="p-1 sm:p-2 text-xs text-center border-r border-neutral-medium text-neutral-dark font-medium">
+                    <div key={day} style={{ width: `${Math.max(cellWidth, 50)}px` }} className="p-2 lg:p-3 text-sm lg:text-base text-center border-r border-neutral-medium text-neutral-dark font-medium">
                       {new Date(day).getDate()}
                     </div>
                   ))}
                 </div>
                 {/* Rows */}
                 {rooms.map(room => (
-                  <div key={room.id} className="flex border-b border-neutral-medium relative hover:bg-neutral-light/30 transition-colors min-h-[60px]">
-                      <div className="w-24 sm:w-32 p-2 font-medium text-xs sm:text-sm text-foreground bg-neutral-light border-r border-neutral-medium flex flex-col justify-center">
+                  <div key={room.id} className="flex border-b border-neutral-medium relative hover:bg-neutral-light/30 transition-colors min-h-[70px] lg:min-h-[80px]">
+                      <div className="w-32 sm:w-36 lg:w-40 xl:w-44 p-3 lg:p-4 font-medium text-sm lg:text-base text-foreground bg-neutral-light border-r border-neutral-medium flex flex-col justify-center">
                        <span className="truncate">{room.number}</span>
-                       <span className="text-xs text-neutral-dark hidden sm:block">({room.type})</span>
-                       <span className="text-xs text-neutral-dark">{formatCurrency(room.price)}</span>
+                        <span className="text-xs sm:text-sm lg:text-base text-neutral-dark hidden sm:block">({room.type})</span>
+                        <span className="text-xs sm:text-sm lg:text-base text-neutral-dark">{formatCurrency(room.price)}</span>
                        <select
                          value={room.status}
                          onChange={(e) => {
                            e.stopPropagation();
                            updateRoom.mutate({ id: room.id, status: e.target.value as Room['status'] });
                          }}
-                          className={`text-xs px-1 py-0.5 rounded border-0 w-20 sm:w-24 ${
+                           className={`text-xs sm:text-sm lg:text-base px-2 py-1 rounded border-0 w-24 sm:w-28 lg:w-32 ${
                            room.status === 'available' ? 'bg-green-50 text-green-700' :
                            room.status === 'occupied' ? 'bg-red-50 text-red-700' :
                            room.status === 'dirty' ? 'bg-amber-50 text-amber-700' :
@@ -409,9 +409,9 @@ export function ReservationsPage() {
                          <option value="cleaning">Clean</option>
                        </select>
                      </div>
-                    <div className="flex relative h-8 sm:h-10">
+                     <div className="flex relative h-10 sm:h-12 lg:h-14">
                       {days.map(day => (
-                        <DroppableCell key={day} date={day} roomNumber={room.number} onSelect={handleCellSelect} width={Math.max(cellWidth, 40)} />
+                         <DroppableCell key={day} date={day} roomNumber={room.number} onSelect={handleCellSelect} width={Math.max(cellWidth, 50)} />
                       ))}
                       {reservations?.filter(res => res.room_number === room.number).map(res => {
                         // Mock check_in and check_out
@@ -419,16 +419,16 @@ export function ReservationsPage() {
                         const checkOut = new Date(new Date(checkIn).getTime() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
                         const { left, width } = getPosition(checkIn, checkOut);
                         return (
-                          <div key={res.id} className="absolute top-1" style={{ left: left * Math.max(cellWidth, 40) / 32, width: width * Math.max(cellWidth, 40) / 32 }}>
+                           <div key={res.id} className="absolute top-1 lg:top-2" style={{ left: left * Math.max(cellWidth, 50) / 32, width: width * Math.max(cellWidth, 50) / 32 }}>
                             <DraggableReservation reservation={{ ...res, check_in: checkIn, check_out: checkOut }} />
                           </div>
                         );
                       })}
                       {selection && selection.room === room.number && (
-                        <div className="absolute top-1 bg-yellow-200 opacity-50 rounded" style={{
-                          left: Math.min(days.indexOf(selection.start), days.indexOf(selection.end)) * Math.max(cellWidth, 40),
-                          width: (Math.abs(days.indexOf(selection.end) - days.indexOf(selection.start)) + 1) * Math.max(cellWidth, 40)
-                        }}></div>
+                        <div className="absolute top-1 lg:top-2 bg-yellow-200 opacity-50 rounded" style={{
+                           left: Math.min(days.indexOf(selection.start), days.indexOf(selection.end)) * Math.max(cellWidth, 50),
+                           width: (Math.abs(days.indexOf(selection.end) - days.indexOf(selection.start)) + 1) * Math.max(cellWidth, 50)
+                         }}></div>
                       )}
                     </div>
                   </div>

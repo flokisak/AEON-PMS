@@ -120,14 +120,14 @@ export function NavBar() {
             bg-white text-foreground shadow-lg border-r border-neutral-medium
             transition-all duration-300 min-h-screen flex flex-col overflow-hidden
             ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-            ${isCollapsed ? 'md:w-16' : 'md:w-64'}
+            ${isCollapsed ? 'md:w-16 lg:w-20' : 'md:w-64 lg:w-72 xl:w-80'}
             fixed md:relative z-50 md:z-auto w-64 md:w-auto
             md:shadow-sm
           `}
       >
         {/* Header */}
-        <div className="p-4 border-b border-neutral-medium bg-neutral-light flex items-center justify-between">
-            {!isCollapsed && <h1 className="text-xl font-bold text-primary">AEON PMS</h1>}
+        <div className="p-4 lg:p-6 border-b border-neutral-medium bg-neutral-light flex items-center justify-between">
+            {!isCollapsed && <h1 className="text-xl lg:text-2xl font-bold text-primary">AEON PMS</h1>}
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
               className="hidden md:block p-3 rounded-lg hover:bg-neutral-medium transition-colors text-neutral-dark touch-manipulation"

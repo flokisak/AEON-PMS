@@ -553,8 +553,8 @@ export function FrontDeskPage() {
       {/* Check-in Modal */}
       {showCheckInModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
-            <div className="p-4 sm:p-6 border-b border-neutral-medium flex-shrink-0">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="p-4 sm:p-6 lg:p-8 border-b border-neutral-medium flex-shrink-0">
               <div className="flex justify-between items-center">
                 <h3 className="text-lg sm:text-xl font-semibold text-foreground">{t('frontDesk.checkInGuest')}</h3>
                 <button
@@ -565,8 +565,8 @@ export function FrontDeskPage() {
                 </button>
               </div>
             </div>
-             <div className="p-4 sm:p-6 overflow-y-auto flex-1">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
+             <div className="p-4 sm:p-6 lg:p-8 overflow-y-auto flex-1">
+                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6 mb-4 sm:mb-6">
                  <div>
                    <label className="form-label">{t('frontDesk.guestName')} *</label>
                    <input
@@ -628,7 +628,7 @@ export function FrontDeskPage() {
                </div>
                {form.is_company && (
                  <div className="mb-4 sm:mb-6">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 bg-neutral-light p-3 sm:p-4 rounded-lg border border-neutral-medium">
+                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 bg-neutral-light p-4 sm:p-6 rounded-lg border border-neutral-medium">
                      <div>
                        <label className="form-label">{t('frontDesk.companyName')} *</label>
                        <input
