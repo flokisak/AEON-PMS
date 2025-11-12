@@ -5,6 +5,22 @@
     "expandSidebar": "Expand sidebar",
     "collapseSidebar": "Collapse sidebar"
   },
+  "topBar": {
+    "searchPlaceholder": "Search...",
+    "today": "Today",
+    "thisWeek": "This Week",
+    "all": "All",
+    "notifications": "Notifications",
+    "profile": "Profile",
+    "logout": "Logout",
+    "settings": "Settings",
+    "newReservation": "New reservation received",
+    "roomNeedsCleaning": "Room {{room}} needs cleaning",
+    "paymentReceived": "Payment received for invoice {{invoice}}",
+    "minutesAgo": "{{count}} minutes ago",
+    "hoursAgo": "{{count}} hours ago",
+    "noNotifications": "No notifications"
+  },
   "modules": {
     "reservations": "Reservations",
     "frontDesk": "Front Desk",

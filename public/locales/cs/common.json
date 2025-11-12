@@ -5,6 +5,22 @@
     "expandSidebar": "Rozbalit postranní panel",
     "collapseSidebar": "Sbalit postranní panel"
   },
+  "topBar": {
+    "searchPlaceholder": "Hledat...",
+    "today": "Dnes",
+    "thisWeek": "Tento týden",
+    "all": "Vše",
+    "notifications": "Notifikace",
+    "profile": "Profil",
+    "logout": "Odhlásit se",
+    "settings": "Nastavení",
+    "newReservation": "Nová rezervace přijata",
+    "roomNeedsCleaning": "Pokoj {{room}} potřebuje úklid",
+    "paymentReceived": "Platba přijata pro fakturu {{invoice}}",
+    "minutesAgo": "před {{count}} minutami",
+    "hoursAgo": "před {{count}} hodinami",
+    "noNotifications": "Žádné notifikace"
+  },
   "modules": {
     "reservations": "Rezervace",
     "frontDesk": "Recepce",
