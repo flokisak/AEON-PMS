@@ -2,7 +2,9 @@
 
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FiMoreVertical } from 'react-icons/fi';
 import { Employee, EmployeeStatus, Department, EmploymentType } from '../types';
+import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator } from '@/core/ui/DropdownMenu';
 
 interface EmployeeListProps {
   employees: Employee[];
@@ -170,26 +172,28 @@ export function EmployeeList({ employees, onEdit, onDelete, onView }: EmployeeLi
                   {new Date(employee.hire_date).toLocaleDateString('cs-CZ')}
                 </td>
                 <td className="p-4">
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => onView(employee)}
-                      className="btn-secondary text-sm px-3 py-1"
-                     >
-                       {t('employeeManagement.view')}
-                     </button>
-                     <button
-                       onClick={() => onEdit(employee)}
-                       className="btn-secondary text-sm px-3 py-1"
-                     >
-                       {t('employeeManagement.edit')}
-                     </button>
-                     <button
-                       onClick={() => onDelete(employee.id)}
-                       className="btn-secondary text-sm px-3 py-1 text-red-600 hover:text-red-700"
-                     >
-                       {t('employeeManagement.delete')}
-                     </button>
-                  </div>
+                  <DropdownMenu
+                    trigger={
+                      <button className="p-2 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100">
+                        <FiMoreVertical size={16} />
+                      </button>
+                    }
+                    align="right"
+                  >
+                    <DropdownMenuItem onClick={() => onView(employee)}>
+                      {t('employeeManagement.view')}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => onEdit(employee)}>
+                      {t('employeeManagement.edit')}
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem 
+                      onClick={() => onDelete(employee.id)}
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                    >
+                      {t('employeeManagement.delete')}
+                    </DropdownMenuItem>
+                  </DropdownMenu>
                 </td>
               </tr>
             ))}

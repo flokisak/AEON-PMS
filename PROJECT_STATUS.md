@@ -38,11 +38,12 @@
 4. **UI/UX**: ✅ Navbar issues fixed, translations complete
 
 ## Recent Fixes Applied
-- **Logo Size**: Increased from h-8 to h-12 for better visibility
+- **Logo Size**: Increased from h-8 to h-16 for proper navbar space utilization
 - **Database Modules**: Fixed database to remove "Packages & Events" and add correct "Packages" module
 - **Translation Conflicts**: Resolved duplicate `employeeManagement` key conflicts in translation file
 - **Module Registry**: Cleaned up to prevent duplicate module loading
 - **Complete Translations**: Added comprehensive Czech translations for all employee management features
+- **UI Consistency**: Replaced multiple action buttons with consistent dropdown menus in employee module (matching other modules)
 
 The Hotel PMS system is now **PRODUCTION READY** with:
 - Complete database schema for all modules

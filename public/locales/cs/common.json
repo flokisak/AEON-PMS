@@ -28,7 +28,7 @@
     "packages": "Balíčky",
     "housekeeping": "Úklid",
     "billing": "Fakturace",
-
+    "employeeManagement": "Správa zaměstnanců",
     "aiConcierge": "AI Concierge",
     "aiRevenueManager": "AI Revenue Manager",
     "reports": "Reporty"
