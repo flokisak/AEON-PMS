@@ -30,6 +30,18 @@ export function CreateReservationModal({ roomNumber, checkIn, checkOut, onClose,
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Check if check-in date is in the past
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const checkInDate = new Date(checkIn);
+    checkInDate.setHours(0, 0, 0, 0);
+
+    if (checkInDate < today) {
+      alert('Cannot create reservations in the past. Please select a future date.');
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {

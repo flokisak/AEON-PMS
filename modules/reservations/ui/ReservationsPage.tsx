@@ -82,7 +82,8 @@ function DroppableCell({
   onMouseEnter: handleMouseEnter,
   width,
   isInSelection = false,
-  isCreatingReservation = false
+  isCreatingReservation = false,
+  isPastDate = false
 }: {
   date: string;
   roomNumber: number;
@@ -91,6 +92,7 @@ function DroppableCell({
   width: number;
   isInSelection?: boolean;
   isCreatingReservation?: boolean;
+  isPastDate?: boolean;
 }) {
   const { setNodeRef, isOver } = useDroppable({
     id: `cell-${roomNumber}-${date}`,
@@ -100,13 +102,17 @@ function DroppableCell({
     <div
       ref={setNodeRef}
       style={{ width: `${width}px` }}
-      className={`h-10 border-r border-gray-200 cursor-pointer relative ${
-        isOver ? 'bg-blue-100' : 'bg-white'
+      className={`h-10 border-r border-gray-200 relative ${
+        isPastDate
+          ? 'bg-gray-100 cursor-not-allowed'
+          : isOver
+            ? 'bg-blue-100 cursor-pointer'
+            : 'bg-white cursor-pointer'
       } ${isCreatingReservation ? 'bg-blue-50' : ''}`}
-      onMouseDown={() => handleMouseDown(roomNumber, date)}
-      onMouseEnter={() => handleMouseEnter(roomNumber, date)}
+      onMouseDown={() => !isPastDate && handleMouseDown(roomNumber, date)}
+      onMouseEnter={() => !isPastDate && handleMouseEnter(roomNumber, date)}
     >
-      {isInSelection && (
+      {isInSelection && !isPastDate && (
         <div
           className="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-500 rounded-md shadow-lg border-2 border-blue-600 flex items-center justify-center"
           style={{
@@ -119,6 +125,11 @@ function DroppableCell({
           <div className="text-white text-xs font-semibold opacity-90">
             New Reservation
           </div>
+        </div>
+      )}
+      {isPastDate && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
         </div>
       )}
     </div>
@@ -158,7 +169,11 @@ export function ReservationsPage() {
 
   // Initialize date on mount and update every minute
   useEffect(() => {
-    const updateDate = () => setCurrentDate(new Date());
+    const updateDate = () => {
+      // Create a fresh date object to avoid any caching issues
+      const now = new Date(Date.now());
+      setCurrentDate(now);
+    };
 
     // Set initial date immediately
     updateDate();
@@ -204,6 +219,26 @@ export function ReservationsPage() {
   }, [currentDate, viewMode, customDate]);
 
   const cellWidth = useMemo(() => Math.max(24, Math.min(64, 800 / Math.max(days.length, 1))), [days.length]); // Dynamic width: min 24px, max 64px, based on 800px total width
+
+  // Helper function to check if a date is in the past
+  const isDateInPast = (dateString: string) => {
+    if (!currentDate) return false;
+    const today = new Date(currentDate);
+    today.setHours(0, 0, 0, 0); // Reset time to start of day
+    const checkDate = new Date(dateString);
+    checkDate.setHours(0, 0, 0, 0);
+    return checkDate < today;
+  };
+
+  const getPosition = (checkIn: string, checkOut: string) => {
+    if (!currentDate) return { left: 0, width: 0 };
+
+    const start = new Date(checkIn);
+    const end = new Date(checkOut);
+    const startIndex = Math.max(0, Math.floor((start.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)));
+    const duration = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+    return { left: startIndex * cellWidth, width: duration * cellWidth };
+  };
 
   const navigateDate = (direction: 'prev' | 'next') => {
     if (!currentDate) return;
@@ -257,6 +292,11 @@ export function ReservationsPage() {
   };
 
   const handleMouseDown = (room: number, date: string) => {
+    // Prevent selecting dates in the past
+    if (isDateInPast(date)) {
+      return;
+    }
+
     setSelection({ room, start: date, end: date });
     setIsSelecting(true);
     setIsMouseDown(true);
@@ -293,25 +333,15 @@ export function ReservationsPage() {
     setShowEditModal(false);
   };
 
+  const getStatusLabel = (status: Reservation['status']) => {
+    return t(`reservations.${status}`);
+  };
+
   const rooms: Room[] = [
     { id: 1, room_number: 101, type: 'Standard', status: 'available', price: 100, capacity: 2, amenities: [], maintenance_notes: [] },
     { id: 2, room_number: 102, type: 'Deluxe', status: 'occupied', price: 150, capacity: 2, amenities: [], maintenance_notes: [] },
     { id: 3, room_number: 103, type: 'Suite', status: 'available', price: 200, capacity: 4, amenities: [], maintenance_notes: [] },
   ];
-
-  const getStatusLabel = (status: Reservation['status']) => {
-    return t(`reservations.${status}`);
-  };
-
-  const getPosition = (checkIn: string, checkOut: string) => {
-    if (!currentDate) return { left: 0, width: 0 };
-
-    const start = new Date(checkIn);
-    const end = new Date(checkOut);
-    const startIndex = Math.max(0, Math.floor((start.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)));
-    const duration = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-    return { left: startIndex * cellWidth, width: duration * cellWidth };
-  };
 
   if (isLoading || !currentDate) return <div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div><p className="ml-4 text-gray-600">{t('reservations.loading')}</p></div>;
 
@@ -579,6 +609,7 @@ export function ReservationsPage() {
                        const isInSelection = !!(selection && selection.room === room.room_number &&
                          ((day >= selection.start && day <= selection.end) ||
                           (day >= selection.end && day <= selection.start)));
+                       const isPastDate = isDateInPast(day);
 
                        return (
                          <DroppableCell
@@ -590,6 +621,7 @@ export function ReservationsPage() {
                            width={cellWidth}
                            isInSelection={isInSelection}
                            isCreatingReservation={!!selection}
+                           isPastDate={isPastDate}
                          />
                        );
                      })}
