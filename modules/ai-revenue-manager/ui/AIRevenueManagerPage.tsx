@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAIRevenueManager } from '../logic/useAIRevenueManager';
 import { useCurrency } from '@/core/hooks/useCurrency';
-import { FiTrendingUp, FiDollarSign, FiCalendar, FiTarget, FiSettings, FiPackage, FiCoffee, FiHome, FiCalendar as FiEvent, FiPlus, FiEdit2, FiSave, FiX } from 'react-icons/fi';
+import { FiTrendingUp, FiDollarSign, FiCalendar, FiTarget, FiSettings, FiPackage, FiCoffee, FiHome, FiCalendar as FiEvent, FiPlus, FiEdit2, FiSave, FiX, FiMoreVertical } from 'react-icons/fi';
+import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator } from '@/core/ui/DropdownMenu';
 
 function MetricCard({ title, value, icon: Icon, color }: { title: string; value: string | number; icon: any; color: string }) {
   return (
@@ -405,12 +406,25 @@ export function AIRevenueManagerPage() {
                             </div>
                           )}
                         </td>
-                        <td className="p-3 text-neutral-dark">{item.category}</td>
-                        <td className="p-3">
-                          <button className="text-red-600 hover:text-red-700 text-sm">
-                            {t('aiRevenueManager.delete')}
-                          </button>
-                        </td>
+                         <td className="p-3 text-neutral-dark">{item.category}</td>
+                         <td className="p-3">
+                           <DropdownMenu
+                             trigger={
+                               <button className="text-gray-400 hover:text-gray-600 p-2 rounded hover:bg-gray-100">
+                                 <FiMoreVertical size={16} />
+                               </button>
+                             }
+                             align="right"
+                           >
+                             <DropdownMenuItem onClick={() => {/* TODO: Implement edit functionality */}}>
+                               <span className="text-blue-600">{t('edit')}</span>
+                             </DropdownMenuItem>
+                             <DropdownMenuSeparator />
+                             <DropdownMenuItem onClick={() => {/* TODO: Implement delete functionality */}}>
+                               <span className="text-red-600">{t('aiRevenueManager.delete')}</span>
+                             </DropdownMenuItem>
+                           </DropdownMenu>
+                         </td>
                       </tr>
                     ))}
                   </tbody>
@@ -628,16 +642,29 @@ export function AIRevenueManagerPage() {
                             </div>
                           )}
                         </td>
-                        <td className="p-3">
-                          <button className="text-red-600 hover:text-red-700 text-sm">
-                            {t('aiRevenueManager.delete')}
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                         <td className="p-3">
+                           <DropdownMenu
+                             trigger={
+                               <button className="text-gray-400 hover:text-gray-600 p-2 rounded hover:bg-gray-100">
+                                 <FiMoreVertical size={16} />
+                               </button>
+                             }
+                             align="right"
+                           >
+                             <DropdownMenuItem onClick={() => {/* TODO: Implement edit functionality */}}>
+                               <span className="text-blue-600">{t('edit')}</span>
+                             </DropdownMenuItem>
+                             <DropdownMenuSeparator />
+                             <DropdownMenuItem onClick={() => {/* TODO: Implement delete functionality */}}>
+                               <span className="text-red-600">{t('aiRevenueManager.delete')}</span>
+                             </DropdownMenuItem>
+                           </DropdownMenu>
+                         </td>
+                       </tr>
+                     ))}
+                   </tbody>
+                 </table>
+               </div>
             </div>
           )}
         </div>

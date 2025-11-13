@@ -9,7 +9,8 @@ import { Reservation, Room } from '../../../core/types';
 import { useCurrency } from '@/core/hooks/useCurrency';
 import { CreateReservationModal } from './CreateReservationModal';
 import { EditReservationModal } from './EditReservationModal';
-import { FiChevronLeft, FiChevronRight, FiClock, FiEyeOff } from 'react-icons/fi';
+import { FiChevronLeft, FiChevronRight, FiClock, FiEyeOff, FiMoreVertical } from 'react-icons/fi';
+import { DropdownMenu, DropdownMenuItem } from '@/core/ui/DropdownMenu';
 
 function DraggableReservation({ reservation, onEdit }: { reservation: Reservation & { check_in?: string; check_out?: string }; onEdit: (res: Reservation) => void }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
@@ -509,14 +510,20 @@ export function ReservationsPage() {
                         {getStatusLabel(res.status)}
                       </span>
                     </td>
-                    <td className="p-5">
-                      <button
-                        onClick={() => deleteReservation.mutate(res.id)}
-                        className="btn-error text-sm px-4 py-2"
-                      >
-{t('reservations.delete')}
-                      </button>
-                    </td>
+                     <td className="p-5">
+                       <DropdownMenu
+                         trigger={
+                           <button className="text-gray-400 hover:text-gray-600 p-2 rounded hover:bg-gray-100">
+                             <FiMoreVertical size={16} />
+                           </button>
+                         }
+                         align="right"
+                       >
+                         <DropdownMenuItem onClick={() => deleteReservation.mutate(res.id)}>
+                           <span className="text-red-600">{t('reservations.delete')}</span>
+                         </DropdownMenuItem>
+                       </DropdownMenu>
+                     </td>
                   </tr>
                 ))}
               </tbody>

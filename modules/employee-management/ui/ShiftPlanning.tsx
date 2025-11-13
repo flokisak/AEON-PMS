@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Shift, Employee, ShiftStatus, Department } from '../types';
+import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator } from '@/core/ui/DropdownMenu';
+import { FiMoreVertical } from 'react-icons/fi';
 
 interface ShiftPlanningProps {
   shifts: Shift[];
@@ -299,26 +301,30 @@ export function ShiftPlanning({ shifts, employees, onAddShift, onUpdateShift, on
                               })()}
                             </span>
                          </td>
-                        <td className="p-4">
-                          <div className="flex space-x-2">
-                            <button
-                              onClick={() => onUpdateShift(shift.id, { 
-                                status: shift.status === 'scheduled' ? 'in-progress' : 
-                                       shift.status === 'in-progress' ? 'completed' : 'scheduled'
-                              })}
-                              className="btn-secondary text-sm px-3 py-1"
-                            >
-                               {shift.status === 'scheduled' ? t('employeeManagement.start') : 
-                                shift.status === 'in-progress' ? t('employeeManagement.complete') : t('employeeManagement.reschedule')}
-                             </button>
-                             <button
-                               onClick={() => onDeleteShift(shift.id)}
-                               className="btn-secondary text-sm px-3 py-1 text-red-600 hover:text-red-700"
-                             >
-                               {t('employeeManagement.delete')}
-                             </button>
-                          </div>
-                        </td>
+                         <td className="p-4">
+                           <DropdownMenu
+                             trigger={
+                               <button className="text-gray-400 hover:text-gray-600 p-2 rounded hover:bg-gray-100">
+                                 <FiMoreVertical size={16} />
+                               </button>
+                             }
+                             align="right"
+                           >
+                             <DropdownMenuItem onClick={() => onUpdateShift(shift.id, {
+                               status: shift.status === 'scheduled' ? 'in-progress' :
+                                      shift.status === 'in-progress' ? 'completed' : 'scheduled'
+                             })}>
+                               <span className="text-blue-600">
+                                 {shift.status === 'scheduled' ? t('employeeManagement.start') :
+                                  shift.status === 'in-progress' ? t('employeeManagement.complete') : t('employeeManagement.reschedule')}
+                               </span>
+                             </DropdownMenuItem>
+                             <DropdownMenuSeparator />
+                             <DropdownMenuItem onClick={() => onDeleteShift(shift.id)}>
+                               <span className="text-red-600">{t('employeeManagement.delete')}</span>
+                             </DropdownMenuItem>
+                           </DropdownMenu>
+                         </td>
                       </tr>
                     );
                   })}

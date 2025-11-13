@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 interface DropdownMenuProps {
   trigger: React.ReactNode;
@@ -10,11 +11,23 @@ interface DropdownMenuProps {
 
 export function DropdownMenu({ trigger, children, align = 'left' }: DropdownMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+  const triggerRef = useRef<HTMLDivElement>(null);
+
+  const handleTriggerClick = () => {
+    if (triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      setPosition({
+        top: rect.bottom + window.scrollY,
+        left: align === 'right' ? rect.right + window.scrollX - 192 : rect.left + window.scrollX, // 192px = w-48
+      });
+    }
+    setIsOpen(!isOpen);
+  };
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (triggerRef.current && !triggerRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     }
@@ -26,19 +39,25 @@ export function DropdownMenu({ trigger, children, align = 'left' }: DropdownMenu
   }, []);
 
   return (
-    <div className="relative inline-block text-left" ref={dropdownRef}>
-      <div onClick={() => setIsOpen(!isOpen)}>
-        {trigger}
+    <>
+      <div className="relative inline-block text-left" ref={triggerRef}>
+        <div onClick={handleTriggerClick}>
+          {trigger}
+        </div>
       </div>
-      
-      {isOpen && (
-        <div className={`absolute z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ${
-          align === 'right' ? 'right-0' : 'left-0'
-        }`}>
+
+      {isOpen && createPortal(
+        <div
+          className="fixed z-50 w-48 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+          style={{
+            top: `${position.top + 4}px`,
+            left: `${position.left}px`,
+          }}
+        >
           <div className="py-1">
             {React.Children.map(children, (child) => {
               if (React.isValidElement(child) && 'onClick' in (child.props as Record<string, unknown>)) {
-                return React.cloneElement(child as React.ReactElement<{ onClick: () => void }>, { 
+                return React.cloneElement(child as React.ReactElement<{ onClick: () => void }>, {
                   onClick: () => {
                     const originalOnClick = (child.props as { onClick?: () => void }).onClick;
                     if (originalOnClick) originalOnClick();
@@ -49,9 +68,10 @@ export function DropdownMenu({ trigger, children, align = 'left' }: DropdownMenu
               return child;
             })}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
-    </div>
+    </>
   );
 }
 

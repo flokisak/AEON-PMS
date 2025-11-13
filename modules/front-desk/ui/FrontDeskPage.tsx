@@ -208,9 +208,20 @@ function CRMSection({ companies, setCompanies }: { companies: Company[], setComp
                     <td className="p-4 text-neutral-dark">{guest.phone}</td>
                     <td className="p-4 text-neutral-dark">{guest.visits}</td>
                     <td className="p-4 text-neutral-dark">{guest.lastVisit}</td>
-                     <td className="p-4">
-                       <button onClick={() => setEditingGuest(guest)} className="btn-secondary text-sm px-3 py-1">{t('frontDesk.edit')}</button>
-                     </td>
+                      <td className="p-4">
+                        <DropdownMenu
+                          trigger={
+                            <button className="text-gray-400 hover:text-gray-600 p-2 rounded hover:bg-gray-100">
+                              <FiMoreVertical size={16} />
+                            </button>
+                          }
+                          align="right"
+                        >
+                          <DropdownMenuItem onClick={() => setEditingGuest(guest)}>
+                            <span className="text-blue-600">{t('frontDesk.edit')}</span>
+                          </DropdownMenuItem>
+                        </DropdownMenu>
+                      </td>
                   </tr>
                 ))}
               </tbody>
@@ -291,9 +302,20 @@ function CRMSection({ companies, setCompanies }: { companies: Company[], setComp
                          {t(`frontDesk.leadStatus.${lead.status}`)}
                        </span>
                      </td>
-                     <td className="p-4">
-                       <button onClick={() => setEditingLead(lead)} className="btn-secondary text-sm px-3 py-1">{t('frontDesk.edit')}</button>
-                     </td>
+                      <td className="p-4">
+                        <DropdownMenu
+                          trigger={
+                            <button className="text-gray-400 hover:text-gray-600 p-2 rounded hover:bg-gray-100">
+                              <FiMoreVertical size={16} />
+                            </button>
+                          }
+                          align="right"
+                        >
+                          <DropdownMenuItem onClick={() => setEditingLead(lead)}>
+                            <span className="text-blue-600">{t('frontDesk.edit')}</span>
+                          </DropdownMenuItem>
+                        </DropdownMenu>
+                      </td>
                    </tr>
                 ))}
               </tbody>
@@ -365,9 +387,20 @@ function CRMSection({ companies, setCompanies }: { companies: Company[], setComp
                     <td className="p-4 text-neutral-dark">{company.phone}</td>
                     <td className="p-4 text-neutral-dark">{company.email}</td>
                      <td className="p-4 text-neutral-dark">{company.contact_person || t('frontDesk.notApplicable')}</td>
-                     <td className="p-4">
-                       <button onClick={() => setEditingCompany(company)} className="btn-secondary text-sm px-3 py-1">{t('frontDesk.edit')}</button>
-                     </td>
+                      <td className="p-4">
+                        <DropdownMenu
+                          trigger={
+                            <button className="text-gray-400 hover:text-gray-600 p-2 rounded hover:bg-gray-100">
+                              <FiMoreVertical size={16} />
+                            </button>
+                          }
+                          align="right"
+                        >
+                          <DropdownMenuItem onClick={() => setEditingCompany(company)}>
+                            <span className="text-blue-600">{t('frontDesk.edit')}</span>
+                          </DropdownMenuItem>
+                        </DropdownMenu>
+                      </td>
                   </tr>
                 ))}
               </tbody>
@@ -433,9 +466,20 @@ function CRMSection({ companies, setCompanies }: { companies: Company[], setComp
                          {t(`frontDesk.subscriberStatus.${sub.status}`)}
                        </span>
                      </td>
-                     <td className="p-4">
-                       <button onClick={() => setEditingSubscriber(sub)} className="btn-secondary text-sm px-3 py-1">{t('frontDesk.edit')}</button>
-                     </td>
+                      <td className="p-4">
+                        <DropdownMenu
+                          trigger={
+                            <button className="text-gray-400 hover:text-gray-600 p-2 rounded hover:bg-gray-100">
+                              <FiMoreVertical size={16} />
+                            </button>
+                          }
+                          align="right"
+                        >
+                          <DropdownMenuItem onClick={() => setEditingSubscriber(sub)}>
+                            <span className="text-blue-600">{t('frontDesk.edit')}</span>
+                          </DropdownMenuItem>
+                        </DropdownMenu>
+                      </td>
                    </tr>
                 ))}
               </tbody>

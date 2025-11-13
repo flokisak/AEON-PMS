@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHousekeeping } from '../logic/useHousekeeping';
 import { HousekeepingTask } from '@/core/types';
+import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator } from '@/core/ui/DropdownMenu';
+import { FiMoreVertical } from 'react-icons/fi';
 
 export function HousekeepingPage() {
   const { t } = useTranslation('common');
@@ -133,26 +135,28 @@ export function HousekeepingPage() {
                       t('housekeeping.taskStatus.done').toUpperCase()}
                   </span>
                 </td>
-                 <td className="p-4">
-                   <div className="flex gap-2">
-                     <button
-                       onClick={() => handleEdit(task)}
-                       className="btn-secondary text-sm px-4 py-2"
-                     >
-                       {t('housekeeping.edit')}
-                     </button>
-                     <button
-                       onClick={() => {
-                         if (confirm(t('housekeeping.confirmDeleteTask'))) {
-                           deleteTask.mutate(task.id);
-                         }
-                       }}
-                       className="btn-error text-sm px-4 py-2"
-                     >
-                       {t('housekeeping.delete')}
-                     </button>
-                   </div>
-                 </td>
+                  <td className="p-4">
+                    <DropdownMenu
+                      trigger={
+                        <button className="text-gray-400 hover:text-gray-600 p-2 rounded hover:bg-gray-100">
+                          <FiMoreVertical size={16} />
+                        </button>
+                      }
+                      align="right"
+                    >
+                      <DropdownMenuItem onClick={() => handleEdit(task)}>
+                        <span className="text-blue-600">{t('housekeeping.edit')}</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => {
+                        if (confirm(t('housekeeping.confirmDeleteTask'))) {
+                          deleteTask.mutate(task.id);
+                        }
+                      }}>
+                        <span className="text-red-600">{t('housekeeping.delete')}</span>
+                      </DropdownMenuItem>
+                    </DropdownMenu>
+                  </td>
               </tr>
             ))}
           </tbody>
