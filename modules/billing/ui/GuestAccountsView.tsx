@@ -1,14 +1,19 @@
 'use client';
 
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useBilling } from '../logic/useBilling';
 import { useCurrency } from '@/core/hooks/useCurrency';
 import { GuestAccount } from '../../../core/types';
+import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator } from '@/core/ui/DropdownMenu';
+import { FiMoreVertical } from 'react-icons/fi';
+import { SeparateBillModal } from './SeparateBillModal';
 
 export function GuestAccountsView() {
   const { t } = useTranslation('common');
   const { formatCurrency } = useCurrency();
   const { guestAccounts, isLoading } = useBilling();
+  const [separateBillAccount, setSeparateBillAccount] = useState<{ id: string; name: string } | null>(null);
 
 
 
@@ -72,16 +77,37 @@ export function GuestAccountsView() {
                   </span>
                 </td>
                 <td className="p-4 text-sm">{new Date(account.last_activity).toLocaleDateString()}</td>
-                <td className="p-4">
-                  <div className="flex gap-2">
-                     <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                 <td className="p-4">
+                   <DropdownMenu
+                     trigger={
+                       <button className="p-2 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100">
+                         <FiMoreVertical size={16} />
+                       </button>
+                     }
+                     align="right"
+                   >
+                     <DropdownMenuItem onClick={() => {/* TODO: Implement view details */}}>
                        {t('billing.viewDetails')}
-                     </button>
-                     <button className="text-green-600 hover:text-green-800 text-sm font-medium">
+                     </DropdownMenuItem>
+                     <DropdownMenuItem onClick={() => {/* TODO: Implement statement */}}>
                        {t('billing.statement')}
-                     </button>
-                  </div>
-                </td>
+                     </DropdownMenuItem>
+                     <DropdownMenuSeparator />
+                     <DropdownMenuItem onClick={() => {/* TODO: Implement record payment */}}>
+                       {t('billing.recordPayment')}
+                     </DropdownMenuItem>
+                     <DropdownMenuItem onClick={() => {/* TODO: Implement transfer payment */}}>
+                       {t('billing.transferPayment')}
+                     </DropdownMenuItem>
+                     <DropdownMenuItem onClick={() => {/* TODO: Implement split account */}}>
+                       {t('billing.splitAccount')}
+                     </DropdownMenuItem>
+                     <DropdownMenuSeparator />
+                     <DropdownMenuItem onClick={() => setSeparateBillAccount({ id: account.id, name: account.guest_name })}>
+                       {t('billing.separateBill')}
+                     </DropdownMenuItem>
+                   </DropdownMenu>
+                 </td>
               </tr>
             ))}
           </tbody>
@@ -95,6 +121,18 @@ export function GuestAccountsView() {
             {t('billing.createFirstAccount')}
           </button>
         </div>
+      )}
+
+      {separateBillAccount && (
+        <SeparateBillModal
+          guestAccountId={separateBillAccount.id}
+          guestName={separateBillAccount.name}
+          onClose={() => setSeparateBillAccount(null)}
+          onSuccess={() => {
+            setSeparateBillAccount(null);
+            // Could show a success message here
+          }}
+        />
       )}
     </div>
   );

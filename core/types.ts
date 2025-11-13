@@ -86,6 +86,7 @@ export interface GuestAccount {
   total_paid: number;
   last_activity: string;
   status: 'active' | 'inactive' | 'suspended';
+  notes?: string; // Additional notes for account operations
 }
 
 export interface Folio {
@@ -116,9 +117,10 @@ export interface InvoiceTemplate {
 
 export interface BillingOperation {
   id: string;
-  operation_type: 'edit_invoice' | 'add_line_item' | 'remove_line_item' | 'split_account' | 'transfer_payment' | 'merge_folios' | 'void_invoice';
+  operation_type: 'edit_invoice' | 'add_line_item' | 'remove_line_item' | 'split_account' | 'transfer_payment' | 'merge_folios' | 'void_invoice' | 'separate_bill';
   invoice_id?: number;
   folio_id?: string;
+  guest_account_id?: string;
   description: string;
   changes: Record<string, unknown>; // Operation-specific change data
   performed_by: string;

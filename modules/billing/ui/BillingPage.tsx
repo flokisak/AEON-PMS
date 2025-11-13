@@ -11,6 +11,7 @@ import { PaymentProcessingView } from './PaymentProcessingView';
 import { ReportsView } from './ReportsView';
 import { useCurrency } from '@/core/hooks/useCurrency';
 import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator } from '@/core/ui/DropdownMenu';
+import { FiMoreVertical } from 'react-icons/fi';
 
 type ViewType = 'invoices' | 'guest-accounts' | 'payments' | 'reports';
 
@@ -18,7 +19,7 @@ export function BillingPage() {
   const { t } = useTranslation('common');
   const { invoices, guestAccounts, isLoading, updateInvoice } = useBilling();
   const { formatCurrency, convertFromBase } = useCurrency();
-  const [currentView, setCurrentView] = useState<ViewType>('invoices');
+  const [currentView, setCurrentView] = useState<ViewType>('guest-accounts');
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
   const [editingInvoice, setEditingInvoice] = useState<Invoice | null>(null);
 
@@ -110,8 +111,8 @@ export function BillingPage() {
         {/* Navigation Tabs */}
         <div className="flex bg-neutral-light rounded-lg p-1 border border-neutral-medium">
           {[
-            { id: 'invoices', label: t('billing.invoices'), count: invoices?.length || 0 },
             { id: 'guest-accounts', label: t('billing.guestAccounts'), count: guestAccounts?.length || 0 },
+            { id: 'invoices', label: t('billing.invoices'), count: invoices?.length || 0 },
             { id: 'payments', label: t('billing.payments') },
             { id: 'reports', label: t('billing.reports') },
           ].map((tab) => (
@@ -193,33 +194,39 @@ export function BillingPage() {
                          {getStatusLabel(invoice.status)}
                        </span>
                     </td>
-                     <td className="p-4">
-                       <DropdownMenu
-                         trigger={
-                           <button className="text-gray-400 hover:text-gray-600 p-1 rounded hover:bg-gray-100">
-                             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                               <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"/>
-                             </svg>
-                           </button>
-                         }
-                         align="right"
-                       >
-                         <DropdownMenuItem onClick={() => setSelectedInvoice(invoice)}>
-                           <span className="text-primary">{t('billing.view')}</span>
-                         </DropdownMenuItem>
-                         <DropdownMenuItem onClick={() => setEditingInvoice(invoice)}>
-                           <span className="text-neutral-dark">{t('billing.edit')}</span>
-                         </DropdownMenuItem>
-                         {invoice.balance > 0 && (
-                           <>
-                             <DropdownMenuSeparator />
-                             <DropdownMenuItem onClick={() => {/* TODO: Implement payment functionality */}}>
-                               <span className="text-emerald-600">{t('billing.pay')}</span>
-                             </DropdownMenuItem>
-                           </>
-                         )}
-                       </DropdownMenu>
-                     </td>
+                      <td className="p-4">
+                        <DropdownMenu
+                          trigger={
+                            <button className="p-2 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100">
+                              <FiMoreVertical size={16} />
+                            </button>
+                          }
+                          align="right"
+                        >
+                          <DropdownMenuItem onClick={() => setSelectedInvoice(invoice)}>
+                            {t('billing.view')}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => setEditingInvoice(invoice)}>
+                            {t('billing.edit')}
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          {invoice.balance > 0 && (
+                            <DropdownMenuItem onClick={() => {/* TODO: Implement payment functionality */}}>
+                              <span className="text-emerald-600">{t('billing.pay')}</span>
+                            </DropdownMenuItem>
+                          )}
+                          <DropdownMenuItem onClick={() => {/* TODO: Implement transfer functionality */}}>
+                            {t('billing.transferPayment')}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => {/* TODO: Implement split functionality */}}>
+                            {t('billing.splitAccount')}
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem onClick={() => {/* TODO: Implement void functionality */}}>
+                            <span className="text-red-600">{t('billing.voidInvoice')}</span>
+                          </DropdownMenuItem>
+                        </DropdownMenu>
+                      </td>
                   </tr>
                 ))}
               </tbody>

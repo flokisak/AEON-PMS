@@ -116,12 +116,14 @@ export function NavBar() {
         {/* Header */}
         <div className="p-4 border-b border-neutral-medium bg-neutral-light flex items-center justify-between">
             <div className={`flex items-center ${isCollapsed ? 'justify-center w-full' : ''}`}>
-              <Image 
-                src="/logo.png" 
-                alt="AEON PMS Logo" 
-                width={64}
-                height={64}
-                className="h-16 w-auto"
+              <Image
+                src="/logo.png"
+                alt="AEON PMS Logo"
+                width={80}
+                height={80}
+                className="h-20 w-auto"
+                priority
+                quality={100}
               />
             </div>
             <button

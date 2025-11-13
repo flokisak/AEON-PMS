@@ -741,6 +741,47 @@ export function useBilling() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['invoices'] }),
   });
 
+  // Separate Bill (transfer charges between rooms during stay)
+  const separateBill = useMutation({
+    mutationFn: async ({
+      guestAccountId,
+      fromRoom,
+      toRoom,
+      lineItemIds,
+      reason
+    }: {
+      guestAccountId: string;
+      fromRoom: string;
+      toRoom: string;
+      lineItemIds: string[];
+      reason: string;
+    }) => {
+      // Find the guest account
+      const account = mockGuestAccounts.find(a => a.id === guestAccountId);
+      if (!account) throw new Error('Guest account not found');
+
+      // For now, we'll simulate this by creating a note in the account
+      // In a real implementation, this would move line items between folios/rooms
+      account.notes = account.notes || '';
+      account.notes += `\n[${new Date().toISOString()}] Separated bill: Moved ${lineItemIds.length} items from ${fromRoom} to ${toRoom}. Reason: ${reason}`;
+
+      // Log operation
+      mockBillingOperations.push({
+        id: `op${Date.now()}`,
+        operation_type: 'separate_bill',
+        guest_account_id: guestAccountId,
+        description: `Separated bill: Moved charges from ${fromRoom} to ${toRoom}`,
+        changes: { fromRoom, toRoom, lineItemIds, reason },
+        performed_by: 'System',
+        performed_at: new Date().toISOString(),
+        status: 'completed',
+      });
+
+      return account;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['guest-accounts'] }),
+  });
+
   return {
     // Data
     invoices,
@@ -766,6 +807,7 @@ export function useBilling() {
     splitAccount,
     transferPayment,
     voidInvoice,
+    separateBill,
 
     // Guest account operations
     createGuestAccount,
