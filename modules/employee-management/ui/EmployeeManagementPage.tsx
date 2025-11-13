@@ -42,6 +42,7 @@ export function EmployeeManagementPage() {
   const departmentStats = getDepartmentStats();
 
   const getDepartmentTranslationKey = (department: string) => {
+    // Handle both the dash-separated format and the Czech names from department stats
     const keyMap: { [key: string]: string } = {
       'front-desk': 'frontDesk',
       'housekeeping': 'housekeeping',
@@ -50,9 +51,14 @@ export function EmployeeManagementPage() {
       'management': 'management',
       'security': 'security',
       'spa': 'spa',
-      'administration': 'administration'
+      'administration': 'administration',
+      // Czech department names from database
+      'recepce': 'frontDesk',
+      'úklid': 'housekeeping',
+      'údržba': 'maintenance',
+      'gastronomie': 'foodBeverage'
     };
-    return keyMap[department] || department;
+    return keyMap[department.toLowerCase()] || department;
   };
 
   const getEmploymentTypeTranslationKey = (type: string) => {

@@ -74,9 +74,14 @@ export function EmployeeList({ employees, onEdit, onDelete, onView }: EmployeeLi
       'management': 'management',
       'security': 'security',
       'spa': 'spa',
-      'administration': 'administration'
+      'administration': 'administration',
+      // Czech department names from database
+      'recepce': 'frontDesk',
+      'úklid': 'housekeeping',
+      'údržba': 'maintenance',
+      'gastronomie': 'foodBeverage'
     };
-    return keyMap[department] || department;
+    return keyMap[department.toLowerCase()] || department;
   };
 
   const getEmploymentTypeTranslationKey = (type: EmploymentType) => {

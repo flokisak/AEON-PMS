@@ -155,9 +155,22 @@ export function ShiftPlanning({ shifts, employees, onAddShift, onUpdateShift, on
                   <div key={department}>
                     {/* Department Header */}
                      <div className="grid grid-cols-8">
-                       <div className="p-4 bg-neutral-light font-semibold text-foreground capitalize">
-                         {t(`employeeManagement.${department.replace('-', '')}`) || department.replace('-', ' ')}
-                       </div>
+                        <div className="p-4 bg-neutral-light font-semibold text-foreground capitalize">
+                          {(() => {
+                            const keyMap: { [key: string]: string } = {
+                              'front-desk': 'frontDesk',
+                              'housekeeping': 'housekeeping',
+                              'maintenance': 'maintenance',
+                              'food-beverage': 'foodBeverage',
+                              'management': 'management',
+                              'security': 'security',
+                              'spa': 'spa',
+                              'administration': 'administration'
+                            };
+                            const translationKey = keyMap[department] || department;
+                            return t(`employeeManagement.${translationKey}`);
+                          })()}
+                        </div>
                        <div className="col-span-7 p-2 bg-neutral-light/50">
                          <div className="text-sm text-neutral-dark">
                            {t('employeeManagement.employeeCount', { count: departmentEmployees.length, plural: departmentEmployees.length !== 1 ? 's' : '' })}
@@ -255,13 +268,36 @@ export function ShiftPlanning({ shifts, employees, onAddShift, onUpdateShift, on
                           {shift.start_time} - {shift.end_time}
                         </td>
                         <td className="p-4 text-foreground">{shift.position}</td>
-                         <td className="p-4 text-foreground capitalize">
-                           {t(`employeeManagement.${shift.department.replace('-', '')}`) || shift.department.replace('-', ' ')}
-                         </td>
+                          <td className="p-4 text-foreground capitalize">
+                            {(() => {
+                              const keyMap: { [key: string]: string } = {
+                                'front-desk': 'frontDesk',
+                                'housekeeping': 'housekeeping',
+                                'maintenance': 'maintenance',
+                                'food-beverage': 'foodBeverage',
+                                'management': 'management',
+                                'security': 'security',
+                                'spa': 'spa',
+                                'administration': 'administration'
+                              };
+                              const translationKey = keyMap[shift.department] || shift.department;
+                              return t(`employeeManagement.${translationKey}`);
+                            })()}
+                          </td>
                          <td className="p-4">
-                           <span className={`px-2 py-1 rounded-full text-xs font-medium ${getShiftStatusColor(shift.status)}`}>
-                             {t(`employeeManagement.${shift.status.replace('-', '')}`) || shift.status.replace('-', ' ')}
-                           </span>
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getShiftStatusColor(shift.status)}`}>
+                              {(() => {
+                                const statusKeyMap: { [key: string]: string } = {
+                                  'scheduled': 'scheduled',
+                                  'in-progress': 'inProgress',
+                                  'completed': 'completed',
+                                  'missed': 'missed',
+                                  'cancelled': 'cancelled'
+                                };
+                                const translationKey = statusKeyMap[shift.status] || shift.status;
+                                return t(`employeeManagement.${translationKey}`);
+                              })()}
+                            </span>
                          </td>
                         <td className="p-4">
                           <div className="flex space-x-2">

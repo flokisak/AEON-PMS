@@ -9,6 +9,10 @@ import { useRooms } from '../modules/rooms/logic/useRooms';
 import { FiCalendar, FiUsers, FiMessageSquare, FiHome } from 'react-icons/fi';
 import { GiBroom } from 'react-icons/gi';
 import { ComponentType } from 'react';
+import { OccupancyTrendChart } from './components/dashboard/OccupancyTrendChart';
+import { RevenueTrendChart } from './components/dashboard/RevenueTrendChart';
+import { GuestSatisfactionChart } from './components/dashboard/GuestSatisfactionChart';
+import { DashboardMetrics } from './components/dashboard/DashboardMetrics';
 
 function MetricCard({ title, value, icon: Icon, color }: { title: string; value: string | number; icon: ComponentType<{ className?: string }>; color: string }) {
   return (
@@ -82,40 +86,114 @@ export default function Home() {
     .slice(0, 5)
     .map(t => `Room ${t.room_number} - ${t.status}`) || [];
 
-   return (
-     <div className="space-y-8">
-       <div>
-         <h1 className="text-2xl font-semibold text-foreground mb-2">{t('dashboard.title')}</h1>
-         <p className="text-neutral-dark">{t('dashboard.welcomeMessage')}</p>
-       </div>
+  // Mock data for charts
+  const [occupancyData, setOccupancyData] = useState<any[]>([]);
+  const [revenueData, setRevenueData] = useState<any[]>([]);
 
-       {/* Key Metrics */}
-       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-         <MetricCard
-           title={t('dashboard.todaysArrivals')}
-           value={todaysArrivals}
-           icon={FiUsers}
-           color="border-primary"
-         />
-         <MetricCard
-           title={t('dashboard.todaysDepartures')}
-           value={todaysDepartures}
-           icon={FiCalendar}
-           color="border-cyan-400"
-         />
-         <MetricCard
-           title={t('dashboard.occupancyRate')}
-           value={`${occupancyRate}%`}
-           icon={FiHome}
-           color="border-emerald-400"
-         />
-         <MetricCard
-           title={t('dashboard.pendingTasks')}
-           value={pendingTasks}
-           icon={GiBroom}
-           color="border-amber-400"
-         />
-       </div>
+  useEffect(() => {
+    // Generate occupancy data
+    const occupancy = [];
+    for (let i = 29; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const baseOccupancy = 65 + Math.sin(i * 0.2) * 15 + Math.random() * 10;
+      occupancy.push({
+        date: date.toISOString().split('T')[0],
+        occupancy: Math.round(Math.max(0, Math.min(100, baseOccupancy))),
+        trend: 70 + Math.sin(i * 0.1) * 5
+      });
+    }
+    setOccupancyData(occupancy);
+
+    // Generate revenue data
+    const revenue = [];
+    for (let i = 29; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const baseRevenue = 45000 + Math.sin(i * 0.3) * 10000 + Math.random() * 5000;
+      revenue.push({
+        date: date.toISOString().split('T')[0],
+        revenue: Math.round(baseRevenue),
+        target: 50000,
+        growth: Math.round((Math.random() - 0.5) * 20 * 100) / 100
+      });
+    }
+    setRevenueData(revenue);
+  }, []);
+
+  const satisfactionData = [
+    { name: t('dashboard.excellent'), value: 45, color: '#10b981' },
+    { name: t('dashboard.veryGood'), value: 30, color: '#3b82f6' },
+    { name: t('dashboard.good'), value: 15, color: '#f59e0b' },
+    { name: t('dashboard.fair'), value: 7, color: '#f97316' },
+    { name: t('dashboard.poor'), value: 3, color: '#ef4444' }
+  ];
+
+  const averageRating = 4.2;
+
+  // Additional metrics
+  const totalRevenue = 1250000;
+  const monthlyGrowth = 8.5;
+  const totalGuests = 2847;
+  const averageStayDuration = 3.2;
+  const bookingConversionRate = 68.4;
+
+   return (
+      <div className="space-y-8">
+        <div>
+          <h1 className="text-2xl font-semibold text-foreground mb-2">{t('dashboard.title')}</h1>
+          <p className="text-neutral-dark">{t('dashboard.welcomeMessage')}</p>
+        </div>
+
+        {/* Enhanced Key Metrics */}
+        <DashboardMetrics
+          totalRevenue={totalRevenue}
+          monthlyGrowth={monthlyGrowth}
+          averageRating={averageRating}
+          totalGuests={totalGuests}
+          averageStayDuration={averageStayDuration}
+          bookingConversionRate={bookingConversionRate}
+        />
+
+        {/* Charts Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <OccupancyTrendChart data={occupancyData} />
+          </div>
+          <div>
+            <GuestSatisfactionChart data={satisfactionData} averageRating={averageRating} />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <RevenueTrendChart data={revenueData} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <MetricCard
+              title={t('dashboard.todaysArrivals')}
+              value={todaysArrivals}
+              icon={FiUsers}
+              color="border-primary"
+            />
+            <MetricCard
+              title={t('dashboard.todaysDepartures')}
+              value={todaysDepartures}
+              icon={FiCalendar}
+              color="border-cyan-400"
+            />
+            <MetricCard
+              title={t('dashboard.occupancyRate')}
+              value={`${occupancyRate}%`}
+              icon={FiHome}
+              color="border-emerald-400"
+            />
+            <MetricCard
+              title={t('dashboard.pendingTasks')}
+              value={pendingTasks}
+              icon={GiBroom}
+              color="border-amber-400"
+            />
+          </div>
+        </div>
 
        {/* Recent Activities and Gantt Preview */}
        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
