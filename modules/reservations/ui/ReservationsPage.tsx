@@ -9,7 +9,7 @@ import { Reservation, Room } from '../../../core/types';
 import { useCurrency } from '@/core/hooks/useCurrency';
 import { CreateReservationModal } from './CreateReservationModal';
 import { EditReservationModal } from './EditReservationModal';
-import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FiChevronLeft, FiChevronRight, FiClock, FiEyeOff } from 'react-icons/fi';
 
 function DraggableReservation({ reservation, onEdit }: { reservation: Reservation & { check_in?: string; check_out?: string }; onEdit: (res: Reservation) => void }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
@@ -165,6 +165,7 @@ export function ReservationsPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingReservation, setEditingReservation] = useState<Reservation | null>(null);
+  const [showPastDates, setShowPastDates] = useState(false);
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
 
   // Initialize date on mount and update every minute
@@ -198,12 +199,27 @@ export function ReservationsPage() {
         length = 1;
         break;
       case 'week':
-        startDate.setDate(currentDate.getDate() - currentDate.getDay());
-        length = 7;
+        if (showPastDates) {
+          // Show past dates: start from beginning of week
+          startDate.setDate(currentDate.getDate() - currentDate.getDay());
+          length = 7;
+        } else {
+          // Hide past dates: start from today, show 7 days
+          startDate = new Date(currentDate);
+          length = 7;
+        }
         break;
       case 'month':
-        startDate.setDate(1);
-        length = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+        if (showPastDates) {
+          // Show full month
+          startDate.setDate(1);
+          length = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+        } else {
+          // Show from today to end of month
+          startDate = new Date(currentDate);
+          const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+          length = Math.ceil((endOfMonth.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+        }
         break;
       case 'custom':
         startDate = customDate ? new Date(customDate) : new Date(currentDate);
@@ -211,12 +227,25 @@ export function ReservationsPage() {
         break;
     }
 
-    return Array.from({ length }, (_, i) => {
+    const allDates = Array.from({ length }, (_, i) => {
       const date = new Date(startDate);
       date.setDate(startDate.getDate() + i);
       return date.toISOString().split('T')[0];
     });
-  }, [currentDate, viewMode, customDate]);
+
+    // Filter out past dates if not showing history
+    if (!showPastDates && viewMode !== 'custom') {
+      const today = new Date(currentDate);
+      today.setHours(0, 0, 0, 0);
+      return allDates.filter(dateStr => {
+        const date = new Date(dateStr);
+        date.setHours(0, 0, 0, 0);
+        return date >= today;
+      });
+    }
+
+    return allDates;
+  }, [currentDate, viewMode, customDate, showPastDates]);
 
   const cellWidth = useMemo(() => Math.max(24, Math.min(64, 800 / Math.max(days.length, 1))), [days.length]); // Dynamic width: min 24px, max 64px, based on 800px total width
 
@@ -525,6 +554,22 @@ export function ReservationsPage() {
             </button>
            </div>
 
+           {/* History Toggle */}
+           <div className="flex items-center ml-4">
+             <button
+               onClick={() => setShowPastDates(!showPastDates)}
+               className={`flex items-center gap-2 px-3 py-2 rounded-lg font-medium transition-colors ${
+                 showPastDates
+                   ? 'bg-amber-100 text-amber-700 border border-amber-200'
+                   : 'bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200'
+               }`}
+               title={showPastDates ? 'Hide past dates' : 'Show past dates'}
+             >
+               {showPastDates ? <FiEyeOff size={16} /> : <FiClock size={16} />}
+               <span className="text-sm">{showPastDates ? 'Hide History' : 'Show History'}</span>
+             </button>
+           </div>
+
            {/* Date Navigation Arrows */}
            <div className="flex items-center gap-2 ml-4">
              <button
@@ -542,6 +587,11 @@ export function ReservationsPage() {
                  month: 'short',
                  year: 'numeric'
                }) : 'Loading...'}
+               {!showPastDates && (
+                 <div className="text-xs opacity-80 mt-0.5">
+                   {viewMode === 'week' ? 'Current Week' : viewMode === 'month' ? 'Current Month' : 'Today'}
+                 </div>
+               )}
              </div>
 
              <button
@@ -660,6 +710,10 @@ export function ReservationsPage() {
                <div className="flex items-center bg-gradient-to-r from-blue-400 to-blue-500 px-3 py-2 rounded-lg shadow-sm border-2 border-blue-600">
                  <div className="w-3 h-3 bg-white bg-opacity-90 rounded mr-2"></div>
                   <span className="text-sm font-medium text-white font-semibold">{t('reservations.newReservation')}</span>
+               </div>
+               <div className="flex items-center bg-gray-50 px-3 py-2 rounded-lg border border-gray-200">
+                 <div className="w-3 h-3 bg-gray-400 rounded mr-2"></div>
+                  <span className="text-sm font-medium text-gray-700">Past Dates (Hidden)</span>
                </div>
                <div className="flex items-center bg-green-50 px-3 py-2 rounded-lg border border-green-200">
                  <div className="w-3 h-3 bg-green-400 rounded mr-2"></div>
