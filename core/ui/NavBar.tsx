@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { FiCalendar, FiMessageSquare, FiTrendingUp, FiUserCheck, FiCreditCard, FiHome, FiBarChart, FiSettings, FiChevronLeft, FiChevronRight, FiPackage, FiUsers } from 'react-icons/fi';
 import { GiBroom } from 'react-icons/gi';
+import Image from 'next/image';
 import { getActiveModulesForNav } from '../moduleRegistry';
 
 interface Module {
@@ -115,9 +116,11 @@ export function NavBar() {
         {/* Header */}
         <div className="p-4 border-b border-neutral-medium bg-neutral-light flex items-center justify-between">
             <div className={`flex items-center ${isCollapsed ? 'justify-center w-full' : ''}`}>
-              <img 
+              <Image 
                 src="/logo.png" 
                 alt="AEON PMS Logo" 
+                width={64}
+                height={64}
                 className="h-16 w-auto"
               />
             </div>

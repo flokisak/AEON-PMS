@@ -36,17 +36,18 @@ export function DropdownMenu({ trigger, children, align = 'left' }: DropdownMenu
           align === 'right' ? 'right-0' : 'left-0'
         }`}>
           <div className="py-1">
-            {React.Children.map(children, (child) => 
-              React.isValidElement(child) 
-                ? React.cloneElement(child as React.ReactElement<any>, { 
-                    onClick: () => {
-                      const originalOnClick = (child as React.ReactElement<any>).props.onClick;
-                      if (originalOnClick) originalOnClick();
-                      setIsOpen(false);
-                    }
-                  })
-                : child
-            )}
+            {React.Children.map(children, (child) => {
+              if (React.isValidElement(child) && 'onClick' in (child.props as Record<string, unknown>)) {
+                return React.cloneElement(child as React.ReactElement<{ onClick: () => void }>, { 
+                  onClick: () => {
+                    const originalOnClick = (child.props as { onClick?: () => void }).onClick;
+                    if (originalOnClick) originalOnClick();
+                    setIsOpen(false);
+                  }
+                });
+              }
+              return child;
+            })}
           </div>
         </div>
       )}

@@ -1,15 +1,16 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useReservations } from '../modules/reservations/logic/useReservations';
 import { useHousekeeping } from '../modules/housekeeping/logic/useHousekeeping';
 import { useRooms } from '../modules/rooms/logic/useRooms';
-import { FiCalendar, FiUsers, FiTrendingUp, FiAlertTriangle, FiMessageSquare, FiHome } from 'react-icons/fi';
+import { FiCalendar, FiUsers, FiMessageSquare, FiHome } from 'react-icons/fi';
 import { GiBroom } from 'react-icons/gi';
+import { ComponentType } from 'react';
 
-function MetricCard({ title, value, icon: Icon, color }: { title: string; value: string | number; icon: any; color: string }) {
+function MetricCard({ title, value, icon: Icon, color }: { title: string; value: string | number; icon: ComponentType<{ className?: string }>; color: string }) {
   return (
     <div className={`bg-white rounded-lg shadow-sm p-6 border-l-4 ${color} hover:shadow-md transition-shadow duration-200`}>
       <div className="flex items-center justify-between">
@@ -46,12 +47,10 @@ export default function Home() {
   const { rooms } = useRooms();
 
   // Calculate metrics
-  const { today, tomorrow } = useMemo(() => {
+  const { today } = useMemo(() => {
     const now = new Date();
     const todayStr = now.toISOString().split('T')[0];
-    const tomorrowDate = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-    const tomorrowStr = tomorrowDate.toISOString().split('T')[0];
-    return { today: todayStr, tomorrow: tomorrowStr };
+    return { today: todayStr };
   }, []);
 
   const todaysArrivals = reservations?.filter(r => r.check_in === today).length || 0;
@@ -62,12 +61,22 @@ export default function Home() {
   const pendingTasks = tasks?.filter(t => t.status === 'pending').length || 0;
 
   // Recent activities (mock data for now)
+  const [currentTime, setCurrentTime] = useState(() => Date.now());
+  
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 60000); // Update every minute
+    
+    return () => clearInterval(timer);
+  }, []);
+  
+  const weekAgo = useMemo(() => new Date(currentTime - 7 * 24 * 60 * 60 * 1000), [currentTime]);
   const recentArrivals = useMemo(() => {
-    const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     return reservations?.filter(r => r.check_in && new Date(r.check_in) >= weekAgo)
       .slice(0, 5)
       .map(r => `${r.guest_name} - Room ${r.room_number}`) || [];
-  }, [reservations]);
+  }, [reservations, weekAgo]);
 
   const pendingHousekeeping = tasks?.filter(t => t.status === 'pending')
     .slice(0, 5)

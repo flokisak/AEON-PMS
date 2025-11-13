@@ -23,10 +23,8 @@
   },
   "modules": {
     "reservations": "Reservations",
-    "frontDesk": "Front Desk",
     "rooms": "Rooms",
     "packages": "Packages",
-    "housekeeping": "Housekeeping",
     "billing": "Billing",
     "employeeManagement": "Employee Management",
     "aiConcierge": "AI Concierge",
@@ -380,7 +378,12 @@
     "total": "Total",
     "remove": "Remove",
     "qty": "Qty",
-    "totalAmount": "Total Amount"
+    "totalAmount": "Total Amount",
+    "paymentHistory": "Payment History",
+    "guestInformation": "Guest Information",
+    "recordPayment": "Record Payment",
+    "name": "Name",
+    "outstanding": "Outstanding"
   },
   "reservations": {
     "title": "Reservations",
@@ -424,7 +427,22 @@
     "today": "Today",
     "week": "Week",
     "month": "Month",
-    "roomNotClean": "Room {{room}} is not clean. Creating priority housekeeping task."
+    "roomNotClean": "Room {{room}} is not clean. Creating priority housekeeping task.",
+    "description": "Manage reservations and room assignments",
+    "roomTypes": {
+      "any": "Any",
+      "standard": "Standard",
+      "deluxe": "Deluxe",
+      "suite": "Suite"
+    },
+    "roomStatus": {
+      "available": "Available",
+      "occupied": "Occupied",
+      "maintenance": "Maintenance",
+      "dirty": "Dirty",
+      "cleaning": "Cleaning"
+    },
+    "id": "ID"
   },
   "packagesEvents": {
     "title": "Packages & Events",
@@ -1056,6 +1074,13 @@
     "conversionRate": "Conversion Rate",
     "totalInBaseCurrency": "Total ({{baseCurrency}})",
     "totalInCurrentCurrency": "Total ({{currency}})"
+  },
+  "login": {
+    "title": "Login",
+    "email": "Email",
+    "sendMagicLink": "Send Magic Link",
+    "checkEmailLink": "Check your email for login link!",
+    "signInError": "Error signing in"
   },
   "error": "Error",
   "aiReceptionist": {

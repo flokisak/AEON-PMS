@@ -86,8 +86,8 @@ export function AIConciergePage() {
   });
   const [newWorkflow, setNewWorkflow] = useState({ name: '', description: '' });
   const [recommendationMode, setRecommendationMode] = useState(false);
-  const [suggestedPartners, setSuggestedPartners] = useState<any[]>([]);
-  const [pendingReservations, setPendingReservations] = useState<any[]>([]);
+  const [suggestedPartners, setSuggestedPartners] = useState<Array<{id: string, name: string, description: string, category: string, recommendationNotes: string, openingHours: string, contact: string}>>([]);
+  const [pendingReservations, setPendingReservations] = useState<Array<{id: string, name: string, status: string, requestedAt: Date}>>([]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -219,7 +219,12 @@ export function AIConciergePage() {
                     <button
                       onClick={() => {
                         // Simulate sending reservation request
-                        setPendingReservations([...pendingReservations, { ...partner, requestedAt: new Date() }]);
+                        setPendingReservations([...pendingReservations, { 
+                          id: partner.id, 
+                          name: partner.name, 
+                          status: 'pending',
+                          requestedAt: new Date()
+                        }]);
                         sendMessage(`Great! I've sent a reservation request to ${partner.name}. I'll confirm once they respond.`);
                         setRecommendationMode(false);
                         setSuggestedPartners([]);

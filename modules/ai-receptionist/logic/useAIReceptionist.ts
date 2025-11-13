@@ -117,7 +117,7 @@ export const useAIReceptionist = () => {
       const assignedRoom = availableRooms[0];
 
       // Update reservation
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('reservations')
         .update({ room_number: assignedRoom.number })
         .eq('id', reservationId);
@@ -222,29 +222,29 @@ export const useAIReceptionist = () => {
     }
   };
 
-  const executeWorkflow = async (action: string, params: any): Promise<any> => {
+  const executeWorkflow = async (action: string, params: Record<string, unknown>): Promise<unknown> => {
     // Execute predefined workflows based on action
     switch (action) {
       case 'check_in':
-        return await handleCheckIn(params.reservationId);
+        return await handleCheckIn(params.reservationId as string);
       case 'check_out':
-        return await handleCheckOut(params.reservationId);
+        return await handleCheckOut(params.reservationId as string);
       case 'answer':
-        return { success: true, data: await answerQuestion(params.question) };
+        return { success: true, data: await answerQuestion(params.question as string) };
       case 'assign_room':
-        return await assignRoom(params.reservationId, params.preferences);
+        return await assignRoom(params.reservationId as string, params.preferences as { type?: string } | undefined);
       case 'auto_checkin':
-        return await handleCheckIn(params.reservationId);
+        return await handleCheckIn(params.reservationId as string);
       case 'housekeeping':
-        return await requestHousekeeping(params.roomNumber || 'TBD', params.request || 'General housekeeping request');
+        return await requestHousekeeping((params.roomNumber as string) || 'TBD', (params.request as string) || 'General housekeeping request');
       case 'taxi':
-        return await callTaxi(params.guestName || 'Guest', params.roomNumber || 'TBD', params.destination);
+        return await callTaxi((params.guestName as string) || 'Guest', (params.roomNumber as string) || 'TBD', params.destination as string);
       case 'room_service':
-        return await requestRoomService(params.roomNumber || 'TBD', params.order || 'Room service request');
+        return await requestRoomService((params.roomNumber as string) || 'TBD', (params.order as string) || 'Room service request');
       case 'maintenance':
-        return await requestMaintenance(params.roomNumber || 'TBD', params.issue || 'Maintenance request', params.priority);
+        return await requestMaintenance((params.roomNumber as string) || 'TBD', (params.issue as string) || 'Maintenance request', params.priority as 'low' | 'medium' | 'high' | undefined);
       case 'information':
-        return await sendHotelInformation(params.guestEmail, params.roomNumber);
+        return await sendHotelInformation(params.guestEmail as string, params.roomNumber as string);
       default:
         return { success: false, error: 'Unknown action' };
     }

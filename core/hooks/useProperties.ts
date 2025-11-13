@@ -123,7 +123,7 @@ export function useProperties() {
         } else {
           setCurrentPropertyId('prop-1');
         }
-      } catch (err) {
+      } catch {
         setError('Failed to load properties');
       } finally {
         setIsLoading(false);

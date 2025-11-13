@@ -120,7 +120,7 @@ export interface BillingOperation {
   invoice_id?: number;
   folio_id?: string;
   description: string;
-  changes: any; // Operation-specific change data
+  changes: Record<string, unknown>; // Operation-specific change data
   performed_by: string;
   performed_at: string;
   approved_by?: string;
@@ -177,7 +177,7 @@ export interface BillingReport {
     end: string;
   };
   generated_at: string;
-  data: any; // Report-specific data structure
+  data: Record<string, unknown>; // Report-specific data structure
   total_revenue?: number;
   total_payments?: number;
   outstanding_balance?: number;

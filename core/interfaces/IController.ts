@@ -7,6 +7,6 @@ export interface IController {
 export interface IRoute {
   path: string;
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
-  handler: (req: any, res: any) => Promise<any>;
-  middleware?: any[];
+  handler: (req: unknown, res: unknown) => Promise<unknown>;
+  middleware?: unknown[];
 }

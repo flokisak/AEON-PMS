@@ -8,8 +8,9 @@ export function useCurrency() {
 
   useEffect(() => {
     const savedCurrency = CurrencyConverter.getCurrentCurrency();
+    const currencyInfo = CurrencyConverter.getCurrencyInfo(savedCurrency);
     setCurrentCurrencyState(savedCurrency);
-    setCurrencyInfo(CurrencyConverter.getCurrencyInfo(savedCurrency));
+    setCurrencyInfo(currencyInfo);
   }, []);
 
   const changeCurrency = (newCurrency: CurrencyCode) => {

@@ -104,7 +104,7 @@ export function AIReceptionist() {
     setIsLoading(true);
     const newRequest: AIRequest = {
       id: Date.now().toString(),
-      type: action as any,
+      type: action as 'checkin' | 'checkout' | 'room_service' | 'housekeeping' | 'taxi' | 'maintenance',
       request: `Quick action: ${action}`,
       status: 'processing',
       timestamp: new Date().toISOString()
@@ -120,8 +120,8 @@ export function AIReceptionist() {
           req.id === newRequest.id 
             ? { 
                 ...req, 
-                status: result.success ? 'completed' : 'failed', 
-                response: result.success ? generateResponse(action) : result.error || 'Request failed'
+                status: (result as { success?: boolean }).success ? 'completed' : 'failed', 
+                response: (result as { success?: boolean }).success ? generateResponse(action) : (result as { error?: string }).error || 'Request failed'
               }
             : req
         )

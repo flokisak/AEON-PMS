@@ -7,7 +7,7 @@ export interface ModuleConfig {
   name: string;
   version: string;
   status: 'active' | 'inactive';
-  config: Record<string, any>;
+  config: Record<string, unknown>;
   module_path: string;
   icon: string;
   created_at: string;
@@ -205,7 +205,7 @@ export function useModules() {
   });
 
   const updateModuleConfig = useMutation({
-    mutationFn: async ({ id, config }: { id: string; config: Record<string, any> }) => {
+    mutationFn: async ({ id, config }: { id: string; config: Record<string, unknown> }) => {
       const { data, error } = await supabase
         .from('modules')
         .update({ config, updated_at: new Date().toISOString() })

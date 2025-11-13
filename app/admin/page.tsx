@@ -541,7 +541,7 @@ export default function AdminPage() {
               <label className="block text-sm font-medium text-gray-700 mb-2">{t('admin.selectCurrency')}</label>
               <select
                 value={currentCurrency}
-                onChange={(e) => changeCurrency(e.target.value as any)}
+                onChange={(e) => changeCurrency(e.target.value as 'USD' | 'EUR' | 'CZK' | 'GBP')}
                 className="form-input w-full max-w-xs"
               >
                 {allCurrencies.map((currency) => (

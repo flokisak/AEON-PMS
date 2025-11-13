@@ -470,7 +470,7 @@ function EventForm({
           <label className="form-label">{t('packagesEvents.eventType')} *</label>
           <select
             value={formData.type}
-            onChange={(e) => setFormData(prev => ({ ...prev, type: e.target.value as any }))}
+            onChange={(e) => setFormData(prev => ({ ...prev, type: e.target.value as 'conference' | 'wedding' | 'party' | 'corporate' | 'other' }))}
             className="form-input"
             required
           >
@@ -536,7 +536,7 @@ function EventForm({
           <label className="form-label">{t('packagesEvents.status')} *</label>
           <select
             value={formData.status}
-            onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value as any }))}
+            onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value as 'upcoming' | 'ongoing' | 'completed' | 'cancelled' }))}
             className="form-input"
             required
           >

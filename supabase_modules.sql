@@ -92,4 +92,6 @@ insert into modules (name, version, status, module_path, icon) values
 ('Reports', '1.0.0', 'active', '@/modules/reports/index', 'barchart'),
 ('AI Concierge', '1.0.0', 'active', '@/modules/ai-concierge/index', 'message'),
 ('AI Revenue Manager', '1.0.0', 'active', '@/modules/ai-revenue-manager/index', 'trending'),
-('Packages & Events', '1.0.0', 'active', '@/modules/packages-events/index', 'package');
+('Packages', '1.0.0', 'active', '@/modules/packages-events/index', 'package'),
+('Employee Management', '1.0.0', 'active', '@/modules/employee-management/index', 'users'),
+('Stay Packages', '1.0.0', 'active', '@/modules/stay-packages/index', 'package');

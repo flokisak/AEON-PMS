@@ -1,6 +1,5 @@
 import { moduleLoader } from './moduleLoader';
 import { supabase } from './config/supabaseClient';
-import { FiUsers } from 'react-icons/fi';
 
 export async function getActiveModules() {
   const { data, error } = await supabase

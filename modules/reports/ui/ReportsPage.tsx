@@ -38,10 +38,20 @@ export function ReportsPage() {
   ) || [];
 
   const checkedInGuests = reservations?.filter(r => r.status === 'checked_in') || [];
+  const [currentTime, setCurrentTime] = useState(() => Date.now());
+  
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 60000); // Update every minute
+    
+    return () => clearInterval(timer);
+  }, []);
+  
   const checkedOutGuests = reservations?.filter(r => r.status === 'checked_out') || [];
   const stayoverGuests = reservations?.filter(r =>
     r.status === 'checked_in' &&
-    new Date(r.check_out!) <= new Date(Date.now() + 24 * 60 * 60 * 1000) &&
+    new Date(r.check_out!) <= new Date(currentTime + 24 * 60 * 60 * 1000) &&
     new Date(r.check_out!) > new Date()
   ) || [];
 
@@ -573,7 +583,7 @@ export function ReportsPage() {
                 <div className="bg-red-50 p-4 rounded-lg border border-red-200">
                   <h3 className="font-semibold text-red-800">{t('reports.urgentReporting')}</h3>
                   <p className="text-2xl font-bold text-red-600">
-                    {checkedInGuests.filter(g => g.nationality !== 'CZ' && new Date(g.check_in!) >= new Date(Date.now() - 24 * 60 * 60 * 1000)).length}
+                    {checkedInGuests.filter(g => g.nationality !== 'CZ' && new Date(g.check_in!) >= new Date(currentTime - 24 * 60 * 60 * 1000)).length}
                   </p>
                   <p className="text-sm text-red-700">{t('reports.arrivedLast24Hours')}</p>
                 </div>
@@ -608,7 +618,7 @@ export function ReportsPage() {
                 </thead>
                 <tbody>
                   {checkedInGuests.filter(g => g.nationality !== 'CZ').map((guest) => {
-                    const needsUrgentReporting = new Date(guest.check_in!) >= new Date(Date.now() - 24 * 60 * 60 * 1000);
+                    const needsUrgentReporting = new Date(guest.check_in!) >= new Date(currentTime - 24 * 60 * 60 * 1000);
                     return (
                       <tr key={guest.id} className={`border-b border-neutral-light ${needsUrgentReporting ? 'bg-red-50' : ''}`}>
                         <td className="p-2 font-medium">{guest.guest_name}</td>

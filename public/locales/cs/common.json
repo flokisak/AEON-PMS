@@ -23,10 +23,8 @@
   },
   "modules": {
     "reservations": "Rezervace",
-    "frontDesk": "Recepce",
     "rooms": "Pokoje",
     "packages": "Balíčky",
-    "housekeeping": "Úklid",
     "billing": "Fakturace",
     "employeeManagement": "Správa zaměstnanců",
     "aiConcierge": "AI Concierge",
@@ -379,7 +377,12 @@
     "total": "Celkem",
     "remove": "Odstranit",
     "qty": "Množství",
-    "totalAmount": "Celková částka"
+    "totalAmount": "Celková částka",
+    "paymentHistory": "Historie plateb",
+    "guestInformation": "Informace o hostovi",
+    "recordPayment": "Zaznamenat platbu",
+    "name": "Jméno",
+    "outstanding": "Nevyřízeno"
   },
   "reservations": {
     "title": "Rezervace",
@@ -423,7 +426,22 @@
     "today": "Dnes",
     "week": "Týden",
     "month": "Měsíc",
-    "roomNotClean": "Pokoj {{room}} není čistý. Vytváření prioritního úklidového úkolu."
+    "roomNotClean": "Pokoj {{room}} není čistý. Vytváření prioritního úklidového úkolu.",
+    "description": "Správa rezervací a přiřazení pokojů",
+    "roomTypes": {
+      "any": "Jakýkoliv",
+      "standard": "Standardní",
+      "deluxe": "Deluxe",
+      "suite": "Apartmán"
+    },
+    "roomStatus": {
+      "available": "Volný",
+      "occupied": "Obsazený",
+      "maintenance": "Údržba",
+      "dirty": "Špinavý",
+      "cleaning": "Čištění"
+    },
+    "id": "ID"
   },
   "packagesEvents": {
     "title": "Balíčky & Akce",
@@ -953,13 +971,6 @@
     "onLeave": "Na dovolené",
     "na": "N/A",
     "gastronomy": "Gastronomie",
-    "fullTime": "Plný úvazek",
-    "partTime": "Částečný úvazek",
-    "seasonal": "Sezónní",
-    "contract": "Smlouva",
-    "intern": "Stážista",
-    "inactive": "Neaktivní",
-    "terminated": "Ukončeno",
     "search": "Hledat",
     "allDepartments": "Všechna oddělení",
     "allStatus": "Všechny stavy",
@@ -1114,6 +1125,13 @@
     "conversionRate": "Kurz",
     "totalInBaseCurrency": "Celkem ({{baseCurrency}})",
     "totalInCurrentCurrency": "Celkem ({{currency}})"
+  },
+  "login": {
+    "title": "Přihlášení",
+    "email": "Email",
+    "sendMagicLink": "Odeslat přihlašovací odkaz",
+    "checkEmailLink": "Zkontrolujte svůj email pro přihlašovací odkaz!",
+    "signInError": "Chyba při přihlašování"
   },
   "error": "Chyba",
   "aiReceptionist": {

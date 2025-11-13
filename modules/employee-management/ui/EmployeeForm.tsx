@@ -51,7 +51,7 @@ export function EmployeeForm({ employee, onSave, onCancel }: EmployeeFormProps) 
 
   useEffect(() => {
     if (employee) {
-      setFormData({
+      const formData = {
         first_name: employee.first_name,
         last_name: employee.last_name,
         email: employee.email,
@@ -59,21 +59,22 @@ export function EmployeeForm({ employee, onSave, onCancel }: EmployeeFormProps) 
         address: employee.address,
         date_of_birth: employee.date_of_birth,
         hire_date: employee.hire_date,
-        position: employee.position,
         department: employee.department,
+        position: employee.position,
         employment_type: employee.employment_type,
-        status: employee.status,
         salary: employee.salary,
+        status: employee.status,
         hourly_rate: employee.hourly_rate,
         emergency_contact: {
-          ...employee.emergency_contact,
+          name: employee.emergency_contact.name,
+          relationship: employee.emergency_contact.relationship,
+          phone: employee.emergency_contact.phone,
           email: employee.emergency_contact.email || ''
         },
         skills: employee.skills,
         notes: employee.notes || ''
-      });
-      setWorkSchedule(employee.work_schedule);
-      setCertifications(employee.certifications);
+      };
+      setFormData(formData);
     }
   }, [employee]);
 

@@ -11,18 +11,18 @@ export interface IModule {
 
 export interface IService {
   name: string;
-  instance: any;
+  instance: unknown;
   dependencies?: string[];
 }
 
 export interface IRoute {
   path: string;
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
-  handler: (req: any, res: any) => Promise<any>;
-  middleware?: any[];
+  handler: (req: unknown, res: unknown) => Promise<unknown>;
+  middleware?: unknown[];
 }
 
 export interface IHook {
   event: string;
-  handler: (...args: any[]) => void;
+  handler: (...args: unknown[]) => void;
 }
