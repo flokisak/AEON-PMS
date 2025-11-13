@@ -467,6 +467,8 @@
      "specialRequests": "Special requests or notes",
      "creating": "Creating...",
      "updating": "Updating...",
+     "previousDay": "Previous day",
+     "nextDay": "Next day",
     "roomNotClean": "Room {{room}} is not clean. Creating priority housekeeping task.",
     "description": "Manage reservations and room assignments",
     "roomTypes": {

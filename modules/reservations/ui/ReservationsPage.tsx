@@ -9,6 +9,7 @@ import { Reservation, Room } from '../../../core/types';
 import { useCurrency } from '@/core/hooks/useCurrency';
 import { CreateReservationModal } from './CreateReservationModal';
 import { EditReservationModal } from './EditReservationModal';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 function DraggableReservation({ reservation, onEdit }: { reservation: Reservation & { check_in?: string; check_out?: string }; onEdit: (res: Reservation) => void }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
@@ -143,11 +144,23 @@ export function ReservationsPage() {
   const [isSelecting, setIsSelecting] = useState(false);
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [viewMode, setViewMode] = useState<'day' | 'week' | 'month' | 'custom'>('week');
-  const [customDate, setCustomDate] = useState(() => new Date().toISOString().split('T')[0]);
+  const [customDate, setCustomDate] = useState(() => {
+    // Initialize on client side only
+    if (typeof window !== 'undefined') {
+      return new Date().toISOString().split('T')[0];
+    }
+    return '';
+  });
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingReservation, setEditingReservation] = useState<Reservation | null>(null);
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(() => {
+    // Initialize on client side only
+    if (typeof window !== 'undefined') {
+      return new Date();
+    }
+    return null;
+  });
 
   // Update current date every minute to keep it accurate
   useEffect(() => {
@@ -159,6 +172,8 @@ export function ReservationsPage() {
   }, []);
 
   const getDays = () => {
+    if (!currentDate) return [];
+
     let startDate = new Date(currentDate);
     let length = 30;
 
@@ -176,7 +191,7 @@ export function ReservationsPage() {
         length = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
         break;
       case 'custom':
-        startDate = new Date(customDate);
+        startDate = customDate ? new Date(customDate) : new Date(currentDate || new Date());
         length = 7; // Show 7 days from custom date
         break;
     }
@@ -190,6 +205,20 @@ export function ReservationsPage() {
 
   const days = getDays();
   const cellWidth = Math.max(24, Math.min(64, 800 / days.length)); // Dynamic width: min 24px, max 64px, based on 800px total width
+
+  const navigateDate = (direction: 'prev' | 'next') => {
+    if (!currentDate) return;
+
+    const newDate = new Date(currentDate);
+    const daysToAdd = direction === 'next' ? 1 : -1;
+    newDate.setDate(newDate.getDate() + daysToAdd);
+    setCurrentDate(newDate);
+
+    // Update custom date if in custom mode
+    if (viewMode === 'custom') {
+      setCustomDate(newDate.toISOString().split('T')[0]);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -276,6 +305,8 @@ export function ReservationsPage() {
   };
 
   const getPosition = (checkIn: string, checkOut: string) => {
+    if (!currentDate) return { left: 0, width: 0 };
+
     const start = new Date(checkIn);
     const end = new Date(checkOut);
     const startIndex = Math.max(0, Math.floor((start.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)));
@@ -283,7 +314,7 @@ export function ReservationsPage() {
     return { left: startIndex * cellWidth, width: duration * cellWidth };
   };
 
-  if (isLoading) return <div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div><p className="ml-4 text-gray-600">{t('reservations.loading')}</p></div>;
+  if (isLoading || !currentDate) return <div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div><p className="ml-4 text-gray-600">{t('reservations.loading')}</p></div>;
 
   return (
     <div className="space-y-6">
@@ -463,15 +494,44 @@ export function ReservationsPage() {
             >
               Custom
             </button>
-          </div>
-          {viewMode === 'custom' && (
-            <input
-              type="date"
-              value={customDate}
-              onChange={(e) => setCustomDate(e.target.value)}
-              className="form-input"
-            />
-          )}
+           </div>
+
+           {/* Date Navigation Arrows */}
+           <div className="flex items-center gap-2 ml-4">
+             <button
+               onClick={() => navigateDate('prev')}
+               className="p-2 rounded-lg bg-white border border-neutral-medium hover:bg-neutral-light transition-colors"
+               title={t('reservations.previousDay')}
+             >
+               <FiChevronLeft size={20} />
+             </button>
+
+             <div className="px-3 py-2 bg-primary text-white rounded-lg font-semibold text-sm min-w-[120px] text-center">
+               {currentDate ? currentDate.toLocaleDateString('cs-CZ', {
+                 weekday: 'short',
+                 day: 'numeric',
+                 month: 'short',
+                 year: 'numeric'
+               }) : 'Loading...'}
+             </div>
+
+             <button
+               onClick={() => navigateDate('next')}
+               className="p-2 rounded-lg bg-white border border-neutral-medium hover:bg-neutral-light transition-colors"
+               title={t('reservations.nextDay')}
+             >
+               <FiChevronRight size={20} />
+             </button>
+           </div>
+
+           {viewMode === 'custom' && (
+             <input
+               type="date"
+               value={customDate}
+               onChange={(e) => setCustomDate(e.target.value)}
+               className="form-input"
+             />
+           )}
         </div>
       )}
 

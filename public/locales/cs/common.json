@@ -466,6 +466,8 @@
      "specialRequests": "Speciální požadavky nebo poznámky",
      "creating": "Vytváření...",
      "updating": "Aktualizace...",
+     "previousDay": "Předchozí den",
+     "nextDay": "Následující den",
     "roomNotClean": "Pokoj {{room}} není čistý. Vytváření prioritního úklidového úkolu.",
     "description": "Správa rezervací a přiřazení pokojů",
     "roomTypes": {
