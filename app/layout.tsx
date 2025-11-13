@@ -28,11 +28,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <body
-        className={`${inter.variable} ${geistMono.variable} antialiased flex bg-neutral-light min-h-screen`}
+        className={`${inter.variable} ${geistMono.variable} antialiased bg-neutral-light min-h-screen`}
       >
         <Providers>
           <NavBar />
-          <div className="flex-1 flex flex-col">
+          <div className="md:ml-64 flex flex-col min-h-screen">
             <TopBar />
             <main className="flex-1 p-6 overflow-auto">
               {children}

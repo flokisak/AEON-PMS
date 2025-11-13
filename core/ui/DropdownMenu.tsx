@@ -11,16 +11,13 @@ interface DropdownMenuProps {
 
 export function DropdownMenu({ trigger, children, align = 'left' }: DropdownMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [position, setPosition] = useState({ top: 0, left: 0 });
+  const [triggerRect, setTriggerRect] = useState<DOMRect | null>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
 
   const handleTriggerClick = () => {
     if (triggerRef.current) {
       const rect = triggerRef.current.getBoundingClientRect();
-      setPosition({
-        top: rect.bottom + window.scrollY,
-        left: align === 'right' ? rect.right + window.scrollX - 192 : rect.left + window.scrollX, // 192px = w-48
-      });
+      setTriggerRect(rect);
     }
     setIsOpen(!isOpen);
   };
@@ -38,6 +35,16 @@ export function DropdownMenu({ trigger, children, align = 'left' }: DropdownMenu
     };
   }, []);
 
+  // Calculate dropdown position when it's open
+  const dropdownStyle = triggerRect ? {
+    position: 'fixed' as const,
+    top: triggerRect.bottom + window.scrollY + 4,
+    left: align === 'right'
+      ? Math.max(8, triggerRect.right + window.scrollX - 192) // 192px = w-48
+      : Math.max(8, triggerRect.left + window.scrollX),
+    zIndex: 9999,
+  } : {};
+
   return (
     <>
       <div className="relative inline-block text-left" ref={triggerRef}>
@@ -46,13 +53,10 @@ export function DropdownMenu({ trigger, children, align = 'left' }: DropdownMenu
         </div>
       </div>
 
-      {isOpen && createPortal(
+      {isOpen && triggerRect && createPortal(
         <div
-          className="fixed z-50 w-48 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-          style={{
-            top: `${position.top + 4}px`,
-            left: `${position.left}px`,
-          }}
+          className="w-48 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+          style={dropdownStyle}
         >
           <div className="py-1">
             {React.Children.map(children, (child) => {

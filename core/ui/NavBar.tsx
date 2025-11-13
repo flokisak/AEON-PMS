@@ -110,7 +110,7 @@ export function NavBar() {
             transition-all duration-300 min-h-screen flex flex-col overflow-visible
             ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
             ${isCollapsed ? 'md:w-16' : 'md:w-64'}
-            fixed md:relative z-50 md:z-auto w-64 md:w-auto
+            fixed z-50 w-64 md:w-auto
           `}
       >
         {/* Header */}
