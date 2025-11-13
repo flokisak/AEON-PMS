@@ -77,14 +77,16 @@ function DraggableReservation({ reservation, onEdit }: { reservation: Reservatio
 function DroppableCell({
   date,
   roomNumber,
-  onSelect,
+  onMouseDown: handleMouseDown,
+  onMouseEnter: handleMouseEnter,
   width,
   isInSelection = false,
   isCreatingReservation = false
 }: {
   date: string;
   roomNumber: number;
-  onSelect: (room: number, date: string) => void;
+  onMouseDown: (room: number, date: string) => void;
+  onMouseEnter: (room: number, date: string) => void;
   width: number;
   isInSelection?: boolean;
   isCreatingReservation?: boolean;
@@ -100,8 +102,8 @@ function DroppableCell({
       className={`h-10 border-r border-gray-200 cursor-pointer relative ${
         isOver ? 'bg-blue-100' : 'bg-white'
       } ${isCreatingReservation ? 'bg-blue-50' : ''}`}
-      onMouseDown={() => onSelect(roomNumber, date)}
-      onMouseEnter={() => onSelect(roomNumber, date)}
+      onMouseDown={() => handleMouseDown(roomNumber, date)}
+      onMouseEnter={() => handleMouseEnter(roomNumber, date)}
     >
       {isInSelection && (
         <div
@@ -139,6 +141,7 @@ export function ReservationsPage() {
   });
   const [selection, setSelection] = useState<{ room: number; start: string; end: string } | null>(null);
   const [isSelecting, setIsSelecting] = useState(false);
+  const [isMouseDown, setIsMouseDown] = useState(false);
   const [viewMode, setViewMode] = useState<'day' | 'week' | 'month' | 'custom'>('week');
   const [customDate, setCustomDate] = useState(new Date().toISOString().split('T')[0]);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -216,19 +219,21 @@ export function ReservationsPage() {
     }
   };
 
-  const handleCellSelect = (room: number, date: string) => {
-    if (!isSelecting) {
-      setSelection({ room, start: date, end: date });
-      setIsSelecting(true);
-    } else {
-      if (selection && selection.room === room) {
-        setSelection({ ...selection, end: date });
-      }
+  const handleMouseDown = (room: number, date: string) => {
+    setSelection({ room, start: date, end: date });
+    setIsSelecting(true);
+    setIsMouseDown(true);
+  };
+
+  const handleMouseEnter = (room: number, date: string) => {
+    if (isMouseDown && selection && selection.room === room) {
+      setSelection({ ...selection, end: date });
     }
   };
 
   const handleMouseUp = () => {
-    if (selection) {
+    setIsMouseDown(false);
+    if (selection && isSelecting) {
       // Open create reservation modal
       setShowCreateModal(true);
       setIsSelecting(false);
@@ -512,7 +517,8 @@ export function ReservationsPage() {
                            key={day}
                            date={day}
                            roomNumber={room.room_number}
-                           onSelect={handleCellSelect}
+                           onMouseDown={handleMouseDown}
+                           onMouseEnter={handleMouseEnter}
                            width={cellWidth}
                            isInSelection={isInSelection}
                            isCreatingReservation={!!selection}
