@@ -1039,10 +1039,14 @@
     "onLeave": "On Leave",
     "na": "N/A"
   },
-  "admin": {
-    "title": "Administration",
-    "loading": "Loading...",
-    "modules": "Modules",
+   "admin": {
+     "title": "Administration",
+     "loading": "Loading...",
+     "modules": "Modules",
+     "properties": "Properties",
+     "propertiesManagement": "Properties Management",
+     "addNewProperty": "Add New Property",
+     "propertyName": "Property Name",
     "propertySettings": "Property Settings",
     "companySettings": "Company Settings",
     "userManagement": "User Management",

@@ -1090,10 +1090,14 @@
     "employeeDirectory": "Adresář zaměstnanců",
     "manageHotelStaff": "Spravujte personál hotelu a informace o zaměstnancích"
   },
-  "admin": {
-    "title": "Administrace",
-    "loading": "Načítání...",
-    "modules": "Moduly",
+   "admin": {
+     "title": "Správa",
+     "loading": "Načítání...",
+     "modules": "Moduly",
+     "properties": "Nemovitosti",
+     "propertiesManagement": "Správa nemovitostí",
+     "addNewProperty": "Přidat novou nemovitost",
+     "propertyName": "Název nemovitosti",
     "propertySettings": "Nastavení nemovitosti",
     "companySettings": "Nastavení společnosti",
     "userManagement": "Správa uživatelů",

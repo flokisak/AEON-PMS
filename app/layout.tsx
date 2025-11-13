@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
+import { PropertyProvider } from "@/core/contexts/PropertyContext";
 import { NavBar } from "@/core/ui/NavBar";
 import { TopBar } from "@/core/ui/TopBar";
 
@@ -31,13 +32,15 @@ export default function RootLayout({
         className={`${inter.variable} ${geistMono.variable} antialiased bg-neutral-light min-h-screen`}
       >
         <Providers>
-          <NavBar />
-          <div className="md:ml-64 flex flex-col min-h-screen">
-            <TopBar />
-            <main className="flex-1 p-6 overflow-auto">
-              {children}
-            </main>
-          </div>
+          <PropertyProvider>
+            <NavBar />
+            <div className="md:ml-64 flex flex-col min-h-screen">
+              <TopBar />
+              <main className="flex-1 p-6 overflow-auto">
+                {children}
+              </main>
+            </div>
+          </PropertyProvider>
         </Providers>
       </body>
     </html>

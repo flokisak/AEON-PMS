@@ -4,6 +4,9 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import { usePropertyContext } from '@/core/contexts/PropertyContext';
+import { DropdownMenu, DropdownMenuItem } from './DropdownMenu';
+import { FiChevronDown } from 'react-icons/fi';
 import { FiCalendar, FiMessageSquare, FiTrendingUp, FiUserCheck, FiCreditCard, FiHome, FiBarChart, FiSettings, FiChevronLeft, FiChevronRight, FiPackage, FiUsers } from 'react-icons/fi';
 import { GiBroom } from 'react-icons/gi';
 import Image from 'next/image';
@@ -34,6 +37,7 @@ export function NavBar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const pathname = usePathname();
+  const { properties, currentProperty, switchProperty } = usePropertyContext();
 
   useEffect(() => {
     const fetchModules = async () => {
@@ -196,6 +200,44 @@ export function NavBar() {
             </Link>
           </li>
         </ul>
+
+        {/* Property Selector - only show if multiple properties exist */}
+        {properties && properties.length > 1 && (
+          <div className={`border-t border-neutral-medium ${isCollapsed ? 'p-2' : 'p-4'}`}>
+            <DropdownMenu
+              trigger={
+                <button className={`w-full flex items-center justify-between p-3 hover:bg-neutral-light rounded-lg transition-all duration-200 text-left ${isCollapsed ? 'px-2' : ''}`}>
+                  <div className={`flex items-center ${isCollapsed ? 'flex-col' : ''}`}>
+                    <div className={`w-3 h-3 rounded-full bg-primary ${isCollapsed ? 'mb-1' : 'mr-3'}`}></div>
+                    {!isCollapsed && (
+                      <div>
+                        <div className="font-medium text-foreground text-sm">{currentProperty?.name || 'Select Property'}</div>
+                        <div className="text-xs text-neutral-dark">{currentProperty?.city || ''}</div>
+                      </div>
+                    )}
+                  </div>
+                  {!isCollapsed && <FiChevronDown size={16} className="text-neutral-dark" />}
+                </button>
+              }
+              align="left"
+            >
+              {properties.map((property) => (
+                <DropdownMenuItem
+                  key={property.id}
+                  onClick={() => switchProperty(property.id)}
+                >
+                  <div className="flex items-center">
+                    <div className={`w-3 h-3 rounded-full mr-3 ${property.id === currentProperty?.id ? 'bg-primary' : 'bg-neutral-300'}`}></div>
+                    <div>
+                      <div className="font-medium">{property.name}</div>
+                      <div className="text-xs text-neutral-dark">{property.city}, {property.country}</div>
+                    </div>
+                  </div>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenu>
+          </div>
+        )}
       </nav>
     </>
   );

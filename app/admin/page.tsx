@@ -5,12 +5,14 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useModules } from '@/core/hooks/useModules';
 import { useCurrency } from '@/core/hooks/useCurrency';
+import { useProperties } from '@/core/hooks/useProperties';
 
 export default function AdminPage() {
   const { t, i18n } = useTranslation('common');
   const { modules, isLoading, updateModuleStatus } = useModules();
   const { currentCurrency, changeCurrency, allCurrencies, formatCurrency } = useCurrency();
-  const [activeTab, setActiveTab] = useState<'modules' | 'property' | 'company' | 'users' | 'employee-access' | 'fees' | 'language'>('modules');
+  const { properties, addProperty, updateProperty, deleteProperty } = useProperties();
+  const [activeTab, setActiveTab] = useState<'modules' | 'properties' | 'property' | 'company' | 'users' | 'employee-access' | 'fees' | 'language'>('modules');
 
   if (isLoading) return <div>{t('admin.loading')}</div>;
 
@@ -18,26 +20,36 @@ export default function AdminPage() {
     <div className="bg-white rounded-lg shadow-lg p-6">
       <h1 className="text-3xl font-bold mb-6 text-gray-800">{t('admin.title')}</h1>
       <div className="flex border-b border-gray-200 mb-6">
-        <button
-          onClick={() => setActiveTab('modules')}
-          className={`px-6 py-3 font-medium text-sm ${
-            activeTab === 'modules'
-              ? 'border-b-2 border-blue-500 text-blue-600'
-              : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          {t('admin.modules')}
-        </button>
-        <button
-          onClick={() => setActiveTab('property')}
-          className={`px-6 py-3 font-medium text-sm ${
-            activeTab === 'property'
-              ? 'border-b-2 border-blue-500 text-blue-600'
-              : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          {t('admin.propertySettings')}
-        </button>
+         <button
+           onClick={() => setActiveTab('modules')}
+           className={`px-6 py-3 font-medium text-sm ${
+             activeTab === 'modules'
+               ? 'border-b-2 border-blue-500 text-blue-600'
+               : 'text-gray-500 hover:text-gray-700'
+           }`}
+         >
+           {t('admin.modules')}
+         </button>
+         <button
+           onClick={() => setActiveTab('properties')}
+           className={`px-6 py-3 font-medium text-sm ${
+             activeTab === 'properties'
+               ? 'border-b-2 border-blue-500 text-blue-600'
+               : 'text-gray-500 hover:text-gray-700'
+           }`}
+         >
+           {t('admin.properties')}
+         </button>
+         <button
+           onClick={() => setActiveTab('property')}
+           className={`px-6 py-3 font-medium text-sm ${
+             activeTab === 'property'
+               ? 'border-b-2 border-blue-500 text-blue-600'
+               : 'text-gray-500 hover:text-gray-700'
+           }`}
+         >
+           {t('admin.propertySettings')}
+         </button>
         <button
           onClick={() => setActiveTab('company')}
           className={`px-6 py-3 font-medium text-sm ${
@@ -136,9 +148,61 @@ export default function AdminPage() {
             </table>
           </div>
         </div>
-      )}
+       )}
 
-      {activeTab === 'property' && (
+       {activeTab === 'properties' && (
+         <div>
+           <div className="flex justify-between items-center mb-6">
+             <h2 className="text-xl font-semibold text-gray-800">{t('admin.propertiesManagement')}</h2>
+             <button className="btn-primary">{t('admin.addNewProperty')}</button>
+           </div>
+
+           <div className="overflow-x-auto">
+             <table className="w-full">
+               <thead className="bg-gray-50">
+                 <tr>
+                   <th className="p-4 text-left font-semibold text-gray-600">{t('admin.propertyName')}</th>
+                   <th className="p-4 text-left font-semibold text-gray-600">{t('admin.address')}</th>
+                   <th className="p-4 text-left font-semibold text-gray-600">{t('admin.totalRooms')}</th>
+                   <th className="p-4 text-left font-semibold text-gray-600">{t('admin.status')}</th>
+                   <th className="p-4 text-left font-semibold text-gray-600">{t('admin.actions')}</th>
+                 </tr>
+               </thead>
+               <tbody>
+                 {properties?.map((property) => (
+                   <tr key={property.id} className="border-t border-gray-200">
+                     <td className="p-4 font-medium">{property.name}</td>
+                     <td className="p-4">{property.address}</td>
+                     <td className="p-4">{property.totalRooms}</td>
+                     <td className="p-4">
+                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                         property.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                       }`}>
+                         {t(`admin.${property.status}`)}
+                       </span>
+                     </td>
+                     <td className="p-4">
+                       <button className="btn-secondary text-sm px-3 py-1 mr-2">{t('admin.edit')}</button>
+                       <button
+                         onClick={() => updateProperty(property.id, { status: property.status === 'active' ? 'inactive' : 'active' })}
+                         className={`px-3 py-1 rounded-lg text-sm font-medium ${
+                           property.status === 'active'
+                             ? 'bg-red-500 hover:bg-red-600 text-white'
+                             : 'bg-green-500 hover:bg-green-600 text-white'
+                         }`}
+                       >
+                         {property.status === 'active' ? t('admin.deactivate') : t('admin.activate')}
+                       </button>
+                     </td>
+                   </tr>
+                 ))}
+               </tbody>
+             </table>
+           </div>
+         </div>
+       )}
+
+       {activeTab === 'property' && (
         <div>
           <h2 className="text-xl font-semibold mb-4 text-gray-800">{t('admin.propertySettings')}</h2>
           <form className="space-y-6">
