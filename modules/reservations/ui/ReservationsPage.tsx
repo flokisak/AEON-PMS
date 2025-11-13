@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DndContext, useDraggable, useDroppable, DragEndEvent } from '@dnd-kit/core';
 import { useReservations } from '../logic/useReservations';
@@ -143,28 +143,37 @@ export function ReservationsPage() {
   const [isSelecting, setIsSelecting] = useState(false);
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [viewMode, setViewMode] = useState<'day' | 'week' | 'month' | 'custom'>('week');
-  const [customDate, setCustomDate] = useState(new Date().toISOString().split('T')[0]);
+  const [customDate, setCustomDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingReservation, setEditingReservation] = useState<Reservation | null>(null);
-  const today = new Date();
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  // Update current date every minute to keep it accurate
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentDate(new Date());
+    }, 60000); // Update every minute
+
+    return () => clearInterval(interval);
+  }, []);
 
   const getDays = () => {
-    let startDate = new Date(today);
+    let startDate = new Date(currentDate);
     let length = 30;
 
     switch (viewMode) {
       case 'day':
-        startDate = new Date(today);
+        startDate = new Date(currentDate);
         length = 1;
         break;
       case 'week':
-        startDate.setDate(today.getDate() - today.getDay());
+        startDate.setDate(currentDate.getDate() - currentDate.getDay());
         length = 7;
         break;
       case 'month':
         startDate.setDate(1);
-        length = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+        length = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
         break;
       case 'custom':
         startDate = new Date(customDate);
@@ -269,9 +278,9 @@ export function ReservationsPage() {
   const getPosition = (checkIn: string, checkOut: string) => {
     const start = new Date(checkIn);
     const end = new Date(checkOut);
-    const startIndex = Math.max(0, Math.floor((start.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)));
+    const startIndex = Math.max(0, Math.floor((start.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)));
     const duration = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-    return { left: startIndex * 32, width: duration * 32 };
+    return { left: startIndex * cellWidth, width: duration * cellWidth };
   };
 
   if (isLoading) return <div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div><p className="ml-4 text-gray-600">{t('reservations.loading')}</p></div>;
