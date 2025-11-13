@@ -422,6 +422,7 @@
     "availableFrom": "Dostupné od",
     "availableTo": "Dostupné do",
     "date": "Datum",
+    "time": "Čas",
     "startTime": "Čas začátku",
     "endTime": "Čas konce",
     "eventType": "Typ akce",
@@ -441,6 +442,7 @@
     "contactPhone": "Kontaktní telefon",
     "address": "Adresa",
     "commissionRate": "Provize (%)",
+    "contact": "Kontakt",
     "bookingWindow": "Rezervační okno",
     "days": "dní",
     "availability": "Dostupnost",
@@ -480,6 +482,7 @@
     "updateOffer": "Aktualizovat nabídku",
     "hotelPackages": "Hotelové balíčky",
     "partnerRecommendations": "Partnerská doporučení",
+    "partnerReservations": "Partnerské rezervace",
     "addItem": "Přidat položku zahrnutou v balíčku...",
     "add": "Přidat",
     "packageBookedSuccessfully": "Balíček úspěšně rezervován! Partnerské rezervace byly vyžádány.",
@@ -499,10 +502,6 @@
     "thu": "Čt",
     "fri": "Pá",
     "sat": "So"
-  },
-  "packagesEvents": {
-    "package": "Balíček",
-    "event": "Akce"
   },
   "stayPackages": {
     "title": "Balíčky",
@@ -988,5 +987,34 @@
     "conversionRate": "Kurz",
     "totalInBaseCurrency": "Celkem ({{baseCurrency}})",
     "totalInCurrentCurrency": "Celkem ({{currency}})"
+  },
+  "aiReceptionist": {
+    "title": "AI Recepční",
+    "description": "Automatizované služby pro hosty 24/7",
+    "chat": "Chat",
+    "requests": "Požadavky",
+    "automation": "Automatizace",
+    "typeMessage": "Napište svou zprávu...",
+    "send": "Odeslat",
+    "autoCheckIn": "Automatický check-in",
+    "autoCheckInDesc": "Automatizovaný proces příjezdu hostů",
+    "requestHousekeeping": "Vyžádat úklid",
+    "requestHousekeepingDesc": "Objednat úklid pokoje a potřeby",
+    "callTaxi": "Volat taxi",
+    "callTaxiDesc": "Rezervovat dopravu pro hosty",
+    "roomService": "Pokojová služba",
+    "roomServiceDesc": "Objednat jídlo a nápoje na pokoj",
+    "maintenance": "Údržba",
+    "maintenanceDesc": "Nahlásit problémy a opravy pokoje",
+    "hotelInformation": "Informace o hotelu",
+    "hotelInformationDesc": "Získat detaily a služby hotelu",
+    "recentRequests": "Nedávné požadavky",
+    "guest": "Host",
+    "room": "Pokoj",
+    "automationStats": "Statistiky automatizace",
+    "completedToday": "Dnes dokončeno",
+    "pending": "Čekající",
+    "satisfactionRate": "Míra spokojenosti",
+    "avgResponseTime": "Prům. doba odpovědi"
   }
 }

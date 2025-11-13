@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFrontDesk } from '../logic/useFrontDesk';
 import { CheckIn } from '@/core/types';
+import { AIReceptionist } from './AIReceptionist';
 
 interface Guest {
   id: string;
@@ -447,7 +448,7 @@ function CRMSection({ companies, setCompanies }: { companies: Company[], setComp
 export function FrontDeskPage() {
   const { t } = useTranslation('common');
   const { checkIns, isLoading, checkInGuest, checkOutGuest } = useFrontDesk();
-  const [activeTab, setActiveTab] = useState<'checkin' | 'crm'>('checkin');
+  const [activeTab, setActiveTab] = useState<'checkin' | 'crm' | 'ai-receptionist'>('checkin');
   const [showCheckInModal, setShowCheckInModal] = useState(false);
   const [companies, setCompanies] = useState<Company[]>([
     { id: '1', name: 'Česká software s.r.o.', tax_id: '12345678', address: 'Na Příkopě 20, Praha 1', phone: '+420 222 551 111', email: 'info@ceskasoftware.cz', contact_person: 'Ing. Novák' },
@@ -531,6 +532,14 @@ export function FrontDeskPage() {
          >
            {t('frontDesk.crm')}
          </button>
+         <button
+           onClick={() => setActiveTab('ai-receptionist')}
+           className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200 ${
+             activeTab === 'ai-receptionist' ? 'bg-white shadow-sm text-primary border border-neutral-medium' : 'text-neutral-dark hover:text-primary'
+           }`}
+         >
+           {t('aiReceptionist.title')}
+         </button>
       </div>
 
       {activeTab === 'checkin' && (
@@ -597,6 +606,10 @@ export function FrontDeskPage() {
 
       {activeTab === 'crm' && (
         <CRMSection companies={companies} setCompanies={setCompanies} />
+      )}
+
+      {activeTab === 'ai-receptionist' && (
+        <AIReceptionist />
       )}
 
       {/* Check-in Modal */}

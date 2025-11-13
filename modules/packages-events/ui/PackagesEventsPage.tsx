@@ -1105,8 +1105,8 @@ export function PackagesEventsPage() {
             <div className="p-6 border-b border-neutral-medium">
               <div className="flex justify-between items-center">
                  <h3 className="text-xl font-semibold text-foreground">
-                   {editingItem ? t('common.edit') : t('common.add')} {activeTab === 'packages' ? t('packagesEvents.package') : t('packagesEvents.event')}
-                 </h3>
+                    {editingItem ? t('employeeManagement.edit') : t('employeeManagement.add')} {activeTab === 'packages' ? t('packagesEvents.package') : t('packagesEvents.event')}
+                  </h3>
                 <button
                   onClick={() => {
                     setShowForm(false);

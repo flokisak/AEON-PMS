@@ -423,6 +423,7 @@
     "availableFrom": "Available From",
     "availableTo": "Available To",
     "date": "Date",
+    "time": "Time",
     "startTime": "Start Time",
     "endTime": "End Time",
     "eventType": "Event Type",
@@ -442,6 +443,7 @@
     "contactPhone": "Contact Phone",
     "address": "Address",
     "commissionRate": "Commission Rate (%)",
+    "contact": "Contact",
     "bookingWindow": "Booking Window",
     "days": "days",
     "availability": "Availability",
@@ -481,6 +483,7 @@
     "updateOffer": "Update Offer",
     "hotelPackages": "Hotel Packages",
     "partnerRecommendations": "Partner Recommendations",
+    "partnerReservations": "Partner Reservations",
     "addItem": "Add item included in package...",
     "add": "Add",
     "packageBookedSuccessfully": "Package booked successfully! Partner reservations have been requested.",
@@ -500,10 +503,6 @@
     "thu": "Thu",
     "fri": "Fri",
     "sat": "Sat"
-  },
-  "packagesEvents": {
-    "package": "Package",
-    "event": "Event"
   },
   "stayPackages": {
     "title": "Packages",
@@ -989,5 +988,34 @@
     "conversionRate": "Conversion Rate",
     "totalInBaseCurrency": "Total ({{baseCurrency}})",
     "totalInCurrentCurrency": "Total ({{currency}})"
+  },
+  "aiReceptionist": {
+    "title": "AI Receptionist",
+    "description": "24/7 Automated guest services",
+    "chat": "Chat",
+    "requests": "Requests",
+    "automation": "Automation",
+    "typeMessage": "Type your message...",
+    "send": "Send",
+    "autoCheckIn": "Auto Check-in",
+    "autoCheckInDesc": "Automated guest check-in process",
+    "requestHousekeeping": "Request Housekeeping",
+    "requestHousekeepingDesc": "Order room cleaning and supplies",
+    "callTaxi": "Call Taxi",
+    "callTaxiDesc": "Book transportation for guests",
+    "roomService": "Room Service",
+    "roomServiceDesc": "Order food and drinks to room",
+    "maintenance": "Maintenance",
+    "maintenanceDesc": "Report room issues and repairs",
+    "hotelInformation": "Hotel Information",
+    "hotelInformationDesc": "Get hotel details and services",
+    "recentRequests": "Recent Requests",
+    "guest": "Guest",
+    "room": "Room",
+    "automationStats": "Automation Statistics",
+    "completedToday": "Completed Today",
+    "pending": "Pending",
+    "satisfactionRate": "Satisfaction Rate",
+    "avgResponseTime": "Avg Response Time"
   }
 }

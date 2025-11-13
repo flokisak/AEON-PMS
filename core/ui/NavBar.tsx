@@ -114,7 +114,14 @@ export function NavBar() {
       >
         {/* Header */}
         <div className="p-4 border-b border-neutral-medium bg-neutral-light flex items-center justify-between">
-            {!isCollapsed && <h1 className="text-xl font-bold text-primary">AEON PMS</h1>}
+            <div className={`flex items-center ${isCollapsed ? 'justify-center w-full' : ''}`}>
+              <img 
+                src="/logo.png" 
+                alt="AEON PMS Logo" 
+                className={`h-8 w-auto ${isCollapsed ? '' : 'mr-2'}`}
+              />
+              {!isCollapsed && <h1 className="text-xl font-bold text-primary">AEON PMS</h1>}
+            </div>
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
               className="hidden md:block p-2 rounded-lg hover:bg-neutral-medium transition-colors text-neutral-dark"
