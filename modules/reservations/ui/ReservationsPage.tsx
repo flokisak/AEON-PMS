@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DndContext, useDraggable, useDroppable, DragEndEvent } from '@dnd-kit/core';
 import { useReservations } from '../logic/useReservations';
@@ -154,24 +154,26 @@ export function ReservationsPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingReservation, setEditingReservation] = useState<Reservation | null>(null);
-  const [currentDate, setCurrentDate] = useState(() => {
-    // Only initialize on client side to avoid SSR issues
-    if (typeof window === 'undefined') {
-      return new Date(); // Fallback for SSR
-    }
-    return new Date();
-  });
+  const [currentDate, setCurrentDate] = useState<Date | null>(null);
 
-  // Update current date every minute to keep it accurate
+  // Initialize date on mount and update every minute
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentDate(new Date());
-    }, 60000); // Update every minute
+    const updateDate = () => setCurrentDate(new Date());
+
+    // Set initial date immediately
+    updateDate();
+
+    // Update every minute
+    const interval = setInterval(updateDate, 60000);
 
     return () => clearInterval(interval);
   }, []);
 
-  const getDays = () => {
+
+
+  const days = useMemo(() => {
+    if (!currentDate) return [];
+
     let startDate = new Date(currentDate);
     let length = 30;
 
@@ -189,7 +191,7 @@ export function ReservationsPage() {
         length = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
         break;
       case 'custom':
-        startDate = customDate ? new Date(customDate) : new Date(currentDate || new Date());
+        startDate = customDate ? new Date(customDate) : new Date(currentDate);
         length = 7; // Show 7 days from custom date
         break;
     }
@@ -199,10 +201,9 @@ export function ReservationsPage() {
       date.setDate(startDate.getDate() + i);
       return date.toISOString().split('T')[0];
     });
-  };
+  }, [currentDate, viewMode, customDate]);
 
-  const days = getDays();
-  const cellWidth = Math.max(24, Math.min(64, 800 / days.length)); // Dynamic width: min 24px, max 64px, based on 800px total width
+  const cellWidth = useMemo(() => Math.max(24, Math.min(64, 800 / Math.max(days.length, 1))), [days.length]); // Dynamic width: min 24px, max 64px, based on 800px total width
 
   const navigateDate = (direction: 'prev' | 'next') => {
     if (!currentDate) return;
@@ -303,6 +304,8 @@ export function ReservationsPage() {
   };
 
   const getPosition = (checkIn: string, checkOut: string) => {
+    if (!currentDate) return { left: 0, width: 0 };
+
     const start = new Date(checkIn);
     const end = new Date(checkOut);
     const startIndex = Math.max(0, Math.floor((start.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)));
@@ -310,7 +313,7 @@ export function ReservationsPage() {
     return { left: startIndex * cellWidth, width: duration * cellWidth };
   };
 
-  if (isLoading) return <div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div><p className="ml-4 text-gray-600">{t('reservations.loading')}</p></div>;
+  if (isLoading || !currentDate) return <div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div><p className="ml-4 text-gray-600">{t('reservations.loading')}</p></div>;
 
   return (
     <div className="space-y-6">
@@ -508,7 +511,7 @@ export function ReservationsPage() {
                  day: 'numeric',
                  month: 'short',
                  year: 'numeric'
-               }) : 'Načítání...'}
+               }) : 'Loading...'}
              </div>
 
              <button
