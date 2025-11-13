@@ -36,6 +36,11 @@ function DraggableReservation({ reservation, onEdit }: { reservation: Reservatio
           shadow: 'shadow-blue-200'
         };
       case 'booked':
+        return {
+          bg: 'bg-gradient-to-r from-amber-500 to-amber-600',
+          border: 'border-amber-700',
+          shadow: 'shadow-amber-200'
+        };
       default:
         return {
           bg: 'bg-gradient-to-r from-indigo-500 to-indigo-600',

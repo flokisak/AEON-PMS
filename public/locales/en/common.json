@@ -434,6 +434,7 @@
     "save": "Save",
     "cancel": "Cancel",
     "booked": "Booked",
+    "confirmed": "Confirmed",
     "checkedIn": "Checked In",
     "checkedOut": "Checked Out",
     "cancelled": "Cancelled",
