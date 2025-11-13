@@ -166,12 +166,12 @@ export function NavBar() {
                     className={`flex items-center p-3 hover:bg-neutral-light hover:text-primary rounded-lg transition-all duration-200 group ${pathname === module.path ? 'bg-primary/10 text-primary rounded-lg border-r-2 border-primary' : ''}`}
                  >
                     {Icon && <Icon className="text-xl text-neutral-dark" />}
-                    {!isCollapsed && <span className="ml-3 font-medium">{t(`modules.${module.name}`)}</span>}
-                    {isCollapsed && !isMobileOpen && (
-                      <span className="absolute left-16 bg-white text-foreground px-2 py-1 rounded text-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 shadow-sm border">
-                        {t(`modules.${module.name}`)}
-                      </span>
-                    )}
+                     {!isCollapsed && <span className="ml-3 font-medium">{module.name}</span>}
+                     {isCollapsed && !isMobileOpen && (
+                       <span className="absolute left-16 bg-white text-foreground px-2 py-1 rounded text-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 shadow-sm border">
+                         {module.name}
+                       </span>
+                     )}
                  </Link>
               </li>
             );

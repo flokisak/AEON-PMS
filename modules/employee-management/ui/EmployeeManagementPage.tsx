@@ -41,6 +41,41 @@ export function EmployeeManagementPage() {
 
   const departmentStats = getDepartmentStats();
 
+  const getDepartmentTranslationKey = (department: string) => {
+    const keyMap: { [key: string]: string } = {
+      'front-desk': 'frontDesk',
+      'housekeeping': 'housekeeping',
+      'maintenance': 'maintenance',
+      'food-beverage': 'foodBeverage',
+      'management': 'management',
+      'security': 'security',
+      'spa': 'spa',
+      'administration': 'administration'
+    };
+    return keyMap[department] || department;
+  };
+
+  const getEmploymentTypeTranslationKey = (type: string) => {
+    const keyMap: { [key: string]: string } = {
+      'full-time': 'fullTime',
+      'part-time': 'partTime',
+      'seasonal': 'seasonal',
+      'contract': 'contract',
+      'intern': 'intern'
+    };
+    return keyMap[type] || type;
+  };
+
+  const getStatusTranslationKey = (status: string) => {
+    const keyMap: { [key: string]: string } = {
+      'active': 'active',
+      'inactive': 'inactive',
+      'on-leave': 'onLeave',
+      'terminated': 'terminated'
+    };
+    return keyMap[status] || status;
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -153,9 +188,9 @@ export function EmployeeManagementPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             {departmentStats.map((stat) => (
               <div key={stat.department} className="bg-white rounded-lg shadow-sm border border-neutral-medium p-4">
-                 <h3 className="font-semibold text-foreground capitalize mb-2">
-                   {t(`employeeManagement.${stat.department.replace('-', '')}`) || stat.department.replace('-', ' ')}
-                 </h3>
+                  <h3 className="font-semibold text-foreground capitalize mb-2">
+                    {t(`employeeManagement.${getDepartmentTranslationKey(stat.department)}`)}
+                  </h3>
                  <div className="space-y-1 text-sm">
                    <div className="flex justify-between">
                      <span className="text-neutral-dark">{t('employeeManagement.total')}:</span>
@@ -384,28 +419,28 @@ export function EmployeeManagementPage() {
                      <div className="text-foreground">{viewingEmployee.phone}</div>
                    </div>
                    <div>
-                     <label className="form-label text-sm">{t('employeeManagement.department')}</label>
-                     <div className="text-foreground capitalize">
-                       {t(`employeeManagement.${viewingEmployee.department.replace('-', '')}`) || viewingEmployee.department.replace('-', ' ')}
-                     </div>
-                   </div>
-                   <div>
-                     <label className="form-label text-sm">{t('employeeManagement.employmentType')}</label>
-                     <div className="text-foreground capitalize">
-                       {t(`employeeManagement.${viewingEmployee.employment_type.replace('-', '')}`) || viewingEmployee.employment_type.replace('-', ' ')}
-                     </div>
-                   </div>
-                   <div>
-                     <label className="form-label text-sm">{t('employeeManagement.hireDate')}</label>
-                     <div className="text-foreground">
-                        {new Date(viewingEmployee.hire_date).toLocaleDateString('cs-CZ')}
-                     </div>
-                   </div>
-                   <div>
-                     <label className="form-label text-sm">{t('employeeManagement.status')}</label>
-                     <div className="text-foreground capitalize">
-                       {t(`employeeManagement.${viewingEmployee.status.replace('-', '')}`) || viewingEmployee.status.replace('-', ' ')}
-                     </div>
+                      <label className="form-label text-sm">{t('employeeManagement.department')}</label>
+                      <div className="text-foreground capitalize">
+                        {t(`employeeManagement.${getDepartmentTranslationKey(viewingEmployee.department)}`)}
+                      </div>
+                    </div>
+                    <div>
+                      <label className="form-label text-sm">{t('employeeManagement.employmentType')}</label>
+                      <div className="text-foreground capitalize">
+                        {t(`employeeManagement.${getEmploymentTypeTranslationKey(viewingEmployee.employment_type)}`)}
+                      </div>
+                    </div>
+                    <div>
+                      <label className="form-label text-sm">{t('employeeManagement.hireDate')}</label>
+                      <div className="text-foreground">
+                         {new Date(viewingEmployee.hire_date).toLocaleDateString('cs-CZ')}
+                      </div>
+                    </div>
+                    <div>
+                      <label className="form-label text-sm">{t('employeeManagement.status')}</label>
+                      <div className="text-foreground capitalize">
+                        {t(`employeeManagement.${getStatusTranslationKey(viewingEmployee.status)}`)}
+                      </div>
                    </div>
                 </div>
 

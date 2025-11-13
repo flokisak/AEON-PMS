@@ -65,6 +65,41 @@ export function EmployeeList({ employees, onEdit, onDelete, onView }: EmployeeLi
     }
   };
 
+  const getDepartmentTranslationKey = (department: string) => {
+    const keyMap: { [key: string]: string } = {
+      'front-desk': 'frontDesk',
+      'housekeeping': 'housekeeping',
+      'maintenance': 'maintenance',
+      'food-beverage': 'foodBeverage',
+      'management': 'management',
+      'security': 'security',
+      'spa': 'spa',
+      'administration': 'administration'
+    };
+    return keyMap[department] || department;
+  };
+
+  const getEmploymentTypeTranslationKey = (type: EmploymentType) => {
+    const keyMap: { [key: string]: string } = {
+      'full-time': 'fullTime',
+      'part-time': 'partTime',
+      'seasonal': 'seasonal',
+      'contract': 'contract',
+      'intern': 'intern'
+    };
+    return keyMap[type] || type;
+  };
+
+  const getStatusTranslationKey = (status: EmployeeStatus) => {
+    const keyMap: { [key: string]: string } = {
+      'active': 'active',
+      'inactive': 'inactive',
+      'on-leave': 'onLeave',
+      'terminated': 'terminated'
+    };
+    return keyMap[status] || status;
+  };
+
   return (
     <div className="space-y-6">
       {/* Filters */}
@@ -155,19 +190,19 @@ export function EmployeeList({ employees, onEdit, onDelete, onView }: EmployeeLi
                   </div>
                 </td>
                 <td className="p-4 text-foreground">{employee.position}</td>
-                 <td className="p-4 text-foreground capitalize">
-                   {t(`employeeManagement.${employee.department.replace('-', '')}`) || employee.department.replace('-', ' ')}
-                 </td>
-                 <td className="p-4">
-                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${getEmploymentTypeColor(employee.employment_type)}`}>
-                     {t(`employeeManagement.${employee.employment_type.replace('-', '')}`) || employee.employment_type.replace('-', ' ')}
-                   </span>
-                 </td>
-                 <td className="p-4">
-                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(employee.status)}`}>
-                     {t(`employeeManagement.${employee.status.replace('-', '')}`) || employee.status.replace('-', ' ')}
-                   </span>
-                 </td>
+                  <td className="p-4 text-foreground capitalize">
+                    {t(`employeeManagement.${getDepartmentTranslationKey(employee.department)}`)}
+                  </td>
+                  <td className="p-4">
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getEmploymentTypeColor(employee.employment_type)}`}>
+                      {t(`employeeManagement.${getEmploymentTypeTranslationKey(employee.employment_type)}`)}
+                    </span>
+                  </td>
+                  <td className="p-4">
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(employee.status)}`}>
+                      {t(`employeeManagement.${getStatusTranslationKey(employee.status)}`)}
+                    </span>
+                  </td>
                 <td className="p-4 text-neutral-dark">
                   {new Date(employee.hire_date).toLocaleDateString('cs-CZ')}
                 </td>
