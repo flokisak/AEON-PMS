@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { useFrontDesk } from '../logic/useFrontDesk';
 import { CheckIn } from '@/core/types';
 import { AIReceptionist } from './AIReceptionist';
+import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator } from '@/core/ui/DropdownMenu';
+import { FiMoreVertical } from 'react-icons/fi';
 
 interface Guest {
   id: string;
@@ -450,6 +452,10 @@ export function FrontDeskPage() {
   const { checkIns, isLoading, checkInGuest, checkOutGuest } = useFrontDesk();
   const [activeTab, setActiveTab] = useState<'checkin' | 'crm' | 'ai-receptionist'>('checkin');
   const [showCheckInModal, setShowCheckInModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [showMoveRoomModal, setShowMoveRoomModal] = useState(false);
+  const [selectedCheckIn, setSelectedCheckIn] = useState<CheckIn | null>(null);
   const [companies, setCompanies] = useState<Company[]>([
     { id: '1', name: 'Česká software s.r.o.', tax_id: '12345678', address: 'Na Příkopě 20, Praha 1', phone: '+420 222 551 111', email: 'info@ceskasoftware.cz', contact_person: 'Ing. Novák' },
     { id: '2', name: 'Moravské strojírny a.s.', tax_id: '87654321', address: 'Husova 15, Brno', phone: '+420 533 422 222', email: 'obchod@moravskestrojirny.cz', contact_person: 'Dvořák Tomáš' },
@@ -586,16 +592,48 @@ export function FrontDeskPage() {
                         {t(`frontDesk.checkinStatus.${checkIn.status}`)}
                       </span>
                     </td>
-                    <td className="p-4">
-                      {checkIn.status === 'active' && (
-                        <button 
-                          onClick={() => checkOutGuest.mutate(checkIn.id)}
-                          className="btn-secondary text-sm px-3 py-1"
-                        >
-                          {t('frontDesk.checkOut')}
-                        </button>
-                      )}
-                    </td>
+                     <td className="p-4">
+                       <DropdownMenu
+                         trigger={
+                           <button className="text-gray-400 hover:text-gray-600 p-2 rounded hover:bg-gray-100">
+                             <FiMoreVertical size={16} />
+                           </button>
+                         }
+                         align="right"
+                       >
+                         <DropdownMenuItem onClick={() => {
+                           setSelectedCheckIn(checkIn);
+                           setShowDetailsModal(true);
+                         }}>
+                           <span className="text-blue-600">{t('frontDesk.displayDetails')}</span>
+                         </DropdownMenuItem>
+                         <DropdownMenuItem onClick={() => {
+                           setSelectedCheckIn(checkIn);
+                           setShowEditModal(true);
+                         }}>
+                           <span className="text-blue-600">{t('frontDesk.edit')}</span>
+                         </DropdownMenuItem>
+                         <DropdownMenuItem onClick={() => {
+                           setSelectedCheckIn(checkIn);
+                           setShowMoveRoomModal(true);
+                         }}>
+                           <span className="text-amber-600">{t('frontDesk.moveRooms')}</span>
+                         </DropdownMenuItem>
+                         <DropdownMenuSeparator />
+                         {checkIn.status === 'active' ? (
+                           <DropdownMenuItem onClick={() => checkOutGuest.mutate(checkIn.id)}>
+                             <span className="text-red-600">{t('frontDesk.checkOut')}</span>
+                           </DropdownMenuItem>
+                         ) : (
+                           <DropdownMenuItem onClick={() => {
+                             // TODO: Implement check in functionality
+                             console.log('Check in guest:', checkIn.id);
+                           }}>
+                             <span className="text-green-600">{t('frontDesk.checkIn')}</span>
+                           </DropdownMenuItem>
+                         )}
+                       </DropdownMenu>
+                     </td>
                   </tr>
                 ))}
               </tbody>
@@ -614,7 +652,7 @@ export function FrontDeskPage() {
 
       {/* Check-in Modal */}
       {showCheckInModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-neutral-900/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-neutral-medium">
               <div className="flex justify-between items-center">

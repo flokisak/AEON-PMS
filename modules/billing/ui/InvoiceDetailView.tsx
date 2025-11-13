@@ -249,7 +249,7 @@ export function InvoiceDetailView({ invoice, onBack }: InvoiceDetailViewProps) {
 
       {/* Payment Form Modal */}
       {showPaymentForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-neutral-900/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl max-w-md w-full">
             <div className="p-6">
               <h3 className="text-xl font-semibold text-gray-800 mb-4">Record Payment</h3>
