@@ -155,11 +155,11 @@ export function ReservationsPage() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingReservation, setEditingReservation] = useState<Reservation | null>(null);
   const [currentDate, setCurrentDate] = useState(() => {
-    // Initialize on client side only
-    if (typeof window !== 'undefined') {
-      return new Date();
+    // Only initialize on client side to avoid SSR issues
+    if (typeof window === 'undefined') {
+      return new Date(); // Fallback for SSR
     }
-    return null;
+    return new Date();
   });
 
   // Update current date every minute to keep it accurate
@@ -172,8 +172,6 @@ export function ReservationsPage() {
   }, []);
 
   const getDays = () => {
-    if (!currentDate) return [];
-
     let startDate = new Date(currentDate);
     let length = 30;
 
@@ -305,8 +303,6 @@ export function ReservationsPage() {
   };
 
   const getPosition = (checkIn: string, checkOut: string) => {
-    if (!currentDate) return { left: 0, width: 0 };
-
     const start = new Date(checkIn);
     const end = new Date(checkOut);
     const startIndex = Math.max(0, Math.floor((start.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)));
@@ -314,7 +310,7 @@ export function ReservationsPage() {
     return { left: startIndex * cellWidth, width: duration * cellWidth };
   };
 
-  if (isLoading || !currentDate) return <div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div><p className="ml-4 text-gray-600">{t('reservations.loading')}</p></div>;
+  if (isLoading) return <div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div><p className="ml-4 text-gray-600">{t('reservations.loading')}</p></div>;
 
   return (
     <div className="space-y-6">
@@ -512,7 +508,7 @@ export function ReservationsPage() {
                  day: 'numeric',
                  month: 'short',
                  year: 'numeric'
-               }) : 'Loading...'}
+               }) : 'Načítání...'}
              </div>
 
              <button
