@@ -28,21 +28,7 @@ export async function getActiveModulesForNav() {
     const activeModules = await getActiveModules();
     console.log('Active modules:', activeModules);
 
-      // Add packages module statically for development
-      const packagesModule = {
-        name: 'Packages',
-        icon: 'package',
-        path: '/modules/packages-events'
-      };
-
-      // Add employee management module statically for development
-      const employeeManagementModule = {
-        name: 'Employee Management',
-        icon: 'users',
-        path: '/modules/employee-management'
-      };
-
-      const allModules = [...activeModules, packagesModule, employeeManagementModule];
+      const allModules = activeModules;
       const navModules = allModules.map(mod => ({
         name: mod.name,
         path: mod.path || `/modules/${mod.name.toLowerCase().replace(/\s+/g, '-').replace('&', 'and')}`,
