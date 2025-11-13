@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { useModules } from '@/core/hooks/useModules';
 import { useCurrency } from '@/core/hooks/useCurrency';
 import { useProperties } from '@/core/hooks/useProperties';
+import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator } from '@/core/ui/DropdownMenu';
+import { FiMoreVertical } from 'react-icons/fi';
 
 export default function AdminPage() {
   const { t, i18n } = useTranslation('common');
@@ -181,19 +183,26 @@ export default function AdminPage() {
                          {t(`admin.${property.status}`)}
                        </span>
                      </td>
-                     <td className="p-4">
-                       <button className="btn-secondary text-sm px-3 py-1 mr-2">{t('admin.edit')}</button>
-                       <button
-                         onClick={() => updateProperty(property.id, { status: property.status === 'active' ? 'inactive' : 'active' })}
-                         className={`px-3 py-1 rounded-lg text-sm font-medium ${
-                           property.status === 'active'
-                             ? 'bg-red-500 hover:bg-red-600 text-white'
-                             : 'bg-green-500 hover:bg-green-600 text-white'
-                         }`}
-                       >
-                         {property.status === 'active' ? t('admin.deactivate') : t('admin.activate')}
-                       </button>
-                     </td>
+                      <td className="p-4">
+                        <DropdownMenu
+                          trigger={
+                            <button className="text-gray-400 hover:text-gray-600 p-2 rounded hover:bg-gray-100">
+                              <FiMoreVertical size={16} />
+                            </button>
+                          }
+                          align="right"
+                        >
+                          <DropdownMenuItem onClick={() => {/* TODO: Implement edit functionality */}}>
+                            <span className="text-blue-600">{t('admin.edit')}</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem onClick={() => updateProperty(property.id, { status: property.status === 'active' ? 'inactive' : 'active' })}>
+                            <span className={property.status === 'active' ? 'text-red-600' : 'text-green-600'}>
+                              {property.status === 'active' ? t('admin.deactivate') : t('admin.activate')}
+                            </span>
+                          </DropdownMenuItem>
+                        </DropdownMenu>
+                      </td>
                    </tr>
                  ))}
                </tbody>
