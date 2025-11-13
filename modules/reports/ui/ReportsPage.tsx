@@ -15,7 +15,7 @@ export function ReportsPage() {
   const { rooms } = useRooms();
   const { tasks } = useHousekeeping();
   const { formatCurrency } = useCurrency();
-  const [selectedReport, setSelectedReport] = useState<'overview' | 'maintenance' | 'guests' | 'stayovers' | 'housekeeping'>('overview');
+  const [selectedReport, setSelectedReport] = useState<'overview' | 'maintenance' | 'guests' | 'stayovers' | 'housekeeping' | 'foreign-police'>('overview');
 
   // Add currency change listener for auto-refresh
   useEffect(() => {
@@ -32,7 +32,7 @@ export function ReportsPage() {
   const maintenanceIssues = rooms?.flatMap(room =>
     room.maintenance_notes.map(note => ({
       ...note,
-      roomNumber: room.number,
+      roomNumber: room.room_number,
       roomType: room.type
     }))
   ) || [];
@@ -94,6 +94,14 @@ export function ReportsPage() {
           }`}
         >
           {t('reports.housekeeping')}
+        </button>
+        <button
+          onClick={() => setSelectedReport('foreign-police')}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            selectedReport === 'foreign-police' ? 'bg-primary text-white' : 'bg-neutral-light text-neutral-dark hover:bg-neutral-medium'
+          }`}
+        >
+          {t('reports.foreignPolice')}
         </button>
       </div>
       {selectedReport === 'overview' && (
@@ -500,6 +508,131 @@ export function ReportsPage() {
                       </td>
                     </tr>
                   ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {selectedReport === 'foreign-police' && (
+        <div className="space-y-6">
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+            <h3 className="font-semibold text-amber-800 mb-2">{t('reports.legalRequirement')}</h3>
+            <p className="text-amber-700 text-sm">
+              {t('reports.foreignPoliceDescription')}
+            </p>
+          </div>
+
+          <div className="flex justify-end gap-2 mb-4">
+            <button
+              onClick={() => window.print()}
+              className="btn-secondary text-sm px-4 py-2"
+            >
+              {t('reports.print')}
+            </button>
+            <button
+              onClick={() => {
+                const foreignGuests = checkedInGuests.filter(g => g.nationality !== 'CZ');
+                const csv = [
+                  t('reports.foreignPoliceReport'),
+                  t('reports.namePassportNationalityRoomCheckin'),
+                  ...foreignGuests.map(g => `${g.guest_name},${g.passport_number || 'N/A'},${g.nationality || 'N/A'},Room ${g.room_number},${new Date(g.check_in!).toLocaleDateString()}`)
+                ].join('\n');
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = t('reports.foreignPoliceReportFile');
+                a.click();
+              }}
+              className="btn-primary text-sm px-4 py-2"
+            >
+              {t('reports.exportCSV')}
+            </button>
+            <button
+              onClick={() => {
+                const foreignGuests = checkedInGuests.filter(g => g.nationality !== 'CZ');
+                const message = t('reports.foreignPoliceReportMessage', { 
+                  count: foreignGuests.length,
+                  date: new Date().toLocaleDateString()
+                });
+                const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+                window.open(url, '_blank');
+              }}
+              className="btn-success text-sm px-4 py-2"
+            >
+              {t('reports.share')}
+            </button>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-sm border border-neutral-medium p-6">
+            <h2 className="text-lg font-semibold mb-4 text-foreground">{t('reports.foreignGuestsCurrentlyStayed')}</h2>
+            <div className="mb-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+                  <h3 className="font-semibold text-red-800">{t('reports.urgentReporting')}</h3>
+                  <p className="text-2xl font-bold text-red-600">
+                    {checkedInGuests.filter(g => g.nationality !== 'CZ' && new Date(g.check_in!) >= new Date(Date.now() - 24 * 60 * 60 * 1000)).length}
+                  </p>
+                  <p className="text-sm text-red-700">{t('reports.arrivedLast24Hours')}</p>
+                </div>
+                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                  <h3 className="font-semibold text-blue-800">{t('reports.totalForeignGuests')}</h3>
+                  <p className="text-2xl font-bold text-blue-600">
+                    {checkedInGuests.filter(g => g.nationality !== 'CZ').length}
+                  </p>
+                  <p className="text-sm text-blue-700">{t('reports.currentlyStayed')}</p>
+                </div>
+                <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                  <h3 className="font-semibold text-green-800">{t('reports.czechGuests')}</h3>
+                  <p className="text-2xl font-bold text-green-600">
+                    {checkedInGuests.filter(g => g.nationality === 'CZ').length}
+                  </p>
+                  <p className="text-sm text-green-700">{t('reports.exemptFromReporting')}</p>
+                </div>
+              </div>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-neutral-medium">
+                    <th className="text-left p-2">{t('reports.guestName')}</th>
+                    <th className="text-left p-2">{t('reports.passportNumber')}</th>
+                    <th className="text-left p-2">{t('reports.nationality')}</th>
+                    <th className="text-left p-2">{t('reports.room')}</th>
+                    <th className="text-left p-2">{t('reports.checkin')}</th>
+                    <th className="text-left p-2">{t('reports.checkout')}</th>
+                    <th className="text-left p-2">{t('reports.reportingStatus')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {checkedInGuests.filter(g => g.nationality !== 'CZ').map((guest) => {
+                    const needsUrgentReporting = new Date(guest.check_in!) >= new Date(Date.now() - 24 * 60 * 60 * 1000);
+                    return (
+                      <tr key={guest.id} className={`border-b border-neutral-light ${needsUrgentReporting ? 'bg-red-50' : ''}`}>
+                        <td className="p-2 font-medium">{guest.guest_name}</td>
+                        <td className="p-2">{guest.passport_number || 'N/A'}</td>
+                        <td className="p-2">
+                          <span className={`px-2 py-1 rounded text-xs ${
+                            guest.nationality === 'CZ' ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'
+                          }`}>
+                            {guest.nationality || 'N/A'}
+                          </span>
+                        </td>
+                        <td className="p-2">Room {guest.room_number}</td>
+                        <td className="p-2">{new Date(guest.check_in!).toLocaleDateString()}</td>
+                        <td className="p-2">{new Date(guest.check_out!).toLocaleDateString()}</td>
+                        <td className="p-2">
+                          <span className={`px-2 py-1 rounded text-xs ${
+                            needsUrgentReporting ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
+                          }`}>
+                            {needsUrgentReporting ? t('reports.requiresImmediateReporting') : t('reports.reported')}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

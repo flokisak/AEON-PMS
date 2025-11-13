@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FiMessageSquare, FiCheckCircle, FiXCircle, FiClock, FiHome, FiTool, FiCoffee, FiWifi, FiPhone, FiSettings } from 'react-icons/fi';
+import { useAIReceptionist } from '../../ai-receptionist/logic/useAIReceptionist';
 
 interface AIRequest {
   id: string;
@@ -26,35 +27,27 @@ interface QuickAction {
 
 export function AIReceptionist() {
   const { t } = useTranslation('common');
+  const { executeWorkflow, answerQuestion } = useAIReceptionist();
   const [activeTab, setActiveTab] = useState<'chat' | 'requests' | 'automation'>('chat');
   const [message, setMessage] = useState('');
-  const [requests, setRequests] = useState<AIRequest[]>([
-    {
-      id: '1',
-      type: 'checkin',
-      guestName: 'John Doe',
-      roomNumber: '101',
-      request: 'Automatic check-in for reservation #12345',
-      status: 'completed',
-      timestamp: '2024-11-13T10:30:00Z',
-      response: 'Check-in completed successfully. Room 101 assigned, access code: 1234'
-    },
-    {
-      id: '2',
-      type: 'housekeeping',
-      guestName: 'Jane Smith',
-      roomNumber: '205',
-      request: 'Extra towels and room cleaning',
-      status: 'processing',
-      timestamp: '2024-11-13T09:15:00Z',
-      response: 'Housekeeping notified, ETA: 15 minutes'
-    }
-  ]);
-  const [chatMessages, setChatMessages] = useState([
+  const [requests, setRequests] = useState<AIRequest[]>([]);
+  const [chatMessages, setChatMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>([
     { role: 'assistant', content: 'Hello! I am your AI Receptionist. How can I assist you today?' },
     { role: 'user', content: 'What is the WiFi password?' },
     { role: 'assistant', content: 'The WiFi password is HotelGuest2024. You can also find this information in your room welcome packet.' }
   ]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Load real requests from database on component mount
+  useEffect(() => {
+    loadRequests();
+  }, []);
+
+  const loadRequests = async () => {
+    // This would load real requests from database
+    // For now, keeping empty array to show real data when available
+    setRequests([]);
+  };
 
   const quickActions: QuickAction[] = [
     {
@@ -107,7 +100,8 @@ export function AIReceptionist() {
     }
   ];
 
-  const handleQuickAction = (action: string) => {
+  const handleQuickAction = async (action: string) => {
+    setIsLoading(true);
     const newRequest: AIRequest = {
       id: Date.now().toString(),
       type: action as any,
@@ -118,16 +112,31 @@ export function AIReceptionist() {
 
     setRequests(prev => [newRequest, ...prev]);
 
-    // Simulate processing
-    setTimeout(() => {
+    try {
+      const result = await executeWorkflow(action, { action });
+      
       setRequests(prev => 
         prev.map(req => 
           req.id === newRequest.id 
-            ? { ...req, status: 'completed', response: generateResponse(action) }
+            ? { 
+                ...req, 
+                status: result.success ? 'completed' : 'failed', 
+                response: result.success ? generateResponse(action) : result.error || 'Request failed'
+              }
             : req
         )
       );
-    }, 2000);
+    } catch (error) {
+      setRequests(prev => 
+        prev.map(req => 
+          req.id === newRequest.id 
+            ? { ...req, status: 'failed', response: 'Request failed due to system error' }
+            : req
+        )
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const generateResponse = (action: string): string => {
@@ -149,19 +158,25 @@ export function AIReceptionist() {
     }
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!message.trim()) return;
 
     const userMessage = { role: 'user' as const, content: message };
     setChatMessages(prev => [...prev, userMessage]);
-
-    // Simulate AI response
-    setTimeout(() => {
-      const response = generateAIResponse(message);
-      setChatMessages(prev => [...prev, { role: 'assistant' as const, content: response }]);
-    }, 1000);
-
     setMessage('');
+    setIsLoading(true);
+
+    try {
+      const response = await answerQuestion(message);
+      setChatMessages(prev => [...prev, { role: 'assistant' as const, content: response }]);
+    } catch (error) {
+      setChatMessages(prev => [...prev, { 
+        role: 'assistant' as const, 
+        content: 'I apologize, but I encountered an error. Please try again or contact the front desk.' 
+      }]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const generateAIResponse = (userMessage: string): string => {
@@ -269,6 +284,16 @@ export function AIReceptionist() {
                 </div>
               </div>
             ))}
+            {isLoading && (
+              <div className="flex justify-start">
+                <div className="bg-neutral-light text-foreground px-4 py-2 rounded-lg">
+                  <div className="flex items-center space-x-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+                    <span>Thinking...</span>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           <div className="p-4 border-t border-neutral-medium">
             <div className="flex space-x-2">
@@ -282,9 +307,10 @@ export function AIReceptionist() {
               />
               <button
                 onClick={handleSendMessage}
-                className="btn-primary"
+                disabled={isLoading}
+                className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {t('aiReceptionist.send')}
+                {isLoading ? 'Sending...' : t('aiReceptionist.send')}
               </button>
             </div>
           </div>
@@ -339,7 +365,8 @@ export function AIReceptionist() {
               <button
                 key={action.id}
                 onClick={() => handleQuickAction(action.action)}
-                className="bg-white rounded-lg shadow-sm border border-neutral-medium p-6 hover:shadow-md transition-shadow duration-200 text-left"
+                disabled={isLoading}
+                className="bg-white rounded-lg shadow-sm border border-neutral-medium p-6 hover:shadow-md transition-shadow duration-200 text-left disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <div className="flex items-center space-x-3 mb-3">
                   <div className={`p-2 rounded-lg ${action.color}`}>

@@ -33,23 +33,64 @@ export const useAIReceptionist = () => {
   };
 
   const answerQuestion = async (question: string) => {
-    // Basic AI logic for answering guest questions
+    // Enhanced AI logic for answering guest questions
     // This could be enhanced with actual AI integration
     const responses: { [key: string]: string } = {
-      'wifi': 'Our WiFi password is HotelGuest2024',
-      'breakfast': 'Breakfast is served from 7AM to 10AM in the main dining room',
-      'checkout': 'Checkout time is 11AM',
-      'parking': 'Free parking is available in our underground garage',
+      'wifi': 'Our WiFi password is HotelGuest2024. Network name: HotelGuest_Premium.',
+      'password': 'The WiFi password is HotelGuest2024. You can also find this information in your room welcome packet.',
+      'breakfast': 'Breakfast is served from 7:00 AM to 10:00 AM in main dining room. Room service is available 24/7.',
+      'food': 'Room service is available 24/7. You can order through your room tablet or by calling extension 0.',
+      'checkout': 'Check-out time is 11:00 AM. Late check-out is available until 2:00 PM for an additional fee.',
+      'check out': 'Check-out time is 11:00 AM. Late check-out is available until 2:00 PM for an additional fee.',
+      'parking': 'Free parking is available in our underground garage. Please take your room key for access.',
+      'pool': 'The swimming pool is open from 6:00 AM to 10:00 PM. Towels are provided at the pool area.',
+      'swim': 'The swimming pool is open from 6:00 AM to 10:00 PM. Towels are provided at the pool area.',
+      'gym': 'The fitness center is open 24/7 for hotel guests. Your room key provides access.',
+      'fitness': 'The fitness center is open 24/7 for hotel guests. Your room key provides access.',
+      'taxi': 'I can call a taxi for you right away. Would you like me to arrange one?',
+      'transport': 'I can arrange transportation for you. We have taxi service and airport shuttle available.',
+      'cleaning': 'Housekeeping can be requested at any time. Extra towels and amenities are available upon request.',
+      'housekeeping': 'Housekeeping can be requested at any time. Extra towels and amenities are available upon request.',
+      'maintenance': 'Our maintenance team is available 24/7 for any room issues or repairs.',
+      'repair': 'Our maintenance team is available 24/7 for any room issues or repairs.',
     };
 
     const lowerQuestion = question.toLowerCase();
+    
+    // Check for exact matches first
     for (const key in responses) {
       if (lowerQuestion.includes(key)) {
         return responses[key];
       }
     }
 
-    return 'I apologize, but I need more information to help you. Please contact the front desk.';
+    // Check for more complex patterns
+    if (lowerQuestion.includes('what time') && (lowerQuestion.includes('breakfast') || lowerQuestion.includes('food'))) {
+      return 'Breakfast is served from 7:00 AM to 10:00 AM in the main dining room.';
+    }
+    
+    if (lowerQuestion.includes('late check') || lowerQuestion.includes('extend')) {
+      return 'Late check-out is available until 2:00 PM for an additional fee. Please contact the front desk to arrange.';
+    }
+
+    if (lowerQuestion.includes('airport') || lowerQuestion.includes('shuttle')) {
+      return 'Airport shuttle is available every hour from 5:00 AM to 11:00 PM. The pickup point is at the main entrance.';
+    }
+
+    // Log unanswered questions for improvement
+    try {
+      await supabase
+        .from('ai_receptionist_logs')
+        .insert({
+          question,
+          response: 'unanswered',
+          timestamp: new Date().toISOString()
+        });
+    } catch (error) {
+      console.error('Failed to log question:', error);
+    }
+
+    return 'I understand your request. Let me connect you with the appropriate service or you can contact the front desk for immediate assistance.';
   };
 
   const assignRoom = async (reservationId: string, preferences?: { type?: string }) => {
@@ -72,7 +113,7 @@ export const useAIReceptionist = () => {
         return { success: false, error: 'No available rooms matching preferences' };
       }
 
-      // Assign the first available room
+      // Assign first available room
       const assignedRoom = availableRooms[0];
 
       // Update reservation
@@ -89,6 +130,98 @@ export const useAIReceptionist = () => {
     }
   };
 
+  const requestHousekeeping = async (roomNumber: string, request: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('housekeeping_requests')
+        .insert({
+          room_number: roomNumber,
+          request,
+          status: 'pending',
+          created_at: new Date().toISOString()
+        });
+
+      if (error) throw error;
+      return { success: true, data };
+    } catch (error) {
+      return { success: false, error };
+    }
+  };
+
+  const callTaxi = async (guestName: string, roomNumber: string, destination?: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('taxi_requests')
+        .insert({
+          guest_name: guestName,
+          room_number: roomNumber,
+          destination,
+          status: 'requested',
+          created_at: new Date().toISOString()
+        });
+
+      if (error) throw error;
+      return { success: true, data };
+    } catch (error) {
+      return { success: false, error };
+    }
+  };
+
+  const requestRoomService = async (roomNumber: string, order: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('room_service_orders')
+        .insert({
+          room_number: roomNumber,
+          order_details: order,
+          status: 'pending',
+          created_at: new Date().toISOString()
+        });
+
+      if (error) throw error;
+      return { success: true, data };
+    } catch (error) {
+      return { success: false, error };
+    }
+  };
+
+  const requestMaintenance = async (roomNumber: string, issue: string, priority: 'low' | 'medium' | 'high' = 'medium') => {
+    try {
+      const { data, error } = await supabase
+        .from('maintenance_requests')
+        .insert({
+          room_number: roomNumber,
+          issue,
+          priority,
+          status: 'open',
+          created_at: new Date().toISOString()
+        });
+
+      if (error) throw error;
+      return { success: true, data };
+    } catch (error) {
+      return { success: false, error };
+    }
+  };
+
+  const sendHotelInformation = async (guestEmail?: string, roomNumber?: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('information_requests')
+        .insert({
+          guest_email: guestEmail,
+          room_number: roomNumber,
+          status: 'sent',
+          created_at: new Date().toISOString()
+        });
+
+      if (error) throw error;
+      return { success: true, data };
+    } catch (error) {
+      return { success: false, error };
+    }
+  };
+
   const executeWorkflow = async (action: string, params: any): Promise<any> => {
     // Execute predefined workflows based on action
     switch (action) {
@@ -97,9 +230,21 @@ export const useAIReceptionist = () => {
       case 'check_out':
         return await handleCheckOut(params.reservationId);
       case 'answer':
-        return await answerQuestion(params.question);
+        return { success: true, data: await answerQuestion(params.question) };
       case 'assign_room':
         return await assignRoom(params.reservationId, params.preferences);
+      case 'auto_checkin':
+        return await handleCheckIn(params.reservationId);
+      case 'housekeeping':
+        return await requestHousekeeping(params.roomNumber || 'TBD', params.request || 'General housekeeping request');
+      case 'taxi':
+        return await callTaxi(params.guestName || 'Guest', params.roomNumber || 'TBD', params.destination);
+      case 'room_service':
+        return await requestRoomService(params.roomNumber || 'TBD', params.order || 'Room service request');
+      case 'maintenance':
+        return await requestMaintenance(params.roomNumber || 'TBD', params.issue || 'Maintenance request', params.priority);
+      case 'information':
+        return await sendHotelInformation(params.guestEmail, params.roomNumber);
       default:
         return { success: false, error: 'Unknown action' };
     }
@@ -110,6 +255,11 @@ export const useAIReceptionist = () => {
     handleCheckOut,
     answerQuestion,
     assignRoom,
+    requestHousekeeping,
+    callTaxi,
+    requestRoomService,
+    requestMaintenance,
+    sendHotelInformation,
     executeWorkflow,
   };
 };

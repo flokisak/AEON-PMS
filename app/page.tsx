@@ -139,7 +139,7 @@ export default function Home() {
                {rooms?.slice(0, 5).map(room => (
                  <div key={room.id} className="flex border-b border-gray-100">
                    <div className="w-16 p-2 text-xs font-medium text-gray-800 bg-gray-50">
-                     {room.number}
+                      {room.room_number}
                    </div>
                    <div className="flex">
                      {Array.from({ length: 7 }, (_, i) => {
@@ -147,7 +147,7 @@ export default function Home() {
                        date.setDate(date.getDate() + i);
                        const dateStr = date.toISOString().split('T')[0];
                        const hasReservation = reservations?.some(r =>
-                         r.room_number === room.number &&
+                          r.room_number === room.room_number &&
                          r.check_in && r.check_out &&
                          dateStr >= r.check_in && dateStr < r.check_out
                        );

@@ -1,12 +1,15 @@
 export interface Reservation {
   id: number;
   guest_name: string;
-  room_number?: number;
+  room_id?: string; // UUID reference to rooms.id
+  room_number?: number; // Display room number (for UI)
   check_in?: string;
   check_out?: string;
   status: 'booked' | 'checked_in' | 'checked_out' | 'cancelled';
   created_at: string;
   room_type?: string; // Optional preference
+  nationality?: string; // Guest nationality for foreign police reporting
+  passport_number?: string; // Passport/ID number for foreign police reporting
 }
 
 export interface HousekeepingTask {
@@ -313,7 +316,7 @@ export interface MaintenanceNote {
 
 export interface Room {
   id: number;
-  number: number;
+  room_number: number;
   type: string;
   status: 'available' | 'occupied' | 'maintenance' | 'dirty' | 'cleaning';
   price: number;

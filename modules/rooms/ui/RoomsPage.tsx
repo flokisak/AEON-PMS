@@ -39,7 +39,7 @@ function RoomCard({ room, onEdit, onDelete, onMaintenance }: {
     <div className="bg-white rounded-lg p-6 shadow-sm border border-neutral-medium hover:shadow-md transition-all duration-200">
       <div className="flex justify-between items-start mb-4">
         <div>
-          <h3 className="text-xl font-bold text-foreground">{t('rooms.roomNumber')} {room.number}</h3>
+          <h3 className="text-xl font-bold text-foreground">{t('rooms.roomNumber')} {room.room_number}</h3>
           <p className="text-primary font-medium">{room.type}</p>
           {room.floor !== undefined && <p className="text-sm text-neutral-dark">{t('rooms.floor')} {room.floor}</p>}
         </div>
@@ -141,7 +141,7 @@ function RoomForm({ room, onSave, onCancel }: {
   const { t } = useTranslation('common');
   const { amenities: globalAmenities } = useRooms();
   const [formData, setFormData] = useState<Omit<Room, 'id'>>({
-    number: room?.number || 0,
+    room_number: room?.room_number || 0,
     type: room?.type || '',
     status: room?.status || 'available',
     price: room?.price || 0,
@@ -176,8 +176,8 @@ function RoomForm({ room, onSave, onCancel }: {
                 <label className="form-label">{t('rooms.roomNumber')}</label>
                 <input
                   type="number"
-                  value={formData.number}
-                  onChange={(e) => setFormData(prev => ({ ...prev, number: +e.target.value }))}
+                  value={formData.room_number}
+                  onChange={(e) => setFormData(prev => ({ ...prev, room_number: +e.target.value }))}
                   className="form-input w-full"
                   required
                 />
@@ -368,7 +368,7 @@ export function RoomsPage() {
      return [...rooms].sort((a, b) => {
        let aVal: any, bVal: any;
        switch (sortBy) {
-         case 'number': aVal = a.number; bVal = b.number; break;
+         case 'number': aVal = a.room_number; bVal = b.room_number; break;
          case 'floor': aVal = a.floor || 0; bVal = b.floor || 0; break;
          case 'status': aVal = a.status; bVal = b.status; break;
          case 'type': aVal = a.type; bVal = b.type; break;
@@ -531,7 +531,7 @@ export function RoomsPage() {
                <tbody>
                  {sortedRooms.map((room) => (
                      <tr key={room.id} className="border-t border-neutral-medium hover:bg-neutral-light/50">
-                       <td className="p-4 font-medium text-foreground">{room.number}</td>
+                        <td className="p-4 font-medium text-foreground">{room.room_number}</td>
                        <td className="p-4 text-neutral-dark">{room.type}</td>
                        <td className="p-4 text-neutral-dark">{room.floor || t('frontDesk.notApplicable')}</td>
                       <td className="p-5">
@@ -588,7 +588,7 @@ export function RoomsPage() {
                     >
                       <div className="flex justify-between items-start mb-2">
                         <div>
-                          <h4 className="font-semibold text-foreground">{t('rooms.roomNumber')} {room.number}</h4>
+                          <h4 className="font-semibold text-foreground">{t('rooms.roomNumber')} {room.room_number}</h4>
                           <p className="text-sm text-primary">{room.type}</p>
                         </div>
                        {room.maintenance_notes.filter(n => n.status !== 'resolved').length > 0 && (
@@ -614,7 +614,7 @@ export function RoomsPage() {
                     {t('rooms.backToRoomSelection')}
                   </button>
                   <h2 className="text-xl font-semibold text-foreground">
-                    {t('rooms.maintenanceNotes')} - {t('rooms.roomNumber')} {rooms?.find(r => r.id === selectedRoomId)?.number}
+                    {t('rooms.maintenanceNotes')} - {t('rooms.roomNumber')} {rooms?.find(r => r.id === selectedRoomId)?.room_number}
                   </h2>
                </div>
                <MaintenancePanel roomId={selectedRoomId} />

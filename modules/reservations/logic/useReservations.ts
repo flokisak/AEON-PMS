@@ -9,9 +9,19 @@ export function useReservations() {
     queryKey: ['reservations'],
     queryFn: async () => {
       try {
-        const { data, error } = await supabase.from('reservations').select('*');
+        const { data, error } = await supabase
+          .from('reservations')
+          .select(`
+            *,
+            rooms(room_number)
+          `);
         if (error) throw error;
-        return data as Reservation[];
+        
+        // Transform data to include room_number from joined rooms table
+        return data?.map(reservation => ({
+          ...reservation,
+          room_number: reservation.rooms?.room_number
+        })) as Reservation[] || [];
       } catch (error) {
         // Fallback to mock data
         return [

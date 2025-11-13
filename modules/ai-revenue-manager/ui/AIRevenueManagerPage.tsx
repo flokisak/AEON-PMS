@@ -52,8 +52,8 @@ export function AIRevenueManagerPage() {
         <p className="text-neutral-dark">{t('aiRevenueManager.description')}</p>
       </div>
 
-      {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+       {/* Key Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
         <MetricCard
           title={t('aiRevenueManager.totalRevenue')}
           value={formatCurrency(totalRevenue)}
@@ -65,6 +65,12 @@ export function AIRevenueManagerPage() {
           value={`${avgOccupancy}%`}
           icon={FiTarget}
           color="border-primary"
+        />
+        <MetricCard
+          title={t('aiRevenueManager.localFees')}
+          value={formatCurrency(2500)}
+          icon={FiDollarSign}
+          color="border-blue-400"
         />
         <MetricCard
           title={t('aiRevenueManager.activeSuggestions')}
@@ -128,7 +134,55 @@ export function AIRevenueManagerPage() {
         </div>
       </div>
 
-      {/* Pricing Suggestions */}
+       {/* Local Fees Analysis */}
+       <div className="bg-white rounded-lg shadow-sm p-6 border border-neutral-medium">
+         <h2 className="text-lg font-semibold mb-4 text-foreground">{t('aiRevenueManager.localFeesAnalysis')}</h2>
+         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+           <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+             <h3 className="font-medium text-blue-800">{t('aiRevenueManager.adultFees')}</h3>
+             <p className="text-2xl font-bold text-blue-600">{formatCurrency(1800)}</p>
+             <p className="text-sm text-blue-700">36 {t('aiRevenueManager.adults')}</p>
+           </div>
+           <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+             <h3 className="font-medium text-green-800">{t('aiRevenueManager.youthFees')}</h3>
+             <p className="text-2xl font-bold text-green-600">{formatCurrency(500)}</p>
+             <p className="text-sm text-green-700">20 {t('aiRevenueManager.youths')}</p>
+           </div>
+           <div className="bg-amber-50 p-4 rounded-lg border border-amber-200">
+             <h3 className="font-medium text-amber-800">{t('aiRevenueManager.exemptGuests')}</h3>
+             <p className="text-2xl font-bold text-amber-600">12</p>
+             <p className="text-sm text-amber-700">{t('aiRevenueManager.noFeeApplied')}</p>
+           </div>
+           <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+             <h3 className="font-medium text-purple-800">{t('aiRevenueManager.monthlyProjection')}</h3>
+             <p className="text-2xl font-bold text-purple-600">{formatCurrency(75000)}</p>
+             <p className="text-sm text-purple-700">{t('aiRevenueManager.basedOnCurrentOccupancy')}</p>
+           </div>
+         </div>
+         <div className="border-t border-neutral-medium pt-4">
+           <h3 className="font-medium mb-3 text-foreground">{t('aiRevenueManager.feeBreakdown')}</h3>
+           <div className="space-y-2">
+             <div className="flex justify-between items-center p-2 bg-neutral-light rounded">
+               <span className="text-sm">{t('aiRevenueManager.adultFee')}: 50 Kč × 36 {t('aiRevenueManager.nights')}</span>
+               <span className="font-medium">{formatCurrency(1800)}</span>
+             </div>
+             <div className="flex justify-between items-center p-2 bg-neutral-light rounded">
+               <span className="text-sm">{t('aiRevenueManager.youthFee')}: 25 Kč × 20 {t('aiRevenueManager.nights')}</span>
+               <span className="font-medium">{formatCurrency(500)}</span>
+             </div>
+             <div className="flex justify-between items-center p-2 bg-green-50 rounded border border-green-200">
+               <span className="text-sm text-green-800">{t('aiRevenueManager.czechCitizensExempt')}</span>
+               <span className="font-medium text-green-800">{formatCurrency(0)}</span>
+             </div>
+             <div className="flex justify-between items-center p-2 bg-blue-50 rounded border border-blue-200 font-semibold">
+               <span>{t('aiRevenueManager.totalLocalFees')}</span>
+               <span>{formatCurrency(2300)}</span>
+             </div>
+           </div>
+         </div>
+       </div>
+
+       {/* Pricing Suggestions */}
       <div className="bg-white rounded-lg shadow-sm p-6 border border-neutral-medium">
         <h2 className="text-lg font-semibold mb-4 text-foreground">{t('aiRevenueManager.aiPricingSuggestions')}</h2>
         <div className="space-y-4">

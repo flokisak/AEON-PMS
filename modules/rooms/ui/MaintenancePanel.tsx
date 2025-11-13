@@ -161,8 +161,8 @@ export function MaintenancePanel({ roomId }: { roomId: number }) {
     setShowAddForm(false);
   };
 
-  const handleUpdateNote = (noteId: string, data: Partial<MaintenanceNote>) => {
-    updateMaintenanceNote.mutate({ roomId, noteId, data });
+  const handleUpdateNote = (noteId: string, updates: Partial<MaintenanceNote>) => {
+    updateMaintenanceNote.mutate({ roomId, noteId, updates });
   };
 
   const openNotes = room.maintenance_notes.filter(note => note.status !== 'resolved');
@@ -172,7 +172,7 @@ export function MaintenancePanel({ roomId }: { roomId: number }) {
     <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-xl font-semibold text-gray-800">
-          {t('rooms.maintenanceNotes')} - {t('rooms.roomNumber')} {room.number}
+          {t('rooms.maintenanceNotes')} - {t('rooms.roomNumber')} {room.room_number}
         </h3>
         <button
           onClick={() => setShowAddForm(!showAddForm)}

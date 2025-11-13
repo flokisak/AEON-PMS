@@ -54,7 +54,8 @@ export function ReservationsPage() {
   const [activeTab, setActiveTab] = useState<'list' | 'gantt'>('gantt');
   const [form, setForm] = useState<Omit<Reservation, 'id' | 'created_at'>>({
     guest_name: '',
-    room_number: undefined,
+    room_id: undefined,
+    room_number: undefined, // For display purposes
     check_in: '',
     check_out: '',
     status: 'booked',
@@ -102,7 +103,7 @@ export function ReservationsPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     createReservation.mutate(form);
-    setForm({ guest_name: '', room_number: undefined, check_in: '', check_out: '', status: 'booked', room_type: '' });
+    setForm({ guest_name: '', room_id: undefined, room_number: undefined, check_in: '', check_out: '', status: 'booked', room_type: '' });
   };
 
   const handleDragEnd = (event: any) => {
@@ -118,7 +119,7 @@ export function ReservationsPage() {
         // Check room status if moving to today's date or past
         const today = new Date().toISOString().split('T')[0];
         if (targetDate <= today) {
-          const room = rooms.find(r => r.number === targetRoom);
+          const room = rooms.find(r => r.room_number === targetRoom);
           if (room && room.status !== 'available') {
             alert(t('reservations.roomNotClean', { room: targetRoom }));
             createTask.mutate({ room_number: targetRoom, assigned_to: 'Auto', status: 'pending' });
@@ -162,9 +163,9 @@ export function ReservationsPage() {
   };
 
   const rooms: Room[] = [
-    { id: 1, number: 101, type: 'Standard', status: 'available', price: 100, capacity: 2, amenities: [], maintenance_notes: [] },
-    { id: 2, number: 102, type: 'Deluxe', status: 'occupied', price: 150, capacity: 2, amenities: [], maintenance_notes: [] },
-    { id: 3, number: 103, type: 'Suite', status: 'available', price: 200, capacity: 4, amenities: [], maintenance_notes: [] },
+    { id: 1, room_number: 101, type: 'Standard', status: 'available', price: 100, capacity: 2, amenities: [], maintenance_notes: [] },
+    { id: 2, room_number: 102, type: 'Deluxe', status: 'occupied', price: 150, capacity: 2, amenities: [], maintenance_notes: [] },
+    { id: 3, room_number: 103, type: 'Suite', status: 'available', price: 200, capacity: 4, amenities: [], maintenance_notes: [] },
   ];
 
   const getStatusLabel = (status: Reservation['status']) => {
@@ -224,7 +225,15 @@ export function ReservationsPage() {
                   type="number"
                   placeholder={t('reservations.enterRoomNumber')}
                   value={form.room_number || ''}
-                  onChange={(e) => setForm({ ...form, room_number: e.target.value ? +e.target.value : undefined })}
+                  onChange={(e) => {
+                    const roomNum = e.target.value ? +e.target.value : undefined;
+                    const room = rooms.find(r => r.room_number === roomNum);
+                    setForm({ 
+                      ...form, 
+                      room_number: roomNum,
+                      room_id: room ? room.id.toString() : undefined
+                    });
+                  }}
                   className="form-input w-full"
                 />
               </div>
@@ -380,7 +389,7 @@ export function ReservationsPage() {
               {rooms.map(room => (
                 <div key={room.id} className="flex border-b border-neutral-medium relative hover:bg-neutral-light/30 transition-colors">
                     <div className="w-32 p-2 font-medium text-sm text-foreground bg-neutral-light border-r border-neutral-medium flex flex-col justify-center">
-                     <span className="truncate">{room.number} ({room.type})</span>
+                      <span className="truncate">{room.room_number} ({room.type})</span>
                      <span className="text-xs text-neutral-dark">{formatCurrency(room.price)}</span>
                      <select
                        value={room.status}
@@ -405,9 +414,9 @@ export function ReservationsPage() {
                    </div>
                   <div className="flex relative h-10">
                     {days.map(day => (
-                      <DroppableCell key={day} date={day} roomNumber={room.number} onSelect={handleCellSelect} width={cellWidth} />
+                      <DroppableCell key={day} date={day} roomNumber={room.room_number} onSelect={handleCellSelect} width={cellWidth} />
                     ))}
-                    {reservations?.filter(res => res.room_number === room.number).map(res => {
+                    {reservations?.filter(res => res.room_number === room.room_number).map(res => {
                       // Mock check_in and check_out
                       const checkIn = res.created_at.split('T')[0];
                       const checkOut = new Date(new Date(checkIn).getTime() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
@@ -418,7 +427,7 @@ export function ReservationsPage() {
                         </div>
                       );
                     })}
-                    {selection && selection.room === room.number && (
+                    {selection && selection.room === room.room_number && (
                       <div className="absolute top-1 bg-yellow-200 opacity-50 rounded" style={{
                         left: Math.min(days.indexOf(selection.start), days.indexOf(selection.end)) * cellWidth,
                         width: (Math.abs(days.indexOf(selection.end) - days.indexOf(selection.start)) + 1) * cellWidth

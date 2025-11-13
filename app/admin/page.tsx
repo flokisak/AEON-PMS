@@ -10,7 +10,7 @@ export default function AdminPage() {
   const { t, i18n } = useTranslation('common');
   const { modules, isLoading, updateModuleStatus } = useModules();
   const { currentCurrency, changeCurrency, allCurrencies, formatCurrency } = useCurrency();
-  const [activeTab, setActiveTab] = useState<'modules' | 'property' | 'company' | 'users' | 'employee-access' | 'language'>('modules');
+  const [activeTab, setActiveTab] = useState<'modules' | 'property' | 'company' | 'users' | 'employee-access' | 'fees' | 'language'>('modules');
 
   if (isLoading) return <div>{t('admin.loading')}</div>;
 
@@ -67,6 +67,16 @@ export default function AdminPage() {
           }`}
         >
           {t('admin.employeeAccess')}
+        </button>
+        <button
+          onClick={() => setActiveTab('fees')}
+          className={`px-6 py-3 font-medium text-sm ${
+            activeTab === 'fees'
+              ? 'border-b-2 border-blue-500 text-blue-600'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          {t('admin.feesTaxes')}
         </button>
         <button
           onClick={() => setActiveTab('language')}
@@ -384,6 +394,130 @@ export default function AdminPage() {
               <button className="btn-primary">{t('admin.saveAccessSettings')}</button>
             </div>
           </div>
+        </div>
+      )}
+
+      {activeTab === 'fees' && (
+        <div>
+          <h2 className="text-xl font-semibold mb-4 text-gray-800">{t('admin.feesTaxesConfiguration')}</h2>
+          
+          {/* Local Accommodation Fee Section */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <h3 className="font-semibold text-blue-800 mb-2">{t('admin.localAccommodationFee')}</h3>
+            <p className="text-blue-700 text-sm">
+              {t('admin.localAccommodationFeeDescription')}
+            </p>
+          </div>
+
+          <form className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="form-label">
+                  <input type="checkbox" defaultChecked className="w-4 h-4 mr-2" />
+                  {t('admin.enableLocalFee')}
+                </label>
+                <p className="text-sm text-gray-600 mt-1">{t('admin.enableLocalFeeDescription')}</p>
+              </div>
+              <div>
+                <label className="form-label">{t('admin.feeAmountPerNight')}</label>
+                <div className="flex items-center gap-2">
+                  <input type="number" defaultValue="50" min="0" max="1000" step="1" className="form-input flex-1" />
+                  <span className="text-gray-600">{t('admin.czKcPerNight')}</span>
+                </div>
+                <p className="text-sm text-gray-600 mt-1">{t('admin.typicalRangeNote')}</p>
+              </div>
+            </div>
+
+            {/* Age-based rules */}
+            <div className="border border-gray-200 rounded-lg p-4">
+              <h3 className="font-semibold text-gray-800 mb-4">{t('admin.ageBasedRules')}</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="form-label">{t('admin.adultAge')}</label>
+                  <div className="flex items-center gap-2">
+                    <input type="number" defaultValue="18" min="0" max="30" className="form-input w-20" />
+                    <span className="text-gray-600">{t('admin.yearsAndOlder')}</span>
+                  </div>
+                </div>
+                <div>
+                  <label className="form-label">{t('admin.childAgeLimit')}</label>
+                  <div className="flex items-center gap-2">
+                    <input type="number" defaultValue="15" min="0" max="25" className="form-input w-20" />
+                    <span className="text-gray-600">{t('admin.yearsAndYounger')}</span>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-1">{t('admin.freeForChildren')}</p>
+                </div>
+                <div>
+                  <label className="form-label">{t('admin.youthFee')}</label>
+                  <div className="flex items-center gap-2">
+                    <input type="number" defaultValue="25" min="0" max="1000" step="1" className="form-input w-20" />
+                    <span className="text-gray-600">{t('admin.czKcPerNight')}</span>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-1">{t('admin.forAgesBetween', { adult: 18, child: 15 })}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Exemptions */}
+            <div className="border border-gray-200 rounded-lg p-4">
+              <h3 className="font-semibold text-gray-800 mb-4">{t('admin.exemptions')}</h3>
+              <div className="space-y-3">
+                <label className="flex items-center">
+                  <input type="checkbox" defaultChecked className="w-4 h-4 mr-3" />
+                  <div>
+                    <span className="font-medium">{t('admin.czechCitizensExempt')}</span>
+                    <p className="text-sm text-gray-600">{t('admin.czechCitizensExemptDescription')}</p>
+                  </div>
+                </label>
+                <label className="flex items-center">
+                  <input type="checkbox" defaultChecked className="w-4 h-4 mr-3" />
+                  <div>
+                    <span className="font-medium">{t('admin.euCitizensReduced')}</span>
+                    <p className="text-sm text-gray-600">{t('admin.euCitizensReducedDescription')}</p>
+                  </div>
+                </label>
+                <label className="flex items-center">
+                  <input type="checkbox" className="w-4 h-4 mr-3" />
+                  <div>
+                    <span className="font-medium">{t('admin.longStayExemption')}</span>
+                    <p className="text-sm text-gray-600">{t('admin.longStayExemptionDescription')}</p>
+                  </div>
+                </label>
+                <label className="flex items-center">
+                  <input type="checkbox" className="w-4 h-4 mr-3" />
+                  <div>
+                    <span className="font-medium">{t('admin.businessTravelExemption')}</span>
+                    <p className="text-sm text-gray-600">{t('admin.businessTravelExemptionDescription')}</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            {/* Reporting Settings */}
+            <div className="border border-gray-200 rounded-lg p-4">
+              <h3 className="font-semibold text-gray-800 mb-4">{t('admin.reportingSettings')}</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="form-label">{t('admin.reportingFrequency')}</label>
+                  <select className="form-input w-full">
+                    <option value="monthly">{t('admin.monthly')}</option>
+                    <option value="quarterly">{t('admin.quarterly')}</option>
+                    <option value="annually">{t('admin.annually')}</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="form-label">{t('admin.reportRecipient')}</label>
+                  <input type="email" defaultValue="finance@aeonhotel.com" className="form-input w-full" />
+                  <p className="text-sm text-gray-600 mt-1">{t('admin.reportRecipientDescription')}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-3">
+              <button type="button" className="btn-secondary">{t('admin.cancel')}</button>
+              <button type="submit" className="btn-primary">{t('admin.saveFeeSettings')}</button>
+            </div>
+          </form>
         </div>
       )}
 

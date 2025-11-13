@@ -1,131 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/core/config/supabaseClient';
 import { Room, MaintenanceNote, Amenity } from '@/core/types';
-
-// Mock data store
-let mockRooms: Room[] = [
-  {
-    id: 1,
-    number: 101,
-    type: 'Standardní pokoj',
-    status: 'available',
-    price: 2400,
-    description: 'Pohodlný standardní pokoj s výhledem na město',
-    capacity: 2,
-    size: 25,
-    floor: 1,
-    amenities: [
-      { id: 'wifi', name: 'Bezplatné WiFi', description: 'Rychlý internetový přístup' },
-      { id: 'tv', name: 'Smart TV', description: '55palcová chytrá televize' },
-      { id: 'ac', name: 'Klimatizace', description: 'Systém kontroly klimatu' },
-    ],
-    maintenance_notes: [
-      {
-        id: '1',
-        date: '2024-11-10',
-        note: 'Dálkový ovladač TV potřebuje nové baterie',
-        priority: 'low',
-        status: 'open',
-        reported_by: 'Úklid'
-      }
-    ],
-    last_cleaned: '2024-11-12',
-    next_maintenance: '2024-12-01'
-  },
-  {
-    id: 2,
-    number: 102,
-    type: 'Apartmá Deluxe',
-    status: 'occupied',
-    price: 3600,
-    description: 'Prostorný apartmá s balkonem a prémiovým vybavením',
-    capacity: 4,
-    size: 45,
-    floor: 2,
-    amenities: [
-      { id: 'wifi', name: 'Bezplatné WiFi', description: 'Rychlý internetový přístup' },
-      { id: 'tv', name: 'Smart TV', description: '65palcová chytrá televize' },
-      { id: 'ac', name: 'Klimatizace', description: 'Systém kontroly klimatu' },
-      { id: 'balcony', name: 'Soukromý balkon', description: 'Venkovní sezení' },
-      { id: 'minibar', name: 'Minibar', description: 'Nápoje a občerstvení' },
-    ],
-    maintenance_notes: [],
-    last_cleaned: '2024-11-11',
-    next_maintenance: '2024-12-15'
-  },
-  {
-    id: 3,
-    number: 201,
-    type: 'Pokoj Superior',
-    status: 'maintenance',
-    price: 1800,
-    description: 'Moderní pokoj s pracovním koutem',
-    capacity: 2,
-    size: 30,
-    floor: 2,
-    amenities: [
-      { id: 'wifi', name: 'Bezplatné WiFi', description: 'Rychlý internetový přístup' },
-      { id: 'tv', name: 'Smart TV', description: '55palcová chytrá televize' },
-      { id: 'ac', name: 'Klimatizace', description: 'Systém kontroly klimatu' },
-      { id: 'workspace', name: 'Pracovní kout', description: 'Psací stůl a židle' },
-    ],
-    maintenance_notes: [
-      {
-        id: '2',
-        date: '2024-11-08',
-        note: 'Nutná výměna žárovky v lampě u stolu',
-        priority: 'high',
-        status: 'in_progress',
-        reported_by: 'Údržba'
-      }
-    ],
-    last_cleaned: '2024-11-09',
-    next_maintenance: '2024-11-20'
-  },
-  {
-    id: 4,
-    number: 301,
-    type: 'Rodinný pokoj',
-    status: 'available',
-    price: 4200,
-    description: 'Velký rodinný pokoj s oddělenými spacími prostory',
-    capacity: 4,
-    size: 55,
-    floor: 3,
-    amenities: [
-      { id: 'wifi', name: 'Bezplatné WiFi', description: 'Rychlý internetový přístup' },
-      { id: 'tv', name: 'Smart TV', description: '65palcová chytrá televize' },
-      { id: 'ac', name: 'Klimatizace', description: 'Systém kontroly klimatu' },
-      { id: 'minibar', name: 'Minibar', description: 'Nápoje a občerstvení' },
-      { id: 'kids', name: 'Dětské vybavení', description: 'Postýlka a židle pro dítě' },
-    ],
-    maintenance_notes: [],
-    last_cleaned: '2024-11-12',
-    next_maintenance: '2024-12-10'
-  },
-  {
-    id: 5,
-    number: 302,
-    type: 'Prezidentský apartmá',
-    status: 'occupied',
-    price: 8500,
-    description: 'Luxusní apartmá s panoramatickým výhledem',
-    capacity: 6,
-    size: 120,
-    floor: 3,
-    amenities: [
-      { id: 'wifi', name: 'Bezplatné WiFi', description: 'Rychlý internetový přístup' },
-      { id: 'tv', name: 'Smart TV', description: '75palcová chytrá televize' },
-      { id: 'ac', name: 'Klimatizace', description: 'Systém kontroly klimatu' },
-      { id: 'balcony', name: 'Velký balkon', description: 'Venkovní posezení s výhledem' },
-      { id: 'minibar', name: 'Minibar', description: 'Prémiové nápoje a občerstvení' },
-      { id: 'jacuzzi', name: 'Jacuzzi', description: 'Soukromé vířivka v pokoji' },
-      { id: 'workspace', name: 'Pracovní kout', description: 'Plně vybavená pracovna' },
-    ],
-    maintenance_notes: [],
-    last_cleaned: '2024-11-11',
-    next_maintenance: '2024-12-20'
-  }
-];
 
 // Global amenities store
 let globalAmenities: Amenity[] = [
@@ -150,79 +25,162 @@ export function useRooms() {
   const { data: rooms, isLoading } = useQuery({
     queryKey: ['rooms'],
     queryFn: async () => {
-      // Return mock data
-      return [...mockRooms];
+      try {
+        const { data, error } = await supabase
+          .from('rooms')
+          .select(`
+            *,
+            room_types(name, base_price),
+            amenities(id, name, description),
+            maintenance_notes(id, note, priority, status, date, reported_by)
+          `);
+
+        if (error) throw error;
+        
+        // Transform data to match Room interface
+        return data?.map(room => ({
+          ...room,
+          type: room.room_types?.name || 'Standard',
+          price: room.room_types?.base_price || 0,
+          amenities: room.amenities || [],
+          maintenance_notes: room.maintenance_notes || []
+        })) as Room[] || [];
+      } catch (error) {
+        console.error('Error fetching rooms:', error);
+        // Fallback to empty array if database fails
+        return [];
+      }
     },
   });
 
   const updateRoomStatus = useMutation({
     mutationFn: async ({ id, status }: { id: number; status: Room['status'] }) => {
-      const roomIndex = mockRooms.findIndex(room => room.id === id);
-      if (roomIndex !== -1) {
-        mockRooms[roomIndex].status = status;
-      }
+      const { data, error } = await supabase
+        .from('rooms')
+        .update({ 
+          status,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id);
+
+      if (error) throw error;
+      return data;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['rooms'] }),
   });
 
   const addRoom = useMutation({
     mutationFn: async (roomData: Omit<Room, 'id'>) => {
-      const newRoom: Room = {
-        ...roomData,
-        id: Math.max(...mockRooms.map(r => r.id), 0) + 1,
-      };
-      mockRooms.push(newRoom);
-      return { id: newRoom.id };
+      const { data, error } = await supabase
+        .from('rooms')
+        .insert({
+          room_number: roomData.room_number,
+          room_type_id: roomData.type,
+          status: roomData.status,
+          capacity: roomData.capacity,
+          size: roomData.size,
+          floor: roomData.floor,
+          description: roomData.description,
+          created_at: new Date().toISOString()
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['rooms'] }),
   });
 
   const updateRoom = useMutation({
     mutationFn: async ({ id, data }: { id: number; data: Partial<Room> }) => {
-      const roomIndex = mockRooms.findIndex(room => room.id === id);
-      if (roomIndex !== -1) {
-        mockRooms[roomIndex] = { ...mockRooms[roomIndex], ...data };
-      }
+      const { data: result, error } = await supabase
+        .from('rooms')
+        .update({
+          ...data,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return result;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['rooms'] }),
   });
 
   const deleteRoom = useMutation({
     mutationFn: async (id: number) => {
-      mockRooms = mockRooms.filter(room => room.id !== id);
+      const { error } = await supabase
+        .from('rooms')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['rooms'] }),
   });
 
   const addMaintenanceNote = useMutation({
     mutationFn: async ({ roomId, note }: { roomId: number; note: Omit<MaintenanceNote, 'id'> }) => {
-      const roomIndex = mockRooms.findIndex(room => room.id === roomId);
-      if (roomIndex !== -1) {
-        const newNote: MaintenanceNote = {
-          ...note,
-          id: Date.now().toString(),
-        };
-        mockRooms[roomIndex].maintenance_notes.push(newNote);
-        return { id: newNote.id };
-      }
+      const { data, error } = await supabase
+        .from('maintenance_notes')
+        .insert({
+          room_id: roomId,
+          note: note.note,
+          priority: note.priority,
+          status: note.status,
+          date: note.date,
+          reported_by: note.reported_by,
+          created_at: new Date().toISOString()
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['rooms'] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['rooms'] });
+      queryClient.invalidateQueries({ queryKey: ['maintenance'] });
+    },
   });
 
   const updateMaintenanceNote = useMutation({
-    mutationFn: async ({ roomId, noteId, data }: { roomId: number; noteId: string; data: Partial<MaintenanceNote> }) => {
-      const roomIndex = mockRooms.findIndex(room => room.id === roomId);
-      if (roomIndex !== -1) {
-        const noteIndex = mockRooms[roomIndex].maintenance_notes.findIndex(note => note.id === noteId);
-        if (noteIndex !== -1) {
-          mockRooms[roomIndex].maintenance_notes[noteIndex] = {
-            ...mockRooms[roomIndex].maintenance_notes[noteIndex],
-            ...data
-          };
-        }
-      }
+    mutationFn: async ({ roomId, noteId, updates }: { roomId: number; noteId: string; updates: Partial<MaintenanceNote> }) => {
+      const { data, error } = await supabase
+        .from('maintenance_notes')
+        .update({
+          ...updates,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', noteId)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['rooms'] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['rooms'] });
+      queryClient.invalidateQueries({ queryKey: ['maintenance'] });
+    },
+  });
+
+  const deleteMaintenanceNote = useMutation({
+    mutationFn: async ({ roomId, noteId }: { roomId: number; noteId: string }) => {
+      const { error } = await supabase
+        .from('maintenance_notes')
+        .delete()
+        .eq('id', noteId);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['rooms'] });
+      queryClient.invalidateQueries({ queryKey: ['maintenance'] });
+    },
   });
 
   // Amenities management
@@ -256,10 +214,6 @@ export function useRooms() {
   const deleteAmenity = useMutation({
     mutationFn: async (id: string) => {
       globalAmenities = globalAmenities.filter(amenity => amenity.id !== id);
-      // Remove from all rooms
-      mockRooms.forEach(room => {
-        room.amenities = room.amenities.filter(amenity => amenity.id !== id);
-      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['amenities'] });
@@ -276,6 +230,7 @@ export function useRooms() {
     deleteRoom,
     addMaintenanceNote,
     updateMaintenanceNote,
+    deleteMaintenanceNote,
     amenities,
     addAmenity,
     updateAmenity,

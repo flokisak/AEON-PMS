@@ -118,9 +118,8 @@ export function NavBar() {
               <img 
                 src="/logo.png" 
                 alt="AEON PMS Logo" 
-                className={`h-8 w-auto ${isCollapsed ? '' : 'mr-2'}`}
+                className="h-8 w-auto"
               />
-              {!isCollapsed && <h1 className="text-xl font-bold text-primary">AEON PMS</h1>}
             </div>
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
