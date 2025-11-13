@@ -7,8 +7,10 @@ import { useReservations } from '../logic/useReservations';
 import { useHousekeeping } from '../../housekeeping/logic/useHousekeeping';
 import { Reservation, Room } from '../../../core/types';
 import { useCurrency } from '@/core/hooks/useCurrency';
+import { CreateReservationModal } from './CreateReservationModal';
+import { EditReservationModal } from './EditReservationModal';
 
-function DraggableReservation({ reservation }: { reservation: any }) {
+function DraggableReservation({ reservation, onEdit }: { reservation: Reservation & { check_in?: string; check_out?: string }; onEdit: (res: Reservation) => void }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: `res-${reservation.id}`,
   });
@@ -23,9 +25,14 @@ function DraggableReservation({ reservation }: { reservation: any }) {
       style={style}
       {...listeners}
       {...attributes}
-      className={`absolute h-8 rounded cursor-move shadow-md ${reservation.status === 'checked_in' ? 'bg-green-500' : 'bg-blue-500'} text-white text-xs flex items-center px-1 ${isDragging ? 'opacity-50' : ''}`}
+      className={`absolute h-8 rounded cursor-pointer shadow-md ${reservation.status === 'checked_in' ? 'bg-green-500' : 'bg-blue-500'} text-white text-xs flex items-center px-2 ${isDragging ? 'opacity-50' : 'hover:opacity-80'}`}
+      onClick={(e) => {
+        e.stopPropagation();
+        onEdit(reservation);
+      }}
+      title={`${reservation.guest_name} - Click to edit`}
     >
-      {reservation.guest_name}
+      <span className="truncate">{reservation.guest_name}</span>
     </div>
   );
 }
@@ -65,6 +72,9 @@ export function ReservationsPage() {
   const [isSelecting, setIsSelecting] = useState(false);
   const [viewMode, setViewMode] = useState<'day' | 'week' | 'month' | 'custom'>('week');
   const [customDate, setCustomDate] = useState(new Date().toISOString().split('T')[0]);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingReservation, setEditingReservation] = useState<Reservation | null>(null);
   const today = new Date();
 
   const getDays = () => {
@@ -106,7 +116,7 @@ export function ReservationsPage() {
     setForm({ guest_name: '', room_id: undefined, room_number: undefined, check_in: '', check_out: '', status: 'booked', room_type: '' });
   };
 
-  const handleDragEnd = (event: any) => {
+  const handleDragEnd = (event: { active: any; over: any }) => {
     const { active, over } = event;
     if (over && active.id.startsWith('res-')) {
       const resId = parseInt(active.id.split('-')[1]);
@@ -147,19 +157,26 @@ export function ReservationsPage() {
 
   const handleMouseUp = () => {
     if (selection) {
-      // Open form for new reservation
-      setForm({
-        guest_name: '',
-        room_number: selection.room,
-        check_in: selection.start,
-        check_out: selection.end,
-        status: 'booked',
-        room_type: ''
-      });
-      setActiveTab('list'); // Switch to list to show form
+      // Open create reservation modal
+      setShowCreateModal(true);
       setIsSelecting(false);
-      setSelection(null);
+      // Keep selection for the modal
     }
+  };
+
+  const handleEditReservation = (reservation: Reservation) => {
+    setEditingReservation(reservation);
+    setShowEditModal(true);
+  };
+
+  const handleCreateSuccess = () => {
+    setSelection(null);
+    setShowCreateModal(false);
+  };
+
+  const handleEditSuccess = () => {
+    setEditingReservation(null);
+    setShowEditModal(false);
   };
 
   const rooms: Room[] = [
@@ -416,17 +433,20 @@ export function ReservationsPage() {
                     {days.map(day => (
                       <DroppableCell key={day} date={day} roomNumber={room.room_number} onSelect={handleCellSelect} width={cellWidth} />
                     ))}
-                    {reservations?.filter(res => res.room_number === room.room_number).map(res => {
-                      // Mock check_in and check_out
-                      const checkIn = res.created_at.split('T')[0];
-                      const checkOut = new Date(new Date(checkIn).getTime() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-                      const { left, width } = getPosition(checkIn, checkOut);
-                      return (
-                        <div key={res.id} className="absolute top-1" style={{ left: left * cellWidth / 32, width: width * cellWidth / 32 }}>
-                          <DraggableReservation reservation={{ ...res, check_in: checkIn, check_out: checkOut }} />
-                        </div>
-                      );
-                    })}
+                     {reservations?.filter(res => res.room_number === room.room_number).map(res => {
+                       // Mock check_in and check_out
+                       const checkIn = res.check_in || res.created_at.split('T')[0];
+                       const checkOut = res.check_out || new Date(new Date(checkIn).getTime() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+                       const { left, width } = getPosition(checkIn, checkOut);
+                       return (
+                         <div key={res.id} className="absolute top-1" style={{ left: left * cellWidth / 32, width: width * cellWidth / 32 }}>
+                           <DraggableReservation
+                             reservation={{ ...res, check_in: checkIn, check_out: checkOut }}
+                             onEdit={handleEditReservation}
+                           />
+                         </div>
+                       );
+                     })}
                     {selection && selection.room === room.room_number && (
                       <div className="absolute top-1 bg-yellow-200 opacity-50 rounded" style={{
                         left: Math.min(days.indexOf(selection.start), days.indexOf(selection.end)) * cellWidth,
@@ -465,6 +485,31 @@ export function ReservationsPage() {
               </div>
             </div>
         </DndContext>
+      )}
+
+      {/* Modals */}
+      {showCreateModal && selection && (
+        <CreateReservationModal
+          roomNumber={selection.room}
+          checkIn={selection.start}
+          checkOut={selection.end}
+          onClose={() => {
+            setShowCreateModal(false);
+            setSelection(null);
+          }}
+          onSuccess={handleCreateSuccess}
+        />
+      )}
+
+      {showEditModal && editingReservation && (
+        <EditReservationModal
+          reservation={editingReservation}
+          onClose={() => {
+            setShowEditModal(false);
+            setEditingReservation(null);
+          }}
+          onSuccess={handleEditSuccess}
+        />
       )}
     </div>
   );

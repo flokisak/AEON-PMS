@@ -1,6 +1,8 @@
 export interface Reservation {
   id: number;
   guest_name: string;
+  guest_email?: string;
+  guest_phone?: string;
   room_id?: string; // UUID reference to rooms.id
   room_number?: number; // Display room number (for UI)
   check_in?: string;
@@ -10,6 +12,7 @@ export interface Reservation {
   room_type?: string; // Optional preference
   nationality?: string; // Guest nationality for foreign police reporting
   passport_number?: string; // Passport/ID number for foreign police reporting
+  notes?: string;
 }
 
 export interface HousekeepingTask {
