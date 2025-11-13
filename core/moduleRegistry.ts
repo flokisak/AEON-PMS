@@ -39,16 +39,16 @@ export async function getActiveModulesForNav() {
     console.warn('Database query failed, using static modules:', error);
     // Fallback to static modules for development
     return [
-      { name: 'Reservations', path: '/modules/reservations', icon: 'calendar' },
-      { name: 'Front Desk', path: '/modules/front-desk', icon: 'usercheck' },
-      { name: 'Rooms', path: '/modules/rooms', icon: 'home' },
-       { name: 'Packages', path: '/modules/packages-events', icon: 'package' },
-      { name: 'Housekeeping', path: '/modules/housekeeping', icon: 'broom' },
-      { name: 'Billing', path: '/modules/billing', icon: 'creditcard' },
-      { name: 'AI Concierge', path: '/modules/ai-concierge', icon: 'message' },
-      { name: 'AI Revenue Manager', path: '/modules/ai-revenue-manager', icon: 'trending' },
-      { name: 'Reports', path: '/modules/reports', icon: 'barchart' },
-      { name: 'Employee Management', path: '/modules/employee-management', icon: 'users' },
+      { name: 'reservations', path: '/modules/reservations', icon: 'calendar' },
+      { name: 'frontDesk', path: '/modules/front-desk', icon: 'usercheck' },
+      { name: 'rooms', path: '/modules/rooms', icon: 'home' },
+       { name: 'packages', path: '/modules/packages-events', icon: 'package' },
+      { name: 'housekeeping', path: '/modules/housekeeping', icon: 'broom' },
+      { name: 'billing', path: '/modules/billing', icon: 'creditcard' },
+      { name: 'aiConcierge', path: '/modules/ai-concierge', icon: 'message' },
+      { name: 'aiRevenueManager', path: '/modules/ai-revenue-manager', icon: 'trending' },
+      { name: 'reports', path: '/modules/reports', icon: 'barchart' },
+      { name: 'employeeManagement', path: '/modules/employee-management', icon: 'users' },
     ];
   }
 }

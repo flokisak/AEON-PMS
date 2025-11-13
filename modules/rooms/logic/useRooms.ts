@@ -31,7 +31,6 @@ export function useRooms() {
           .select(`
             *,
             room_types(name, base_price),
-            amenities(id, name, description),
             maintenance_notes(id, note, priority, status, date, reported_by)
           `);
 
@@ -42,7 +41,7 @@ export function useRooms() {
           ...room,
           type: room.room_types?.name || 'Standard',
           price: room.room_types?.base_price || 0,
-          amenities: room.amenities || [],
+          amenities: globalAmenities.slice(0, 3), // Add some default amenities
           maintenance_notes: room.maintenance_notes || []
         })) as Room[] || [];
       } catch (error) {

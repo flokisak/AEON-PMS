@@ -18,12 +18,22 @@ export function ReportsPage() {
   const [selectedReport, setSelectedReport] = useState<'overview' | 'maintenance' | 'guests' | 'stayovers' | 'housekeeping' | 'foreign-police'>('overview');
 
   // Add currency change listener for auto-refresh
+  const [currentTime, setCurrentTime] = useState(() => Date.now());
+  
   useEffect(() => {
     const handleCurrencyChange = () => {
       window.location.reload();
     };
     window.addEventListener('currencyChanged', handleCurrencyChange);
     return () => window.removeEventListener('currencyChanged', handleCurrencyChange);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 60000); // Update every minute
+    
+    return () => clearInterval(timer);
   }, []);
 
   if (isLoading) return <div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div></div>;
@@ -38,15 +48,6 @@ export function ReportsPage() {
   ) || [];
 
   const checkedInGuests = reservations?.filter(r => r.status === 'checked_in') || [];
-  const [currentTime, setCurrentTime] = useState(() => Date.now());
-  
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(Date.now());
-    }, 60000); // Update every minute
-    
-    return () => clearInterval(timer);
-  }, []);
   
   const checkedOutGuests = reservations?.filter(r => r.status === 'checked_out') || [];
   const stayoverGuests = reservations?.filter(r =>

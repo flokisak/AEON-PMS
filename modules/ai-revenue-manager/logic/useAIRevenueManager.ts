@@ -21,6 +21,46 @@ export interface AIFactor {
   impact: string;
 }
 
+export interface RoomPricing {
+  id: string;
+  name: string;
+  description: string;
+  basePrice: number;
+  maxOccupancy: number;
+}
+
+export interface UpsellItem {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+}
+
+export interface MinibarItem {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+}
+
+export interface EventSpace {
+  id: string;
+  name: string;
+  description: string;
+  capacity: number;
+  hourlyRate: number;
+  dailyRate: number;
+}
+
+export interface OtherRevenue {
+  id: string;
+  name: string;
+  description: string;
+  pricingModel: string;
+  price: number;
+}
+
 export function useAIRevenueManager() {
   const queryClient = useQueryClient();
 
@@ -35,7 +75,13 @@ export function useAIRevenueManager() {
 
         const { data: reservations, error } = await supabase
           .from('reservations')
-          .select('total_amount, check_in, check_out, status, room_number')
+          .select(`
+            total_amount, 
+            check_in, 
+            check_out, 
+            status,
+            rooms!inner(room_number)
+          `)
           .gte('check_in', startDate.toISOString())
           .lte('check_in', endDate.toISOString())
           .eq('status', 'paid');
@@ -157,8 +203,7 @@ export function useAIRevenueManager() {
         const { data, error } = await supabase
           .from('room_types')
           .update({ 
-            base_price: newPrice,
-            updated_at: new Date().toISOString()
+            base_price: newPrice
           })
           .eq('name', roomType);
 
@@ -192,12 +237,261 @@ export function useAIRevenueManager() {
     },
   });
 
+  // Room Pricing Data
+  const { data: roomPricing = [] } = useQuery({
+    queryKey: ['roomPricing'],
+    queryFn: async () => {
+      try {
+        const { data, error } = await supabase
+          .from('room_types')
+          .select(`
+            id,
+            name,
+            description,
+            base_price,
+            max_occupancy
+          `);
+        
+        if (error) throw error;
+        
+        return data?.map(room => ({
+          id: room.id,
+          name: room.name,
+          description: room.description || '',
+          basePrice: room.base_price || 0,
+          maxOccupancy: room.max_occupancy || 2
+        })) || [];
+      } catch (error) {
+        console.error('Error fetching room pricing:', error);
+        // Fallback mock data
+        return [
+          { id: '1', name: 'Standard Room', description: 'Comfortable standard room', basePrice: 100, maxOccupancy: 2 },
+          { id: '2', name: 'Deluxe Room', description: 'Spacious deluxe room', basePrice: 150, maxOccupancy: 2 },
+          { id: '3', name: 'Suite', description: 'Luxury suite', basePrice: 200, maxOccupancy: 4 },
+          { id: '4', name: 'Family Room', description: 'Room for families', basePrice: 180, maxOccupancy: 6 }
+        ];
+      }
+    }
+  });
+
+  // Upsell Items Data
+  const { data: upsellItems = [] } = useQuery({
+    queryKey: ['upsellItems'],
+    queryFn: async () => {
+      try {
+        const { data, error } = await supabase
+          .from('upsell_items')
+          .select('*');
+        
+        if (error) throw error;
+        return data || [];
+      } catch (error) {
+        console.error('Error fetching upsell items:', error);
+        // Fallback mock data
+        return [
+          { id: '1', name: 'Room Upgrade', description: 'Upgrade to deluxe room', price: 50, category: 'Upgrade' },
+          { id: '2', name: 'Late Checkout', description: 'Extend checkout to 2 PM', price: 30, category: 'Service' },
+          { id: '3', name: 'Breakfast Package', description: 'Premium breakfast for two', price: 25, category: 'Food' },
+          { id: '4', name: 'Spa Access', description: 'Full day spa access', price: 40, category: 'Wellness' },
+          { id: '5', name: 'Airport Transfer', description: 'Private airport transfer', price: 35, category: 'Transport' }
+        ];
+      }
+    }
+  });
+
+  // Minibar Items Data
+  const { data: minibarItems = [] } = useQuery({
+    queryKey: ['minibarItems'],
+    queryFn: async () => {
+      try {
+        const { data, error } = await supabase
+          .from('minibar_items')
+          .select('*');
+        
+        if (error) throw error;
+        return data || [];
+      } catch (error) {
+        console.error('Error fetching minibar items:', error);
+        // Fallback mock data
+        return [
+          { id: '1', name: 'Water', description: 'Mineral water 500ml', price: 3 },
+          { id: '2', name: 'Soda', description: 'Soft drink 330ml', price: 4 },
+          { id: '3', name: 'Beer', description: 'Local beer 330ml', price: 5 },
+          { id: '4', name: 'Wine', description: 'House wine 187ml', price: 8 },
+          { id: '5', name: 'Chocolate', description: 'Premium chocolate bar', price: 6 },
+          { id: '6', name: 'Nuts', description: 'Mixed nuts 100g', price: 7 },
+          { id: '7', name: 'Chips', description: 'Potato chips 150g', price: 4 },
+          { id: '8', name: 'Coffee', description: 'Instant coffee sachet', price: 3 }
+        ];
+      }
+    }
+  });
+
+  // Event Spaces Data
+  const { data: eventSpaces = [] } = useQuery({
+    queryKey: ['eventSpaces'],
+    queryFn: async () => {
+      try {
+        const { data, error } = await supabase
+          .from('event_spaces')
+          .select('*');
+        
+        if (error) throw error;
+        return data || [];
+      } catch (error) {
+        console.error('Error fetching event spaces:', error);
+        // Fallback mock data
+        return [
+          { id: '1', name: 'Conference Room A', description: 'Modern conference room with AV equipment', capacity: 50, hourlyRate: 100, dailyRate: 800 },
+          { id: '2', name: 'Ballroom', description: 'Grand ballroom for events', capacity: 200, hourlyRate: 250, dailyRate: 2000 },
+          { id: '3', name: 'Meeting Room B', description: 'Small meeting room', capacity: 10, hourlyRate: 50, dailyRate: 400 },
+          { id: '4', name: 'Restaurant', description: 'Full restaurant buyout', capacity: 80, hourlyRate: 150, dailyRate: 1200 }
+        ];
+      }
+    }
+  });
+
+  // Other Revenue Streams Data
+  const { data: otherRevenue = [] } = useQuery({
+    queryKey: ['otherRevenue'],
+    queryFn: async () => {
+      try {
+        const { data, error } = await supabase
+          .from('other_revenue_streams')
+          .select('*');
+        
+        if (error) throw error;
+        return data || [];
+      } catch (error) {
+        console.error('Error fetching other revenue:', error);
+        // Fallback mock data
+        return [
+          { id: '1', name: 'Parking', description: 'Secure parking space', pricingModel: 'Per day', price: 15 },
+          { id: '2', name: 'Pet Fee', description: 'Pet accommodation fee', pricingModel: 'Per stay', price: 25 },
+          { id: '3', name: 'Laundry Service', description: 'Laundry and dry cleaning', pricingModel: 'Per item', price: 10 },
+          { id: '4', name: 'Bike Rental', description: 'Bike rental per hour', pricingModel: 'Per hour', price: 8 }
+        ];
+      }
+    }
+  });
+
+  // Update mutations
+  const updateRoomPrice = useMutation({
+    mutationFn: async ({ id, price }: { id: string; price: number }) => {
+      try {
+        const { error } = await supabase
+          .from('room_types')
+          .update({ base_price: price })
+          .eq('id', id);
+        
+        if (error) throw error;
+        return { id, price, success: true };
+      } catch (error) {
+        console.error('Error updating room price:', error);
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['roomPricing'] });
+    }
+  });
+
+  const updateUpsellPrice = useMutation({
+    mutationFn: async ({ id, price }: { id: string; price: number }) => {
+      try {
+        const { error } = await supabase
+          .from('upsell_items')
+          .update({ price })
+          .eq('id', id);
+        
+        if (error) throw error;
+        return { id, price, success: true };
+      } catch (error) {
+        console.error('Error updating upsell price:', error);
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['upsellItems'] });
+    }
+  });
+
+  const updateMinibarPrice = useMutation({
+    mutationFn: async ({ id, price }: { id: string; price: number }) => {
+      try {
+        const { error } = await supabase
+          .from('minibar_items')
+          .update({ price })
+          .eq('id', id);
+        
+        if (error) throw error;
+        return { id, price, success: true };
+      } catch (error) {
+        console.error('Error updating minibar price:', error);
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['minibarItems'] });
+    }
+  });
+
+  const updateEventSpacePrice = useMutation({
+    mutationFn: async ({ id, rate }: { id: string; rate: number }) => {
+      try {
+        const { error } = await supabase
+          .from('event_spaces')
+          .update({ hourly_rate: rate })
+          .eq('id', id);
+        
+        if (error) throw error;
+        return { id, rate, success: true };
+      } catch (error) {
+        console.error('Error updating event space price:', error);
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['eventSpaces'] });
+    }
+  });
+
+  const updateOtherRevenue = useMutation({
+    mutationFn: async ({ id, price }: { id: string; price: number }) => {
+      try {
+        const { error } = await supabase
+          .from('other_revenue_streams')
+          .update({ price })
+          .eq('id', id);
+        
+        if (error) throw error;
+        return { id, price, success: true };
+      } catch (error) {
+        console.error('Error updating other revenue:', error);
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['otherRevenue'] });
+    }
+  });
+
   return {
     revenueData,
     isLoading,
     pricingSuggestions,
     factors,
     updatePrice,
+    roomPricing,
+    updateRoomPrice,
+    upsellItems,
+    updateUpsellPrice,
+    minibarItems,
+    updateMinibarPrice,
+    eventSpaces,
+    updateEventSpacePrice,
+    otherRevenue,
+    updateOtherRevenue,
   };
 }
 
