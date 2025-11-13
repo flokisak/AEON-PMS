@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DndContext, useDraggable, useDroppable } from '@dnd-kit/core';
+import { DndContext, useDraggable, useDroppable, DragEndEvent } from '@dnd-kit/core';
 import { useReservations } from '../logic/useReservations';
 import { useHousekeeping } from '../../housekeeping/logic/useHousekeeping';
 import { Reservation, Room } from '../../../core/types';
@@ -19,25 +19,76 @@ function DraggableReservation({ reservation, onEdit }: { reservation: Reservatio
     transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
   } : undefined;
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'checked_in':
+        return {
+          bg: 'bg-gradient-to-r from-emerald-500 to-emerald-600',
+          border: 'border-emerald-700',
+          shadow: 'shadow-emerald-200'
+        };
+      case 'confirmed':
+        return {
+          bg: 'bg-gradient-to-r from-blue-500 to-blue-600',
+          border: 'border-blue-700',
+          shadow: 'shadow-blue-200'
+        };
+      case 'booked':
+      default:
+        return {
+          bg: 'bg-gradient-to-r from-indigo-500 to-indigo-600',
+          border: 'border-indigo-700',
+          shadow: 'shadow-indigo-200'
+        };
+    }
+  };
+
+  const colors = getStatusColor(reservation.status);
+
   return (
     <div
       ref={setNodeRef}
       style={style}
       {...listeners}
       {...attributes}
-      className={`absolute h-8 rounded cursor-pointer shadow-md ${reservation.status === 'checked_in' ? 'bg-green-500' : 'bg-blue-500'} text-white text-xs flex items-center px-2 ${isDragging ? 'opacity-50' : 'hover:opacity-80'}`}
+      className={`absolute top-1 h-8 rounded-lg cursor-pointer border-2 ${colors.bg} ${colors.border} ${colors.shadow} text-white text-xs font-semibold flex items-center px-3 transition-all duration-200 ${isDragging ? 'opacity-70 scale-105 shadow-xl' : 'hover:opacity-90 hover:scale-102 hover:shadow-lg'}`}
       onClick={(e) => {
         e.stopPropagation();
         onEdit(reservation);
       }}
-      title={`${reservation.guest_name} - Click to edit`}
+      title={`${reservation.guest_name} - ${reservation.status} - Click to edit`}
     >
-      <span className="truncate">{reservation.guest_name}</span>
+      <div className="flex items-center space-x-2 min-w-0 flex-1">
+        <div className="w-2 h-2 bg-white bg-opacity-70 rounded-full flex-shrink-0"></div>
+        <span className="truncate font-medium">{reservation.guest_name}</span>
+        {reservation.room_number && (
+          <span className="text-white text-opacity-80 text-xs flex-shrink-0">
+            #{reservation.room_number}
+          </span>
+        )}
+      </div>
+      <div className="ml-2 flex-shrink-0">
+        <div className="w-1.5 h-1.5 bg-white bg-opacity-60 rounded-full"></div>
+      </div>
     </div>
   );
 }
 
-function DroppableCell({ date, roomNumber, onSelect, width }: { date: string; roomNumber: number; onSelect: (room: number, date: string) => void; width: number }) {
+function DroppableCell({
+  date,
+  roomNumber,
+  onSelect,
+  width,
+  isInSelection = false,
+  isCreatingReservation = false
+}: {
+  date: string;
+  roomNumber: number;
+  onSelect: (room: number, date: string) => void;
+  width: number;
+  isInSelection?: boolean;
+  isCreatingReservation?: boolean;
+}) {
   const { setNodeRef, isOver } = useDroppable({
     id: `cell-${roomNumber}-${date}`,
   });
@@ -46,10 +97,28 @@ function DroppableCell({ date, roomNumber, onSelect, width }: { date: string; ro
     <div
       ref={setNodeRef}
       style={{ width: `${width}px` }}
-      className={`h-10 border-r border-gray-200 ${isOver ? 'bg-blue-100' : 'bg-white'} cursor-pointer`}
+      className={`h-10 border-r border-gray-200 cursor-pointer relative ${
+        isOver ? 'bg-blue-100' : 'bg-white'
+      } ${isCreatingReservation ? 'bg-blue-50' : ''}`}
       onMouseDown={() => onSelect(roomNumber, date)}
       onMouseEnter={() => onSelect(roomNumber, date)}
-    ></div>
+    >
+      {isInSelection && (
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-500 rounded-md shadow-lg border-2 border-blue-600 flex items-center justify-center"
+          style={{
+            margin: '2px',
+            height: 'calc(100% - 4px)',
+            background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+            boxShadow: '0 4px 6px -1px rgba(59, 130, 246, 0.3), 0 2px 4px -1px rgba(59, 130, 246, 0.2)'
+          }}
+        >
+          <div className="text-white text-xs font-semibold opacity-90">
+            New Reservation
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -116,11 +185,14 @@ export function ReservationsPage() {
     setForm({ guest_name: '', room_id: undefined, room_number: undefined, check_in: '', check_out: '', status: 'booked', room_type: '' });
   };
 
-  const handleDragEnd = (event: { active: any; over: any }) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    if (over && active.id.startsWith('res-')) {
-      const resId = parseInt(active.id.split('-')[1]);
-      const parts = over.id.split('-');
+    const activeId = String(active.id);
+    const overId = over ? String(over.id) : null;
+
+    if (overId && activeId.startsWith('res-')) {
+      const resId = parseInt(activeId.split('-')[1]);
+      const parts = overId.split('-');
       const targetRoom = parseInt(parts[1]);
       const targetDate = parts[2];
       // Move reservation to target room and start on targetDate
@@ -429,17 +501,31 @@ export function ReservationsPage() {
                        <option value="cleaning">Cleaning</option>
                      </select>
                    </div>
-                  <div className="flex relative h-10">
-                    {days.map(day => (
-                      <DroppableCell key={day} date={day} roomNumber={room.room_number} onSelect={handleCellSelect} width={cellWidth} />
-                    ))}
-                     {reservations?.filter(res => res.room_number === room.room_number).map(res => {
+                   <div className="flex relative h-10">
+                     {days.map(day => {
+                       const isInSelection = !!(selection && selection.room === room.room_number &&
+                         ((day >= selection.start && day <= selection.end) ||
+                          (day >= selection.end && day <= selection.start)));
+
+                       return (
+                         <DroppableCell
+                           key={day}
+                           date={day}
+                           roomNumber={room.room_number}
+                           onSelect={handleCellSelect}
+                           width={cellWidth}
+                           isInSelection={isInSelection}
+                           isCreatingReservation={!!selection}
+                         />
+                       );
+                     })}
+                      {reservations?.filter(res => res.room_number === room.room_number).map(res => {
                        // Mock check_in and check_out
                        const checkIn = res.check_in || res.created_at.split('T')[0];
                        const checkOut = res.check_out || new Date(new Date(checkIn).getTime() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
                        const { left, width } = getPosition(checkIn, checkOut);
                        return (
-                         <div key={res.id} className="absolute top-1" style={{ left: left * cellWidth / 32, width: width * cellWidth / 32 }}>
+                         <div key={res.id} className="absolute" style={{ left: left * cellWidth / 32, width: width * cellWidth / 32, top: '2px', height: '36px' }}>
                            <DraggableReservation
                              reservation={{ ...res, check_in: checkIn, check_out: checkOut }}
                              onEdit={handleEditReservation}
@@ -447,43 +533,45 @@ export function ReservationsPage() {
                          </div>
                        );
                      })}
-                    {selection && selection.room === room.room_number && (
-                      <div className="absolute top-1 bg-yellow-200 opacity-50 rounded" style={{
-                        left: Math.min(days.indexOf(selection.start), days.indexOf(selection.end)) * cellWidth,
-                        width: (Math.abs(days.indexOf(selection.end) - days.indexOf(selection.start)) + 1) * cellWidth
-                      }}></div>
-                    )}
-                  </div>
+                   </div>
                 </div>
               ))}
             </div>
           </div>
-            <div className="mt-6 flex flex-wrap gap-4">
-              <div className="flex items-center bg-primary/10 px-3 py-2 rounded-lg">
-                <div className="w-3 h-3 bg-primary rounded mr-2"></div>
-                 <span className="text-sm font-medium text-primary">{t('reservations.booked')}</span>
-              </div>
-              <div className="flex items-center bg-emerald-50 px-3 py-2 rounded-lg">
-                 <div className="w-3 h-3 bg-emerald-500 rounded mr-2"></div>
-                 <span className="text-sm font-medium text-emerald-700">{t('reservations.checkedIn')}</span>
-              </div>
-              <div className="flex items-center bg-green-50 px-3 py-2 rounded-lg">
-                <div className="w-3 h-3 bg-green-400 rounded mr-2"></div>
-                 <span className="text-sm font-medium text-green-700">{t('reservations.available')}</span>
-              </div>
-              <div className="flex items-center bg-red-50 px-3 py-2 rounded-lg">
-                <div className="w-3 h-3 bg-red-400 rounded mr-2"></div>
-                 <span className="text-sm font-medium text-red-700">{t('reservations.occupied')}</span>
-              </div>
-              <div className="flex items-center bg-amber-50 px-3 py-2 rounded-lg">
-                <div className="w-3 h-3 bg-amber-400 rounded mr-2"></div>
-                 <span className="text-sm font-medium text-amber-700">{t('reservations.dirty')}</span>
-              </div>
-              <div className="flex items-center bg-cyan-50 px-3 py-2 rounded-lg">
-                <div className="w-3 h-3 bg-cyan-400 rounded mr-2"></div>
-                 <span className="text-sm font-medium text-cyan-700">{t('reservations.cleaning')}</span>
-              </div>
-            </div>
+             <div className="mt-6 flex flex-wrap gap-4">
+               <div className="flex items-center bg-gradient-to-r from-indigo-500 to-indigo-600 px-3 py-2 rounded-lg shadow-sm">
+                 <div className="w-3 h-3 bg-white bg-opacity-80 rounded mr-2"></div>
+                  <span className="text-sm font-medium text-white">{t('reservations.booked')}</span>
+               </div>
+               <div className="flex items-center bg-gradient-to-r from-blue-500 to-blue-600 px-3 py-2 rounded-lg shadow-sm">
+                 <div className="w-3 h-3 bg-white bg-opacity-80 rounded mr-2"></div>
+                  <span className="text-sm font-medium text-white">{t('reservations.confirmed')}</span>
+               </div>
+               <div className="flex items-center bg-gradient-to-r from-emerald-500 to-emerald-600 px-3 py-2 rounded-lg shadow-sm">
+                  <div className="w-3 h-3 bg-white bg-opacity-80 rounded mr-2"></div>
+                  <span className="text-sm font-medium text-white">{t('reservations.checkedIn')}</span>
+               </div>
+               <div className="flex items-center bg-gradient-to-r from-blue-400 to-blue-500 px-3 py-2 rounded-lg shadow-sm border-2 border-blue-600">
+                 <div className="w-3 h-3 bg-white bg-opacity-90 rounded mr-2"></div>
+                  <span className="text-sm font-medium text-white font-semibold">{t('reservations.newReservation')}</span>
+               </div>
+               <div className="flex items-center bg-green-50 px-3 py-2 rounded-lg border border-green-200">
+                 <div className="w-3 h-3 bg-green-400 rounded mr-2"></div>
+                  <span className="text-sm font-medium text-green-700">{t('reservations.available')}</span>
+               </div>
+               <div className="flex items-center bg-red-50 px-3 py-2 rounded-lg border border-red-200">
+                 <div className="w-3 h-3 bg-red-400 rounded mr-2"></div>
+                  <span className="text-sm font-medium text-red-700">{t('reservations.occupied')}</span>
+               </div>
+               <div className="flex items-center bg-amber-50 px-3 py-2 rounded-lg border border-amber-200">
+                 <div className="w-3 h-3 bg-amber-400 rounded mr-2"></div>
+                  <span className="text-sm font-medium text-amber-700">{t('reservations.dirty')}</span>
+               </div>
+               <div className="flex items-center bg-cyan-50 px-3 py-2 rounded-lg border border-cyan-200">
+                 <div className="w-3 h-3 bg-cyan-400 rounded mr-2"></div>
+                  <span className="text-sm font-medium text-cyan-700">{t('reservations.cleaning')}</span>
+               </div>
+             </div>
         </DndContext>
       )}
 
