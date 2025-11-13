@@ -118,7 +118,7 @@ export function NavBar() {
               <img 
                 src="/logo.png" 
                 alt="AEON PMS Logo" 
-                className="h-12 w-auto"
+                className="h-16 w-auto"
               />
             </div>
             <button
