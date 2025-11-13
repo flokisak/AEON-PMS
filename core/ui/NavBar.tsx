@@ -114,25 +114,27 @@ export function NavBar() {
           `}
       >
         {/* Header */}
-        <div className="p-4 border-b border-neutral-medium bg-neutral-light flex items-center justify-between">
-            <div className={`flex items-center ${isCollapsed ? 'justify-center w-full' : ''}`}>
-              <Image
-                src="/logo.png"
-                alt="AEON PMS Logo"
-                width={80}
-                height={80}
-                className="h-20 w-auto"
-                priority
-                quality={100}
-              />
-            </div>
+        <div className={`border-b border-neutral-medium bg-neutral-light flex items-center justify-between ${isCollapsed ? 'p-2' : 'p-4'}`}>
+            {!isCollapsed && (
+              <div className="flex items-center">
+                <Image
+                  src="/logo.png"
+                  alt="AEON PMS Logo"
+                  width={80}
+                  height={80}
+                  className="h-20 w-auto"
+                  priority
+                  quality={100}
+                />
+              </div>
+            )}
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="hidden md:block p-2 rounded-lg hover:bg-neutral-medium transition-colors text-neutral-dark"
+              className={`hidden md:block p-2 rounded-lg hover:bg-neutral-medium transition-colors text-neutral-dark ${isCollapsed ? 'mx-auto' : ''}`}
               title={isCollapsed ? t('nav.expandSidebar') : t('nav.collapseSidebar')}
            >
-             {isCollapsed ? <FiChevronRight size={20} /> : <FiChevronLeft size={20} />}
-           </button>
+              {isCollapsed ? <FiChevronRight size={20} /> : <FiChevronLeft size={20} />}
+            </button>
            <button
              onClick={() => setIsMobileOpen(false)}
              className="md:hidden p-2 rounded-lg hover:bg-neutral-medium transition-colors text-foreground"
@@ -142,7 +144,7 @@ export function NavBar() {
         </div>
 
         {/* Navigation Items */}
-        <ul className="flex-1 p-4 space-y-2">
+        <ul className={`flex-1 space-y-2 ${isCollapsed ? 'p-2' : 'p-4'}`}>
           <li>
             <Link
               href="/"
